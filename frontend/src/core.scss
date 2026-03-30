@@ -1,0 +1,40 @@
+@use "../public/fonts/fonts";
+
+:root {
+  --color-0: #1a1212;
+  --color-1: #231616;
+  --color-2: #312b2b;
+  --color-3: #444735;
+  --color-4: #6b3718;
+  --color-5: #996a3d;
+  --text-color-1: #d0cfcf;
+  --gap-1: 4px;
+  --gap-2: 8px;
+  --gap-3: 16px;
+  --gap-4: 32px;
+  --font-size-1: 0.6rem;
+  --font-size-2: 0.8rem;
+  --font-size-3: 1rem;
+  --font-size-4: 1.2rem;
+  --font-size-5: 1.4rem;
+  --border-radius-1: 8px;
+}
+
+body {
+  font-family: "Courier Prime", sans-serif;
+  line-height: 0;
+  font-size: 0.8rem;
+  background-color: var(--color-1);
+  color: var(--text-color-1);
+  margin: 0;
+}
+
+h1 {
+  font-family: "IM Fell English", serif !important;
+  font-style: italic;
+  font-weight: normal;
+}
+
+.font-fix {
+  padding-top: 0.1em;
+}
