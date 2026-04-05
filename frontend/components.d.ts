@@ -11,10 +11,14 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    Button: typeof import('primevue/button')['default']
     FloatLabel: typeof import('primevue/floatlabel')['default']
+    Form: typeof import('@primevue/forms/form')['default']
     ILSelectButton: typeof import('./src/components/primevue/ILSelectButton.vue')['default']
+    ILTextButton: typeof import('./src/components/primevue/ILTextButton.vue')['default']
     ILTextInput: typeof import('./src/components/primevue/ILTextInput.vue')['default']
     InputText: typeof import('primevue/inputtext')['default']
+    Password: typeof import('primevue/password')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SelectButton: typeof import('primevue/selectbutton')['default']
