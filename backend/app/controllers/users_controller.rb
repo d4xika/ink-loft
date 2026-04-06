@@ -14,7 +14,7 @@ class UsersController < ApplicationController
       same_site: :lax,
       secure: Rails.env.production?
     }
-    return render json: { username: user.username }, status: :ok
+    return render json: render_user(user), status: :ok
   end
 
   def register
@@ -33,6 +33,15 @@ class UsersController < ApplicationController
       secure: Rails.env.production?
     }
 
-    return render json: { username: user.username }, status: :created
+    return render json: render_user(user), status: :created
+  end
+
+  private
+
+  def render_user(user)
+    return {
+      username: user.username,
+      avatar_url: user.avatar.attached? ? Rails.application.routes.url_helpers.rails_blob_url(user.avatar, only_path: true) : nil
+    }
   end
 end

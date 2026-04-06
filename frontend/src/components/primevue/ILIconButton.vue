@@ -1,25 +1,14 @@
 <script setup>
 const props = defineProps({
-  text: {
+  icon: {
     type: String,
     required: true,
-  },
-  variant: {
-    type: String,
-    default: "full-width",
-  },
-  type: {
-    type: String,
-    default: undefined,
-    validator: (value) => ["submit", undefined].includes(value),
   },
 });
 </script>
 
 <template>
-  <Button :class="`variant-${props.variant}`" :type="props.type">{{
-    props.text
-  }}</Button>
+  <Button :icon="`pi ${props.icon}`" class="icon-button" />
 </template>
 
 <style scoped>
@@ -27,7 +16,7 @@ const props = defineProps({
   background-color: var(--color-3);
   border: 1px solid transparent;
   color: var(--text-color-1);
-  padding: 9px 0 6px 0;
+  padding: 10px;
 
   &.variant-full-width {
     width: 100%;

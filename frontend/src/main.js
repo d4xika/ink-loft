@@ -3,8 +3,8 @@ import App from "./App.vue";
 import router from "./router/router.js";
 import "./core.scss";
 import PrimeVue from "primevue/config";
+import "primeicons/primeicons.css";
 import Aura from "@primevue/themes/aura";
-import axios from "axios";
 
 const app = createApp(App);
 

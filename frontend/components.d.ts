@@ -11,9 +11,14 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    Avatar: typeof import('primevue/avatar')['default']
     Button: typeof import('primevue/button')['default']
+    FileUpload: typeof import('primevue/fileupload')['default']
     FloatLabel: typeof import('primevue/floatlabel')['default']
     Form: typeof import('@primevue/forms/form')['default']
+    ILAvatar: typeof import('./src/components/primevue/ILAvatar.vue')['default']
+    ILIconButton: typeof import('./src/components/primevue/ILIconButton.vue')['default']
+    ILImageUploader: typeof import('./src/components/primevue/ILImageUploader.vue')['default']
     ILSelectButton: typeof import('./src/components/primevue/ILSelectButton.vue')['default']
     ILTextButton: typeof import('./src/components/primevue/ILTextButton.vue')['default']
     ILTextInput: typeof import('./src/components/primevue/ILTextInput.vue')['default']

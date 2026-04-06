@@ -4,6 +4,9 @@ import { zodResolver } from "@primevue/forms/resolvers/zod";
 import { z } from "zod";
 import { REGEX } from "../helper/regex.js";
 import API from "../helper/api.js";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 const tab = ref("LOGIN");
 const tabOptions = ["LOGIN", "REGISTER"];
@@ -54,7 +57,8 @@ function submit(data) {
       password: data.values.password,
     }).then(
       (response) => {
-        console.log(response);
+        localStorage.setItem("user", JSON.stringify(response.data));
+        router.push({ name: "home" });
         // TODO: add toasti
       },
       (error) => {
@@ -70,7 +74,7 @@ function submit(data) {
       email: data.values.email,
     }).then(
       (response) => {
-        console.log(response);
+        localStorage.setItem("user", JSON.stringify(response.data));
         // TODO: add toasti
       },
       (error) => {
