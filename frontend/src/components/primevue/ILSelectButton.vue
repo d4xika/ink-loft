@@ -58,6 +58,7 @@ const model = defineModel({
       background-color: var(--color-3) !important;
     }
     .p-togglebutton-label {
+      font-size: var(--font-size-3);
       padding-top: 3px;
     }
   }

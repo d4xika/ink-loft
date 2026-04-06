@@ -10,23 +10,27 @@ const props = defineProps({
   },
   type: {
     type: String,
-    default: "",
+    default: undefined,
+    validator: (value) => ["submit", undefined].includes(value),
   },
 });
 </script>
 
 <template>
-  <Button class="text-button" :class="`variant-${props.variant}`">{{
-    props.text
-  }}</Button>
+  <Button
+    class="text-button"
+    :class="`variant-${props.variant}`"
+    :type="props.type"
+    >{{ props.text }}</Button
+  >
 </template>
 
 <style scoped>
 .text-button {
   background-color: var(--color-3);
-  border: 1px solid var(--color-0);
+  border: 1px solid transparent;
   color: var(--text-color-1);
-  padding: 10px 0 7px 0;
+  padding: 9px 0 6px 0;
 
   &.variant-full-width {
     width: 100%;

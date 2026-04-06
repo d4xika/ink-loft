@@ -8,31 +8,29 @@ import API from "../helper/api.js";
 const tab = ref("LOGIN");
 const tabOptions = ["LOGIN", "REGISTER"];
 
-const user = ref({
+const user = {
   username: "",
   password: "",
   email: "",
   confirm_password: "",
-});
+};
 
 const resolver = computed(() => {
-  const formAttributes = {
-    username: z.string().min(1, { message: "Username is required." }),
-    password: z.string().min(1, { message: "Password is required." }),
-  };
+  const loginSchema = z.object({
+    username: z.string().min(1, "Username is required."),
+    password: z.string().min(1, "Password is required."),
+  });
 
   if (tab.value === "REGISTER") {
-    formAttributes.email = z
-      .string()
-      .min(1, { message: "Email is required." })
-      .regex(REGEX.email, "Invalid email.");
-    formAttributes.confirm_password = z
-      .string()
-      .min(1, { message: "Password is required." });
-
     return zodResolver(
-      z
-        .object({ formAttributes })
+      loginSchema
+        .extend({
+          email: z
+            .string()
+            .min(1, "Email is required.")
+            .regex(REGEX.email, "Invalid email format."),
+          confirm_password: z.string().min(1, "Confirm password is required."),
+        })
         .refine((data) => data.password === data.confirm_password, {
           message: "Passwords don't match.",
           path: ["confirm_password"],
@@ -40,24 +38,46 @@ const resolver = computed(() => {
     );
   }
 
-  return zodResolver(z.object({ formAttributes }));
+  return zodResolver(loginSchema);
 });
 
-function submit({ valid }) {
-  console.log(valid);
-  if (!valid) {
+function submit(data) {
+  console.log(data);
+  if (!data.valid) {
+    // TODO: add toasti
     return;
   }
 
   if (tab.value === "LOGIN") {
     API.post("users/login", {
-      params: { username: user.value.username, password: user.value.password },
+      username: data.values.username,
+      password: data.values.password,
     }).then(
       (response) => {
         console.log(response);
+        // TODO: add toasti
       },
       (error) => {
         console.log(error);
+        // TODO: add toasti
+      },
+    );
+  }
+  if (tab.value === "REGISTER") {
+    API.post("users/register", {
+      username: data.values.username,
+      password: data.values.password,
+      email: data.values.email,
+    }).then(
+      (response) => {
+        console.log(response);
+        // TODO: add toasti
+      },
+      (error) => {
+        console.log(error);
+        if (error.status === 409) {
+          // TODO: add toasti
+        }
       },
     );
   }
@@ -66,45 +86,36 @@ function submit({ valid }) {
 
 <template>
   <div class="authentication-view-container">
-    <h1>Welcome Reader</h1>
     <div class="content">
-      <div>Logo</div>
-      <ILSelectButton v-model="tab" :options="tabOptions" />
-      <Form
-        v-slot="$form"
-        :initialValues="user"
-        :resolver="resolver"
-        class="form-container"
-      >
-        {{ $form }}
+      <h1>Welcome Reader</h1>
 
-        <ILTextInput
-          v-if="tab === 'REGISTER'"
-          name="email"
-          label="Email"
-          v-model="user.email"
-          type="email"
-        />
-        <ILTextInput
-          name="username"
-          label="Username"
-          v-model="user.username"
-        ></ILTextInput>
-        <ILTextInput
-          name="password"
-          label="Password"
-          v-model="user.password"
-          type="password"
-        />
-        <ILTextInput
-          v-if="tab === 'REGISTER'"
-          name="confirm_password"
-          label="Confirm password"
-          v-model="user.confirm_password"
-          type="password"
-        />
-        <ILTextButton text="Submit" @click="submit($form)" />
-      </Form>
+      <img src="../../favicon.svg" alt="" />
+      <div class="auth-card">
+        <ILSelectButton v-model="tab" :options="tabOptions" />
+        <Form
+          @submit="submit"
+          :initialValues="user"
+          :resolver="resolver"
+          :key="tab"
+          class="form-container"
+        >
+          <ILTextInput
+            v-if="tab === 'REGISTER'"
+            name="email"
+            label="Email"
+            type="email"
+          />
+          <ILTextInput name="username" label="Username"></ILTextInput>
+          <ILTextInput name="password" label="Password" type="password" />
+          <ILTextInput
+            v-if="tab === 'REGISTER'"
+            name="confirm_password"
+            label="Confirm password"
+            type="password"
+          />
+          <ILTextButton text="Submit" type="submit" />
+        </Form>
+      </div>
     </div>
   </div>
 </template>
@@ -119,7 +130,7 @@ function submit({ valid }) {
     margin-top: 2rem;
     margin-left: 1rem;
     flex-grow: 0;
-    font-size: 2rem;
+    font-size: 2.5rem;
   }
 
   .content {
@@ -128,16 +139,25 @@ function submit({ valid }) {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: var(--gap-4);
+    gap: var(--gap-5);
 
-    .form-container {
+    .auth-card {
+      background-color: var(--color-2);
+      padding: var(--gap-3);
+      border-radius: var(--border-radius-2);
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      gap: var(--gap-3);
-      width: 60vw;
-      max-width: 500px;
+      gap: var(--gap-4);
+
+      .form-container {
+        display: flex;
+        flex-direction: column;
+        gap: var(--gap-3);
+        width: 80vw;
+        max-width: 500px;
+      }
     }
   }
 }

@@ -6,7 +6,15 @@ class UsersController < ApplicationController
     end
 
     auth_key = user.generate_auth_key
-    return render_user_with_auth(user, auth_key)
+
+    cookies.signed[:auth_token] = {
+      value: auth_key,
+      httponly: true,
+      expires: 2.weeks.from_now,
+      same_site: :lax,
+      secure: Rails.env.production?
+    }
+    return render json: { username: user.username }, status: :ok
   end
 
   def register
@@ -17,12 +25,14 @@ class UsersController < ApplicationController
     user = User.create(username: params[:username], email: params[:email], password: params[:password])
     auth_key = user.generate_auth_key
 
-    return render_user_with_auth(user, auth_key)
-  end
+    cookies.signed[:auth_token] = {
+      value: auth_key,
+      httponly: true,
+      expires: 2.weeks.from_now,
+      same_site: :lax,
+      secure: Rails.env.production?
+    }
 
-  private
-
-  def render_user_with_auth(user, auth_key)
-    render json: { user: user, auth_key: auth_key }, status: :ok
+    return render json: { username: user.username }, status: :created
   end
 end

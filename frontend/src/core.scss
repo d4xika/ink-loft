@@ -1,31 +1,31 @@
 @use "../public/fonts/fonts";
 
 :root {
-  --color-0: #2f2020;
-  --color-1: #422b2b;
-  --color-2: #494040;
-  --color-3: #575b43;
-  --color-4: #80411c;
-  --color-5: #af7945;
+  --color-0: #1c1917;
+  --color-1: #ec0404;
+  --color-2: #292524;
+  --color-3: #464832;
   --text-color-1: #dad9d9;
   --text-color-1-light: #dad9d980;
   --gap-1: 4px;
   --gap-2: 8px;
   --gap-3: 16px;
   --gap-4: 32px;
+  --gap-5: 64px;
   --font-size-1: 0.6rem;
   --font-size-2: 0.8rem;
   --font-size-3: 1rem;
   --font-size-4: 1.2rem;
   --font-size-5: 1.4rem;
   --border-radius-1: 8px;
+  --border-radius-2: 16px;
 }
 
 body {
   font-family: "Courier Prime", sans-serif;
   line-height: 0;
-  font-size: 0.8rem;
-  background-color: var(--color-1);
+  font-size: var(--font-size-3);
+  background-color: var(--color-0);
   color: var(--text-color-1);
   margin: 0;
 }

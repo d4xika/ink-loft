@@ -16,7 +16,7 @@ const props = defineProps({
 
 const model = defineModel({
   type: String,
-  required: true,
+  required: false,
 });
 </script>
 
