@@ -7,6 +7,7 @@ Rails.application.routes.draw do
     collection do
       post :login
       post :register
+      put :update_profile
     end
   end
 end

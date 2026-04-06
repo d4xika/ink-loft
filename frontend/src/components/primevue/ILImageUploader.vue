@@ -1,9 +1,10 @@
 <script setup>
 import { ref, useTemplateRef } from "vue";
 
-const src = ref(null);
+const user = JSON.parse(localStorage.getItem("user"));
+const src = ref(user.avatar_url);
 const fileUpload = useTemplateRef(null);
-const emit = defineEmits(["file-selected"]);
+const emit = defineEmits(["file-selected", "file-removed"]);
 
 function onFileSelect(event) {
   const file = event.files[0];
@@ -24,6 +25,7 @@ function removeFile(event) {
   if (fileUpload.value) {
     fileUpload.value.clear();
   }
+  emit("file-removed");
 }
 </script>
 

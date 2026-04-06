@@ -8,7 +8,7 @@ class UsersController < ApplicationController
     auth_key = user.generate_auth_key
 
     cookies.signed[:auth_token] = {
-      value: auth_key,
+      value: auth_key.key,
       httponly: true,
       expires: 2.weeks.from_now,
       same_site: :lax,
@@ -26,7 +26,7 @@ class UsersController < ApplicationController
     auth_key = user.generate_auth_key
 
     cookies.signed[:auth_token] = {
-      value: auth_key,
+      value: auth_key.key,
       httponly: true,
       expires: 2.weeks.from_now,
       same_site: :lax,
@@ -36,12 +36,30 @@ class UsersController < ApplicationController
     return render json: render_user(user), status: :created
   end
 
+  def update_profile
+    user = current_user
+
+    if params[:delete_avatar] == "true"
+      user.avatar.purge
+    elsif params[:avatar].present?
+      user.update(params.permit(:avatar))
+    end
+
+    if user.save
+      return render json: {
+        user: render_user(user)
+      }, status: :ok
+    else
+      return render json: { errors: user.errors.full_messages }, status: :unprocessable_entity
+    end
+  end
+
   private
 
   def render_user(user)
     return {
       username: user.username,
-      avatar_url: user.avatar.attached? ? Rails.application.routes.url_helpers.rails_blob_url(user.avatar, only_path: true) : nil
+      avatar_url: user.avatar.attached? ? Rails.application.routes.url_helpers.rails_blob_url(user.avatar, host: '127.0.0.1:3000') : nil
     }
   end
 end

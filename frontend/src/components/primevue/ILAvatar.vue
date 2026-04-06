@@ -8,7 +8,7 @@ const props = defineProps({
   },
 });
 
-const user = ref("");
+const user = ref({});
 if (!props.image) {
   user.value = JSON.parse(localStorage.getItem("user"));
 }
@@ -17,7 +17,7 @@ if (!props.image) {
 <template>
   <Avatar
     :image="props.image"
-    :label="user.username.charAt(0).toUpperCase()"
+    :label="user.username?.charAt(0).toUpperCase()"
     size="large"
   />
 </template>
