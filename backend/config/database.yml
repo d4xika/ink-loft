@@ -17,8 +17,7 @@ default: &default
   encoding: unicode
   # For details on connection pooling, see Rails configuration guide
   # https://guides.rubyonrails.org/configuring.html#database-pooling
-  max_connections: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS", 5) %>
 
 development:
   <<: *default
@@ -85,20 +84,42 @@ test:
 # for a full overview on how database connection configuration can be specified.
 #
 production:
-  primary: &primary_production
-    <<: *default
-    database: backend_production
-    username: backend
-    password: <%= ENV["BACKEND_DATABASE_PASSWORD"] %>
-  cache:
-    <<: *primary_production
-    database: backend_production_cache
-    migrations_paths: db/cache_migrate
-  queue:
-    <<: *primary_production
-    database: backend_production_queue
-    migrations_paths: db/queue_migrate
+  primary:
+    adapter: postgresql
+    encoding: unicode
+    host: <%= ENV["DB_HOST"] %>
+    port: <%= ENV.fetch("DB_PORT", 5432) %>
+    database: <%= ENV["DB_NAME"] %>
+    username: <%= ENV["DB_USER"] %>
+    password: <%= ENV["DB_PASSWORD"] %>
+    pool: <%= ENV.fetch("RAILS_MAX_THREADS", 5) %>
+
   cable:
-    <<: *primary_production
-    database: backend_production_cable
-    migrations_paths: db/cable_migrate
+    adapter: postgresql
+    encoding: unicode
+    host: <%= ENV["DB_HOST"] %>
+    port: <%= ENV.fetch("DB_PORT", 5432) %>
+    database: <%= ENV["DB_NAME"] %>
+    username: <%= ENV["DB_USER"] %>
+    password: <%= ENV["DB_PASSWORD"] %>
+    pool: <%= ENV.fetch("RAILS_MAX_THREADS", 5) %>
+
+  queue:
+    adapter: postgresql
+    encoding: unicode
+    host: <%= ENV["DB_HOST"] %>
+    port: <%= ENV.fetch("DB_PORT", 5432) %>
+    database: <%= ENV["DB_NAME"] %>
+    username: <%= ENV["DB_USER"] %>
+    password: <%= ENV["DB_PASSWORD"] %>
+    pool: <%= ENV.fetch("RAILS_MAX_THREADS", 5) %>
+
+  cache:
+    adapter: postgresql
+    encoding: unicode
+    host: <%= ENV["DB_HOST"] %>
+    database: <%= ENV["DB_NAME"] %>
+    port: <%= ENV.fetch("DB_PORT", 5432) %>
+    username: <%= ENV["DB_USER"] %>
+    password: <%= ENV["DB_PASSWORD"] %>
+    pool: <%= ENV.fetch("RAILS_MAX_THREADS", 5) %>
