@@ -42,7 +42,9 @@ class UsersController < ApplicationController
     if params[:delete_avatar] == "true"
       user.avatar.purge
     elsif params[:avatar].present?
-      user.update(params.permit(:avatar))
+      processed_avatar = ImageProcessing::MiniMagick.source(params[:avatar].tempfile).resize_to_fill(500, 500).call
+      processed_avatar.rewind
+      user.avatar.attach(io: processed_avatar, filename: params[:avatar].original_filename, content_type: params[:avatar].content_type)
     end
 
     if user.save
@@ -59,7 +61,8 @@ class UsersController < ApplicationController
   def render_user(user)
     return {
       username: user.username,
-      avatar_url: user.avatar.attached? ? Rails.application.routes.url_helpers.rails_blob_url(user.avatar, host: '127.0.0.1:3000') : nil
+      avatar_url: user.avatar.attached? ? Rails.application.routes.url_helpers.rails_representation_url(user.avatar.variant(:large), host: '127.0.0.1:3000') : nil,
+      avatar_small_url: user.avatar.attached? ? Rails.application.routes.url_helpers.rails_representation_url(user.avatar.variant(:small), host: '127.0.0.1:3000') : nil
     }
   end
 end
