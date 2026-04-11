@@ -93,7 +93,6 @@ function submit(data) {
     <div class="content">
       <h1>Welcome Reader</h1>
 
-      <img src="../../favicon.svg" alt="" />
       <div class="auth-card">
         <ILSelectButton v-model="tab" :options="tabOptions" />
         <Form
