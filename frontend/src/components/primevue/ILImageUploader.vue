@@ -1,10 +1,36 @@
 <script setup>
-import { ref, useTemplateRef } from "vue";
+import { ref, useTemplateRef, watch } from "vue";
 
-const user = JSON.parse(localStorage.getItem("user"));
-const src = ref(user.avatar_url);
+const props = defineProps({
+  imageSrc: {
+    type: String,
+    default: null,
+  },
+  loading: {
+    type: Boolean,
+    default: false,
+  },
+});
+
+const src = ref(props.imageSrc);
 const fileUpload = useTemplateRef(null);
 const emit = defineEmits(["file-selected", "file-removed"]);
+
+watch(() => props.imageSrc, (newValue) => {
+  if (props.loading) {
+    return;
+  }
+  src.value = newValue;
+  if (!newValue && fileUpload.value) {
+    fileUpload.value.clear();
+  }
+});
+
+watch(() => props.loading, (loading) => {
+  if (!loading && props.imageSrc) {
+    src.value = props.imageSrc;
+  }
+});
 
 function onFileSelect(event) {
   const file = event.files[0];
@@ -33,7 +59,7 @@ function removeFile(event) {
   <div class="uploader-wrapper">
     <div class="relative-container">
       <button
-        v-if="src"
+        v-if="src && !loading"
         type="button"
         class="remove-btn"
         @click.stop="removeFile"
@@ -48,6 +74,7 @@ function removeFile(event) {
         customUpload
         auto
         accept="image/*"
+        :disabled="loading"
         class="hidden-uploader"
       >
         <template #chooseicon>
@@ -63,6 +90,10 @@ function removeFile(event) {
 
             <div v-else class="hover-overlay">
               <i class="pi pi-pencil"></i>
+            </div>
+
+            <div v-if="loading" class="loading-overlay">
+              <span class="spinner"></span>
             </div>
           </div>
         </template>
@@ -172,6 +203,26 @@ function removeFile(event) {
     border-radius: var(--border-radius-1);
   }
 
+  .loading-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--border-radius-1);
+    z-index: 2;
+  }
+
+  .spinner {
+    width: 34px;
+    height: 34px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
   @media (hover: hover) {
     &:hover .hover-overlay {
       opacity: 1;
@@ -183,6 +234,12 @@ function removeFile(event) {
       opacity: 1;
       transition: opacit 0.1s;
     }
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
   }
 }
 </style>

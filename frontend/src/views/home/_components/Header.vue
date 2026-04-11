@@ -10,7 +10,7 @@ const user = JSON.parse(localStorage.getItem("user"));
   <div class="header-container">
     <ILAvatar
       @click="router.push({ name: 'profile' })"
-      :image="user.avatar_url"
+      :image="user.avatar_small_url"
     />
     <h1>Cozy day, {{ user.username }}!</h1>
   </div>

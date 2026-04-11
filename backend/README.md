@@ -7,7 +7,8 @@ Things you may want to cover:
 
 * Ruby version
 
-* System dependencies
+* System dependencies:
+  - ImageMagick (required for image processing). Install on macOS via Homebrew: `brew install imagemagick`
 
 * Configuration
 
