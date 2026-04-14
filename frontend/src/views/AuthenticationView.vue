@@ -51,6 +51,10 @@ function submit(data) {
     return;
   }
 
+  console.log("API:", API);
+  console.log("API.post:", API.post);
+  console.log("typeof API.post:", typeof API.post);
+
   if (tab.value === "LOGIN") {
     API.post("users/login", {
       username: data.values.username,
