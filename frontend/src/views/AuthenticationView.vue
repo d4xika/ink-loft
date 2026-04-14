@@ -75,6 +75,7 @@ function submit(data) {
     }).then(
       (response) => {
         localStorage.setItem("user", JSON.stringify(response.data));
+        router.push({ name: "home" });
         // TODO: add toasti
       },
       (error) => {
