@@ -44,12 +44,17 @@ const resolver = computed(() => {
   return zodResolver(loginSchema);
 });
 
+
 function submit(data) {
   console.log(data);
   if (!data.valid) {
     // TODO: add toasti
     return;
   }
+
+  console.log("API:", API);
+  console.log("API.post:", API.post);
+  console.log("typeof API.post:", typeof API.post);
 
   if (tab.value === "LOGIN") {
     API.post("users/login", {
