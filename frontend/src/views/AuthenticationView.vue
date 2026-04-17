@@ -1,5 +1,6 @@
 <script setup>
 import { computed, ref } from "vue";
+import { zodResolver } from "@primevue/forms/resolvers/zod";
 import { z } from "zod";
 import { REGEX } from "../helper/regex.js";
 import API from "../helper/api.js";
@@ -17,93 +18,78 @@ const user = {
   confirm_password: "",
 };
 
-const schema = computed(() => {
-  const baseSchema = z.object({
+const resolver = computed(() => {
+  const loginSchema = z.object({
     username: z.string().min(1, "Username is required."),
     password: z.string().min(1, "Password is required."),
   });
 
   if (tab.value === "REGISTER") {
-    return baseSchema
-      .extend({
-        email: z
-          .string()
-          .min(1, "Email is required.")
-          .regex(REGEX.email, "Invalid email format."),
-        confirm_password: z.string().min(1, "Confirm password is required."),
-      })
-      .refine((data) => data.password === data.confirm_password, {
-        message: "Passwords don't match.",
-        path: ["confirm_password"],
-      });
+    return zodResolver(
+      loginSchema
+        .extend({
+          email: z
+            .string()
+            .min(1, "Email is required.")
+            .regex(REGEX.email, "Invalid email format."),
+          confirm_password: z.string().min(1, "Confirm password is required."),
+        })
+        .refine((data) => data.password === data.confirm_password, {
+          message: "Passwords don't match.",
+          path: ["confirm_password"],
+        }),
+    );
   }
 
-  return baseSchema;
+  return zodResolver(loginSchema);
 });
 
-const resolver = async ({ values }) => {
-  const result = await schema.value.safeParseAsync(values);
 
-  if (result.success) {
-    return {
-      values: result.data,
-      errors: {},
-    };
-  }
-
-  const errors = {};
-
-  for (const issue of result.error.issues) {
-    const path = issue.path.join(".");
-
-    if (!path) {
-      continue;
-    }
-
-    if (!errors[path]) {
-      errors[path] = [];
-    }
-
-    errors[path].push(issue);
-  }
-
-  return {
-    values,
-    errors,
-  };
-};
-
-async function submit(data) {
+function submit(data) {
+  console.log(data);
   if (!data.valid) {
     // TODO: add toasti
     return;
   }
 
-  try {
-    const endpoint = tab.value === "LOGIN" ? "users/login" : "users/register";
-    const payload =
-      tab.value === "LOGIN"
-        ? {
-            username: data.values.username,
-            password: data.values.password,
-          }
-        : {
-            username: data.values.username,
-            password: data.values.password,
-            email: data.values.email,
-          };
+  console.log("API:", API);
+  console.log("API.post:", API.post);
+  console.log("typeof API.post:", typeof API.post);
 
-    const response = await API.post(endpoint, payload);
-
-    localStorage.setItem("user", JSON.stringify(response.data));
-    await router.push({ name: "home" });
-    // TODO: add toasti
-  } catch (error) {
-    console.log(error);
-
-    if (tab.value === "REGISTER" && error.response?.status === 409) {
-      // TODO: add toasti
-    }
+  if (tab.value === "LOGIN") {
+    API.post("users/login", {
+      username: data.values.username,
+      password: data.values.password,
+    }).then(
+      (response) => {
+        localStorage.setItem("user", JSON.stringify(response.data));
+        router.push({ name: "home" });
+        // TODO: add toasti
+      },
+      (error) => {
+        console.log(error);
+        // TODO: add toasti
+      },
+    );
+  }
+  if (tab.value === "REGISTER") {
+    API.post("users/register", {
+      username: data.values.username,
+      password: data.values.password,
+      email: data.values.email,
+    }).then(
+      (response) => {
+        localStorage.setItem("user", JSON.stringify(response.data));
+        router.push({ name: "home" });
+        // TODO: add toasti
+      },
+      (error) => {
+        console.log(error);
+        if (error.status === 409) {
+          // TODO: add toasti
+        }
+      },
+    );
   }
 }
 </script>
