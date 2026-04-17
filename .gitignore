@@ -35,4 +35,5 @@ backend/log
 backend/tmp
 backend/.kamal
 backend/test
+backend/storage
 .keep

@@ -25,9 +25,11 @@ const props = defineProps({
 <style scoped>
 .p-button {
   background-color: var(--color-3);
-  border: 1px solid transparent;
+  border: 1px solid transparent !important;
   color: var(--text-color-1);
-  padding: 9px 0 6px 0;
+  padding: 9px 10px 6px 10px;
+  white-space: nowrap;
+  font-size: var(--font-size-2);
 
   &.variant-full-width {
     width: 100%;
@@ -35,7 +37,7 @@ const props = defineProps({
 
   &:hover {
     background-color: var(--color-3) !important;
-    border: 1px solid var(--p-inputtext-hover-border-color) !important;
+    border: 1px solid var(--text-color-1-light) !important;
     color: var(--text-color-1) !important;
   }
 }
