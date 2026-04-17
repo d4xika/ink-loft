@@ -21,6 +21,5 @@ const user = JSON.parse(localStorage.getItem("user"));
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: var(--gap-3);
 }
 </style>

@@ -1,14 +1,25 @@
 <script setup>
 const props = defineProps({
+  text: {
+    type: String,
+  },
   icon: {
     type: String,
     required: true,
+  },
+  variant: {
+    type: String,
+    default: "full-width",
   },
 });
 </script>
 
 <template>
-  <Button :icon="`pi ${props.icon}`" class="icon-button" />
+  <Button
+    :icon="`pi ${props.icon}`"
+    class="icon-button"
+    :class="`variant-${props.variant}`"
+  />
 </template>
 
 <style scoped>
@@ -20,11 +31,15 @@ const props = defineProps({
 
   &.variant-full-width {
     width: 100%;
+    height: 100%;
+  }
+
+  &.variant-square {
   }
 
   &:hover {
     background-color: var(--color-3) !important;
-    border: 1px solid var(--p-inputtext-hover-border-color) !important;
+    border: 1px solid var(--text-color-1-light) !important;
     color: var(--text-color-1) !important;
   }
 }
