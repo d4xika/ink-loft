@@ -89,7 +89,7 @@ const props = defineProps({
         gap: var(--gap-2);
 
         .quote-btn-container {
-          width: 100%;
+          width: 55%;
         }
 
         .edit-finish-btn-container {

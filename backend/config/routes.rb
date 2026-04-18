@@ -10,4 +10,6 @@ Rails.application.routes.draw do
       put :update_profile
     end
   end
+
+  resources :books, only: [ :index, :create, :show ]
 end

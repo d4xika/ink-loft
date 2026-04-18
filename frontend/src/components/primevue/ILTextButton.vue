@@ -29,7 +29,7 @@ const props = defineProps({
   color: var(--text-color-1);
   padding: 9px 10px 6px 10px;
   white-space: nowrap;
-  font-size: var(--font-size-2);
+  font-size: var(--font-size-3);
 
   &.variant-full-width {
     width: 100%;

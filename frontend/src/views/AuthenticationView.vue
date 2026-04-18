@@ -11,7 +11,7 @@ const router = useRouter();
 const tab = ref("LOGIN");
 const tabOptions = ["LOGIN", "REGISTER"];
 
-const user = {
+const initUser = {
   username: "",
   password: "",
   email: "",
@@ -44,7 +44,6 @@ const resolver = computed(() => {
   return zodResolver(loginSchema);
 });
 
-
 function submit(data) {
   if (!data.valid) {
     // TODO: add toasti
@@ -62,7 +61,6 @@ function submit(data) {
         // TODO: add toasti
       },
       (error) => {
-        console.log(error);
         // TODO: add toasti
       },
     );
@@ -98,7 +96,7 @@ function submit(data) {
         <ILSelectButton v-model="tab" :options="tabOptions" />
         <Form
           @submit="submit"
-          :initialValues="user"
+          :initialValues="initUser"
           :resolver="resolver"
           :key="tab"
           class="form-container"

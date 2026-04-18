@@ -46,7 +46,7 @@ const model = defineModel({
 :deep(.p-inputtext) {
   background-color: var(--color-0);
   border: 1px solid var(--color-2);
-  font-size: 0.8rem;
+  font-size: var(--font-size-3);
   padding-top: 11px !important;
   width: 100% !important;
 
