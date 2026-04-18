@@ -18,6 +18,11 @@ const routes = [
     name: "profile",
     component: () => import("@/views/profile/ProfileView.vue"),
   },
+  {
+    path: "/newBook",
+    name: "newBook",
+    component: () => import("@/views/add_book/AddBookView.vue"),
+  },
 ];
 
 const router = createRouter({

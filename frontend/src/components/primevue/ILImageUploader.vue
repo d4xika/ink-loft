@@ -10,27 +10,41 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  variant: {
+    type: String,
+    default: "square",
+  },
+  title: {
+    type: String,
+    default: "Portrait",
+  },
 });
 
 const src = ref(props.imageSrc);
 const fileUpload = useTemplateRef(null);
 const emit = defineEmits(["file-selected", "file-removed"]);
 
-watch(() => props.imageSrc, (newValue) => {
-  if (props.loading) {
-    return;
-  }
-  src.value = newValue;
-  if (!newValue && fileUpload.value) {
-    fileUpload.value.clear();
-  }
-});
+watch(
+  () => props.imageSrc,
+  (newValue) => {
+    if (props.loading) {
+      return;
+    }
+    src.value = newValue;
+    if (!newValue && fileUpload.value) {
+      fileUpload.value.clear();
+    }
+  },
+);
 
-watch(() => props.loading, (loading) => {
-  if (!loading && props.imageSrc) {
-    src.value = props.imageSrc;
-  }
-});
+watch(
+  () => props.loading,
+  (loading) => {
+    if (!loading && props.imageSrc) {
+      src.value = props.imageSrc;
+    }
+  },
+);
 
 function onFileSelect(event) {
   const file = event.files[0];
@@ -56,7 +70,7 @@ function removeFile(event) {
 </script>
 
 <template>
-  <div class="uploader-wrapper">
+  <div class="uploader-wrapper" :class="`variant-${props.variant}`">
     <div class="relative-container">
       <button
         v-if="src && !loading"
@@ -85,7 +99,7 @@ function removeFile(event) {
           >
             <div v-if="!src" class="placeholder-content">
               <i class="pi pi-plus"></i>
-              <span>Portrait</span>
+              <span>{{ props.title }}</span>
             </div>
 
             <div v-else class="hover-overlay">
@@ -104,14 +118,23 @@ function removeFile(event) {
 
 <style scoped lang="scss">
 .uploader-wrapper {
-  --fileupload-size: 200px;
   display: flex;
   justify-content: center;
 
+  &.variant-square {
+    --fileupload-height: 200px;
+    --fileupload-width: 200px;
+  }
+
+  &.variant-rectangle {
+    --fileupload-height: 200px;
+    --fileupload-width: 133px;
+  }
+
   .relative-container {
     position: relative;
-    width: var(--fileupload-size);
-    height: var(--fileupload-size);
+    width: var(--fileupload-width);
+    height: var(--fileupload-height);
   }
 }
 
@@ -147,13 +170,13 @@ function removeFile(event) {
   background: transparent !important;
   border: none !important;
   display: block;
-  width: var(--fileupload-size);
-  height: var(--fileupload-size);
+  width: var(--fileupload-width);
+  height: var(--fileupload-height);
 }
 
 .custom-upload-box {
-  width: var(--fileupload-size);
-  height: var(--fileupload-size);
+  width: var(--fileupload-width);
+  height: var(--fileupload-height);
   border: 2px dashed var(--text-color-1-light);
   border-radius: var(--border-radius-1);
   display: flex;
