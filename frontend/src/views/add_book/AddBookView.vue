@@ -31,6 +31,9 @@ const resolver = zodResolver(
     words: z.coerce.number().nullable(),
     pages: z.coerce.number().nullable(),
     rating: z.string().nullable(),
+    start_date: z.coerce.date().nullable(),
+    end_date: z.coerce.date().nullable(),
+    recommended: z.boolean().nullable(),
   }),
 );
 
@@ -53,6 +56,8 @@ function submit(data) {
       pages: data.states.pages?.value,
       rating: data.states.rating?.value,
       recommended: data.states.recommended?.value,
+      start_date: data.states.start_date?.value,
+      end_date: data.states.end_date?.value,
     },
   }).then(
     (response) => {
@@ -72,10 +77,14 @@ function submit(data) {
     <div class="content-container">
       <div class="main-content-container">
         <div class="title-author-container">
+          <img src="/divider_book.png" alt="divider">
           <ILTextInput label="Title" name="title" />
           <ILTextInput label="Author" name="author" />
         </div>
-        <ILImageUploader variant="rectangle" title="Cover" name="cover" />
+        <div class="rating-section">
+          <ILImageUploader variant="rectangle" title="Cover" name="cover" />
+          <ILRating name="rating"/>
+        </div>
       </div>
       <!-- TODO: maybe change to combobox -->
       <ILTextInput label="Platform" name="platform" />
@@ -83,11 +92,11 @@ function submit(data) {
       <ILNumberInput label="Chapters" name="chapters" />
       <ILNumberInput label="Words" name="words" />
       <ILNumberInput label="Pages" name="pages" />
-      <!-- TODO add date-->
-      <!-- TODO: maybe change to stars -->
-      <ILTextInput label="Rating" name="rating" />
-      <!-- TODO: maybe change to bool -->
-      <ILTextInput label="Recommended?" name="recommended" />
+      <div class="side-by-side">
+        <ILDatePicker label="Start Date" name="start_date" />
+        <ILDatePicker label="End Date" name="end_date" />
+      </div>
+      <ILToggleSwitch label="Would recommend:" name="recommended"/>
       <!-- TODO: maybe change to area -->
       <ILTextInput label="Notes" name="notes" />
       <ILTextInput label="Link" name="link" />
@@ -103,6 +112,18 @@ function submit(data) {
   gap: var(--gap-3);
   padding: var(--gap-3);
 
+  .side-by-side {
+    display: flex;
+    gap: var(--gap-3);
+  }
+
+  .rating-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-3);
+    padding-bottom: calc(var(--gap-1) + 2px)
+  }
+
   .main-content-container {
     display: flex;
     flex-direction: row;
@@ -115,6 +136,12 @@ function submit(data) {
       gap: var(--gap-3);
       width: 100%;
       padding-right: var(--gap-3);
+
+      img {
+        padding-left: var(--gap-3);
+        padding-right: var(--gap-3);
+        width: calc(100%);
+      };
     }
   }
 }
