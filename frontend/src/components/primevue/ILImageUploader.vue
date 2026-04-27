@@ -122,13 +122,13 @@ function removeFile(event) {
   justify-content: center;
 
   &.variant-square {
-    --fileupload-height: 200px;
-    --fileupload-width: 200px;
+    --fileupload-height: var(--fileupload-square-height);
+    --fileupload-width: var(--fileupload-square-width);
   }
 
   &.variant-rectangle {
-    --fileupload-height: 200px;
-    --fileupload-width: 133px;
+    --fileupload-height: var(--fileupload-rectangle-height);
+    --fileupload-width: var(--fileupload-rectangle-width);
   }
 
   .relative-container {
