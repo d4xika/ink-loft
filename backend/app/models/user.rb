@@ -2,6 +2,7 @@ class User < ApplicationRecord
   has_secure_password
   has_many :auth_keys
   has_many :books
+  has_many :quotes
 
   has_one_attached :avatar do |attachable|
     attachable.variant :small,

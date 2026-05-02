@@ -5,9 +5,44 @@ import Quotes from "./_components/Quotes.vue";
 import CurrentlyReading from "./_components/CurrentlyReading.vue";
 import ILBoxButton from "../../components/ILBoxButton.vue";
 import { useRouter } from "vue-router";
+import ILDrawer from "../../components/primevue/ILDrawer.vue";
+import ILTextArea from "../../components/primevue/ILTextArea.vue";
+import {zodResolver} from "@primevue/forms/resolvers/zod";
+import {z} from "zod";
+import API from "../../helper/api.js";
 
 const router = useRouter();
 const swipeContainer = ref(null);
+const addQuote = ref(false)
+const activeBook = ref(null);
+
+function saveQuote(form) {
+  if(!form.valid) {
+    return;
+  }
+  API.post("quotes", {
+    quote: {
+      book_id: activeBook.value,
+      content: form.values.quote,
+    },
+  }).then(
+    (response) => {
+      addQuote.value = false;
+      // TODO: add toasti
+    },
+    (error) => {
+      // TODO: add toasti
+    },
+  );
+}
+
+const resolver = zodResolver(
+  z.object(
+    {
+      quote: z.string().min(1, "Quote is required."),
+    }
+  )
+)
 
 onMounted(() => {
   if (swipeContainer.value) {
@@ -36,7 +71,7 @@ onMounted(() => {
         </div>
 
         <div class="swipe-main">
-          <CurrentlyReading title="Lunch baby" author="Me" />
+          <CurrentlyReading title="Lunch baby" author="Me" @addQuote="activeBook = 1; addQuote = true"/>
         </div>
       </div>
 
@@ -48,6 +83,15 @@ onMounted(() => {
         </div>
       </div>
     </div>
+
+    <ILDrawer v-model="addQuote" title="Add Quote">
+      <template #body>
+        <Form @submit="saveQuote" :resolver="resolver">
+          <ILTextArea name="quote" label="Quote" />
+          <ILTextButton text="Save Quote" type="submit" />
+        </Form>
+      </template>
+    </ILDrawer>
   </div>
 </template>
 
