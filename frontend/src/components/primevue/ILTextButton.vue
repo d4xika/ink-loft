@@ -38,7 +38,7 @@ const props = defineProps({
   &:hover {
     background-color: var(--color-3) !important;
     border: 1px solid var(--text-color-1-light) !important;
-    color: var(--text-color-1) !important;
+    color: var(--text-color-1-light) !important;
   }
 }
 </style>
