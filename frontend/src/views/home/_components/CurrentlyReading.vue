@@ -12,6 +12,8 @@ const props = defineProps({
     type: String,
   },
 });
+
+const emit = defineEmits(["addQuote"]);
 </script>
 
 <template>
@@ -31,6 +33,7 @@ const props = defineProps({
             <ILIconButton
               icon="pi-pen-to-square"
               variant="full-width"
+              @click="emit('addQuote')"
             ></ILIconButton>
           </div>
           <div class="edit-finish-btn-container">
