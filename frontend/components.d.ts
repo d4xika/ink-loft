@@ -27,6 +27,7 @@ declare module 'vue' {
     ILImageUploader: typeof import('./src/components/primevue/ILImageUploader.vue')['default']
     ILNumberInput: typeof import('./src/components/primevue/ILNumberInput.vue')['default']
     ILRating: typeof import('./src/components/primevue/ILRating.vue')['default']
+    ILSelect: typeof import('./src/components/primevue/ILSelect.vue')['default']
     ILSelectButton: typeof import('./src/components/primevue/ILSelectButton.vue')['default']
     ILTextButton: typeof import('./src/components/primevue/ILTextButton.vue')['default']
     ILTextInput: typeof import('./src/components/primevue/ILTextInput.vue')['default']
@@ -37,6 +38,7 @@ declare module 'vue' {
     Rating: typeof import('primevue/rating')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    Select: typeof import('primevue/select')['default']
     SelectButton: typeof import('primevue/selectbutton')['default']
     ToggleSwitch: typeof import('primevue/toggleswitch')['default']
   }

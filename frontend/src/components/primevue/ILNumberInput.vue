@@ -34,7 +34,7 @@ const model = defineModel({
   label {
     padding-top: 3px !important;
     background-color: var(--color-0) !important;
-    color: var(--text-color-1) !important;
+    color: var(--text-color-1-light) !important;
   }
 }
 

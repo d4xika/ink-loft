@@ -3,7 +3,9 @@ import Header from "./Header.vue";
 import { zodResolver } from "@primevue/forms/resolvers/zod";
 import { z } from "zod";
 import API from "@/helper/api.js";
+import { READING_STATUSES } from "@/helper/constants.js";
 import { useRouter } from "vue-router";
+import ILSelect from "../../components/primevue/ILSelect.vue";
 
 const router = useRouter();
 
@@ -31,9 +33,10 @@ const resolver = zodResolver(
     words: z.coerce.number().nullable(),
     pages: z.coerce.number().nullable(),
     rating: z.string().nullable(),
-    start_date: z.coerce.date().nullable(),
-    end_date: z.coerce.date().nullable(),
+    start_date: z.coerce.date().nullable().optional(),
+    end_date: z.coerce.date().nullable().optional(),
     recommended: z.boolean().nullable(),
+    reading_status: z.coerce.number().nullable(),
   }),
 );
 
@@ -58,6 +61,7 @@ function submit(data) {
       recommended: data.states.recommended?.value,
       start_date: data.states.start_date?.value,
       end_date: data.states.end_date?.value,
+      reading_status: data.states.status?.value,
     },
   }).then(
     (response) => {
@@ -86,21 +90,21 @@ function submit(data) {
           <ILRating name="rating"/>
         </div>
       </div>
-      <!-- TODO: maybe change to combobox -->
-      <ILTextInput label="Platform" name="platform" />
-      <ILTextInput label="Pairing" name="pairing" />
-      <ILNumberInput label="Chapters" name="chapters" />
-      <ILNumberInput label="Words" name="words" />
-      <ILNumberInput label="Pages" name="pages" />
+      <ILSelect :options="READING_STATUSES" option-label="label" option-value="id" label="Reading Status" name="reading_status"/>
       <div class="side-by-side">
         <ILDatePicker label="Start Date" name="start_date" />
         <ILDatePicker label="End Date" name="end_date" />
       </div>
       <ILToggleSwitch label="Would recommend:" name="recommended"/>
+      <!-- TODO: maybe change to combobox -->
+      <ILTextInput label="Platform" name="platform" />
+      <ILNumberInput label="Chapters" name="chapters" />
+      <ILNumberInput label="Words" name="words" />
+      <ILNumberInput label="Pages" name="pages" />
+      <ILTextInput label="Pairing" name="pairing" />
       <!-- TODO: maybe change to area -->
       <ILTextInput label="Notes" name="notes" />
       <ILTextInput label="Link" name="link" />
-      <!-- TODO add cool reading status box buttons?-->
     </div>
   </Form>
 </template>
