@@ -25,8 +25,8 @@ const model = defineModel({ type: String, default: "" })
     <Select
       v-model="model"
       :options="props.options"
-      :option-label="props.optionLabel"
-      :option-value="props.optionValue"
+      :optionLabel="props.optionLabel"
+      :optionValue="props.optionValue"
       class="w-full"
     />
     <label>{{ props.label }}</label>

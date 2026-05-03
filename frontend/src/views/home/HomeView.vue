@@ -5,19 +5,19 @@ import { useRouter } from "vue-router";
 import { z } from "zod";
 import CurrentlyReading from "./_components/CurrentlyReading.vue";
 import Header from "./_components/Header.vue";
-import Quotes from "./_components/Quotes.vue";
 import ILBoxButton from "../../components/ILBoxButton.vue";
 import ILDrawer from "../../components/primevue/ILDrawer.vue";
 import ILTextArea from "../../components/primevue/ILTextArea.vue";
+import IlQuotes from "../../components/quote/ILQuotes.vue";
 import API from "../../helper/api.js";
 
 const router = useRouter();
 const swipeContainer = ref(null);
-const addQuote = ref(false)
+const addQuote = ref(false);
 const activeBook = ref(null);
 
 function saveQuote(form) {
-  if(!form.valid) {
+  if (!form.valid) {
     return;
   }
   API.post("quotes", {
@@ -37,12 +37,10 @@ function saveQuote(form) {
 }
 
 const resolver = zodResolver(
-  z.object(
-    {
-      quote: z.string().min(1, "Quote is required."),
-    }
-  )
-)
+  z.object({
+    quote: z.string().min(1, "Quote is required."),
+  }),
+);
 
 onMounted(() => {
   if (swipeContainer.value) {
@@ -55,8 +53,8 @@ onMounted(() => {
   <div class="home-view-container">
     <Header />
     <div class="content-container">
-      <div class="quotes-container">
-        <Quotes quote="You are not alone." />
+      <div @click="router.push({ name: 'quotes' })">
+        <IlQuotes quote="You are not alone." />
       </div>
       <ILDivider />
 
@@ -71,7 +69,14 @@ onMounted(() => {
         </div>
 
         <div class="swipe-main">
-          <CurrentlyReading title="Lunch baby" author="Me" @add-quote="activeBook = 1; addQuote = true" />
+          <CurrentlyReading
+            title="Lunch baby"
+            author="Me"
+            @add-quote="
+              activeBook = 1;
+              addQuote = true;
+            "
+          />
         </div>
       </div>
 
@@ -106,12 +111,6 @@ onMounted(() => {
     flex-direction: column;
     margin-top: var(--gap-4);
     gap: var(--gap-4);
-
-    .quotes-container {
-      background-color: var(--color-2);
-      border-radius: var(--border-radius-1);
-      padding: var(--gap-2);
-    }
 
     .swipe-wrapper {
       display: flex;

@@ -95,7 +95,7 @@ function submit(data) {
         <ILSelectButton v-model="tab" :options="tabOptions" />
         <Form
           :key="tab"
-          :initial-values="initUser"
+          :initialValues="initUser"
           :resolver="resolver"
           class="form-container"
           @submit="submit"

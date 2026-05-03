@@ -26,7 +26,7 @@ const model = defineModel({
       v-if="props.type === 'password'"
       v-model="model"
       :name="props.name"
-      toggle-mask
+      toggleMask
       :feedback="false"
     />
     <InputText v-else v-model="model" :name="props.name" />

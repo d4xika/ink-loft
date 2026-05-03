@@ -10,7 +10,7 @@ const props = defineProps({
   },
   icon: {
     type: String,
-    default: undefined
+    default: undefined,
   },
 });
 </script>
@@ -40,7 +40,6 @@ const props = defineProps({
   cursor: pointer;
 
   .text {
-    line-height: 1;
     text-align: center;
     font-size: var(--font-size-4);
     margin: 0;
