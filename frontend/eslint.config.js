@@ -47,6 +47,7 @@ export default [
           },
         },
       ],
+      "vue/attribute-hyphenation": ["error", "never"],
       "object-curly-spacing": ["error", "always"],
 
       "no-console": "warn",

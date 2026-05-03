@@ -75,7 +75,7 @@ async function removeProfilePicture() {
     <Header />
     <div class="profile-view-content">
       <ILImageUploader
-        :image-src="avatarUrl"
+        :imageSrc="avatarUrl"
         :loading="avatarLoading"
         @file-selected="(file) => updateProfilePicture(file)"
         @file-removed="removeProfilePicture()"

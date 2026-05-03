@@ -84,7 +84,7 @@ function removeFile(event) {
       <FileUpload
         ref="fileUpload"
         mode="basic"
-        custom-upload
+        customUpload
         auto
         accept="image/*"
         :disabled="loading"

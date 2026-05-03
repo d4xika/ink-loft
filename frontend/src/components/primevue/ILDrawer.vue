@@ -3,9 +3,9 @@ const props = defineProps({
   title: {
     type: String,
     required: true,
-  }
-})
-const model = defineModel({ type: Boolean, default: false })
+  },
+});
+const model = defineModel({ type: Boolean, default: false });
 </script>
 
 <template>
@@ -15,8 +15,7 @@ const model = defineModel({ type: Boolean, default: false })
     position="bottom"
     style="height: fit-content"
   >
-    <slot name="body">
-    </slot>
+    <slot name="body"> </slot>
   </Drawer>
 </template>
 
@@ -26,7 +25,6 @@ const model = defineModel({ type: Boolean, default: false })
   border-top-right-radius: 10px !important;
   border: none !important;
   margin: 0 var(--gap-2) !important;
-  line-height: 1.5rem;
   background-color: var(--color-0) !important;
 
   .p-drawer-header {

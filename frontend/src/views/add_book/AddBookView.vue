@@ -75,7 +75,7 @@ function submit(data) {
 </script>
 
 <template>
-  <Form :initial-values="initBook" :resolver="resolver" @submit="submit">
+  <Form :initialValues="initBook" :resolver="resolver" @submit="submit">
     <Header />
     <div class="content-container">
       <div class="main-content-container">
@@ -91,8 +91,8 @@ function submit(data) {
       </div>
       <ILSelect
         :options="READING_STATUSES"
-        option-label="label"
-        option-value="id"
+        optionLabel="label"
+        optionValue="id"
         label="Reading Status"
         name="reading_status"
       />

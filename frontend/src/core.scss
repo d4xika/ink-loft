@@ -2,7 +2,7 @@
 
 :root {
   --color-0: #1c1917;
-  --color-1: #59585880;
+  --color-1: #45150D;
   --color-2: #292524;
   --color-3: #464832;
   --text-color-1: #dad9d9;
@@ -29,7 +29,6 @@
 
 body {
   font-family: "Courier Prime", sans-serif;
-  line-height: 0;
   font-size: var(--font-size-3);
   background-color: var(--color-0);
   color: var(--text-color-1);
@@ -40,6 +39,15 @@ h1 {
   font-family: "IM Fell English", serif !important;
   font-style: italic;
   font-weight: normal;
+  margin: 0;
+}
+
+h2 {
+  margin: 0;
+}
+
+h3 {
+  margin: 0;
 }
 
 .font-fix {

@@ -16,7 +16,7 @@ const model = defineModel({
   <SelectButton
     v-model="model"
     :options="props.options"
-    :allow-empty="false"
+    :allowEmpty="false"
   />
 </template>
 

@@ -17,9 +17,9 @@ const model = defineModel({ type: Date, default: null });
     <DatePicker
       v-model="model"
       :name="props.name"
-      :input-id="props.label"
-      show-icon
-      icon-display="input"
+      :inputId="props.label"
+      showIcon
+      iconDisplay="input"
     />
     <label>{{ props.label }}</label>
   </FloatLabel>

@@ -7,7 +7,7 @@
 
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
-    origins "http://localhost:5173", "https://ink-loft.d4xika.com"
+    origins "http://localhost:5173", "https://ink-loft.d4xika.com", "http://192.168.178.24:5173"
     resource "*",
              headers: :any,
              methods: [:get, :post, :put, :patch, :delete, :options, :head],
