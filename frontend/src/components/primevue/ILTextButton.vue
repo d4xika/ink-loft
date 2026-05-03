@@ -17,9 +17,11 @@ const props = defineProps({
 </script>
 
 <template>
-  <Button :class="`variant-${props.variant}`" :type="props.type">{{
-    props.text
-  }}</Button>
+  <Button :class="`variant-${props.variant}`" :type="props.type">
+    {{
+      props.text
+    }}
+  </Button>
 </template>
 
 <style scoped>

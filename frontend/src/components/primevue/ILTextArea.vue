@@ -10,12 +10,18 @@ const props = defineProps({
   }
 });
 
-const model = defineModel({ type: String, default: ""})
+const model = defineModel({ type: String, default: "" })
 </script>
 
 <template>
   <FloatLabel variant="on">
-    <Textarea :name="props.name" v-model="model" rows="5" cols="30" style="resize: none" />
+    <Textarea
+      v-model="model"
+      :name="props.name"
+      rows="5"
+      cols="30"
+      style="resize: none"
+    />
     <label>{{ props.label }}</label>
   </FloatLabel>
 </template>

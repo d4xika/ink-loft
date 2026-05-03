@@ -1,11 +1,11 @@
 <script setup>
-import Header from "./Header.vue";
 import { zodResolver } from "@primevue/forms/resolvers/zod";
+import { useRouter } from "vue-router";
 import { z } from "zod";
+import Header from "./Header.vue";
+import ILSelect from "../../components/primevue/ILSelect.vue";
 import API from "@/helper/api.js";
 import { READING_STATUSES } from "@/helper/constants.js";
-import { useRouter } from "vue-router";
-import ILSelect from "../../components/primevue/ILSelect.vue";
 
 const router = useRouter();
 
@@ -41,7 +41,6 @@ const resolver = zodResolver(
 );
 
 function submit(data) {
-  console.log(data);
   if (!data.valid) {
     // TODO: add toasti
     return;
@@ -76,34 +75,39 @@ function submit(data) {
 </script>
 
 <template>
-  <Form :initialValues="initBook" :resolver="resolver" @submit="submit">
+  <Form :initial-values="initBook" :resolver="resolver" @submit="submit">
     <Header />
     <div class="content-container">
       <div class="main-content-container">
         <div class="title-author-container">
-          <img src="/divider_book.png" alt="divider">
+          <img src="/divider_book.png" alt="divider" />
           <ILTextInput label="Title" name="title" />
           <ILTextInput label="Author" name="author" />
         </div>
         <div class="rating-section">
           <ILImageUploader variant="rectangle" title="Cover" name="cover" />
-          <ILRating name="rating"/>
+          <ILRating name="rating" />
         </div>
       </div>
-      <ILSelect :options="READING_STATUSES" option-label="label" option-value="id" label="Reading Status" name="reading_status"/>
+      <ILSelect
+        :options="READING_STATUSES"
+        option-label="label"
+        option-value="id"
+        label="Reading Status"
+        name="reading_status"
+      />
       <div class="side-by-side">
         <ILDatePicker label="Start Date" name="start_date" />
         <ILDatePicker label="End Date" name="end_date" />
       </div>
-      <ILToggleSwitch label="Would recommend:" name="recommended"/>
+      <ILToggleSwitch label="Would recommend:" name="recommended" />
       <!-- TODO: maybe change to combobox -->
       <ILTextInput label="Platform" name="platform" />
       <ILNumberInput label="Chapters" name="chapters" />
       <ILNumberInput label="Words" name="words" />
       <ILNumberInput label="Pages" name="pages" />
       <ILTextInput label="Pairing" name="pairing" />
-      <!-- TODO: maybe change to area -->
-      <ILTextInput label="Notes" name="notes" />
+      <ILTextArea label="Notes" name="notes" />
       <ILTextInput label="Link" name="link" />
     </div>
   </Form>

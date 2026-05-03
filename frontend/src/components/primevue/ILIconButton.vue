@@ -2,6 +2,7 @@
 const props = defineProps({
   text: {
     type: String,
+    default: undefined,
   },
   icon: {
     type: String,

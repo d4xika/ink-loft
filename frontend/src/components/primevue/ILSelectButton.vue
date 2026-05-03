@@ -16,8 +16,8 @@ const model = defineModel({
   <SelectButton
     v-model="model"
     :options="props.options"
-    :allowEmpty="false"
-  ></SelectButton>
+    :allow-empty="false"
+  />
 </template>
 
 <style scoped lang="scss">

@@ -84,12 +84,12 @@ function removeFile(event) {
       <FileUpload
         ref="fileUpload"
         mode="basic"
-        @select="onFileSelect"
-        customUpload
+        custom-upload
         auto
         accept="image/*"
         :disabled="loading"
         class="hidden-uploader"
+        @select="onFileSelect"
       >
         <template #chooseicon>
           <div

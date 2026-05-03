@@ -7,9 +7,9 @@ const router = useRouter();
 <template>
   <div class="header-container">
     <ILIconButton
-      @click="router.push({ name: 'home' })"
       icon="pi-chevron-left"
       variant="square"
+      @click="router.push({ name: 'home' })"
     />
     <ILIconButton icon="pi-save" variant="square" type="submit" />
   </div>

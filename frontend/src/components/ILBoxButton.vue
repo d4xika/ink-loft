@@ -6,18 +6,24 @@ const props = defineProps({
   },
   text2: {
     type: String,
+    default: undefined,
   },
   icon: {
     type: String,
+    default: undefined
   },
 });
 </script>
 
 <template>
   <div class="box-button-container">
-    <p class="text">{{ props.text }}</p>
-    <p v-if="props.text2" class="text">{{ props.text2 }}</p>
-    <i :class="`pi ${props.icon}`" />
+    <p class="text">
+      {{ props.text }}
+    </p>
+    <p v-if="props.text2" class="text">
+      {{ props.text2 }}
+    </p>
+    <i :class="`pi ${props.icon}`"></i>
   </div>
 </template>
 

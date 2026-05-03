@@ -13,8 +13,12 @@ const props = defineProps({
 
 <template>
   <div class="quotes-container">
-    <h2 class="quote">"{{ props.quote }}"</h2>
-    <h3 class="source">~ {{ props.source }}</h3>
+    <h2 class="quote">
+      "{{ props.quote }}"
+    </h2>
+    <h3 class="source">
+      ~ {{ props.source }}
+    </h3>
   </div>
 </template>
 

@@ -24,9 +24,9 @@ const model = defineModel({
   <FloatLabel variant="on">
     <Password
       v-if="props.type === 'password'"
-      :name="props.name"
       v-model="model"
-      toggleMask
+      :name="props.name"
+      toggle-mask
       :feedback="false"
     />
     <InputText v-else v-model="model" :name="props.name" />

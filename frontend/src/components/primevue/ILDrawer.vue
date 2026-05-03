@@ -5,11 +5,16 @@ const props = defineProps({
     required: true,
   }
 })
-const model = defineModel({ type: Boolean, default: false})
+const model = defineModel({ type: Boolean, default: false })
 </script>
 
 <template>
-  <Drawer v-model:visible="model" :header="props.title" position="bottom" style="height: fit-content">
+  <Drawer
+    v-model:visible="model"
+    :header="props.title"
+    position="bottom"
+    style="height: fit-content"
+  >
     <slot name="body">
     </slot>
   </Drawer>
