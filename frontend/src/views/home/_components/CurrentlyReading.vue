@@ -4,12 +4,15 @@ import ILBookCover from "../../../components/ILBookCover.vue";
 const props = defineProps({
   covers: {
     type: String,
+    default: undefined
   },
   title: {
     type: String,
+    default: undefined
   },
   author: {
     type: String,
+    default: undefined
   },
 });
 
@@ -18,15 +21,21 @@ const emit = defineEmits(["addQuote"]);
 
 <template>
   <div class="currently-reading-container">
-    <p class="header-title">Currently Reading</p>
+    <p class="header-title">
+      Currently Reading
+    </p>
     <div class="content-container">
       <div class="left-container">
         <ILBookCover cover="/Test_Cover.jpg" />
       </div>
       <div class="right-container">
         <div class="title-author-container">
-          <p class="title">{{ props.title }}</p>
-          <p class="author">~ {{ props.author }}</p>
+          <p class="title">
+            {{ props.title }}
+          </p>
+          <p class="author">
+            ~ {{ props.author }}
+          </p>
         </div>
         <div class="btn-container">
           <div class="quote-btn-container">
@@ -34,7 +43,7 @@ const emit = defineEmits(["addQuote"]);
               icon="pi-pen-to-square"
               variant="full-width"
               @click="emit('addQuote')"
-            ></ILIconButton>
+            />
           </div>
           <div class="edit-finish-btn-container">
             <ILTextButton text="Edit read" />

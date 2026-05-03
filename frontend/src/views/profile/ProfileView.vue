@@ -50,7 +50,6 @@ async function updateProfilePicture(file) {
     // TODO: add toast
   } catch (error) {
     // TODO: add toast
-    console.error(error);
   } finally {
     avatarLoading.value = false;
   }

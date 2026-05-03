@@ -17,12 +17,18 @@ const props = defineProps({
     default: undefined,
   }
 })
-const model = defineModel({ type: String, default: ""})
+const model = defineModel({ type: String, default: "" })
 </script>
 
 <template>
   <FloatLabel class="w-full md:w-56" variant="on">
-    <Select v-model="model" :options="props.options" :optionLabel="props.optionLabel" :optionValue="props.optionValue" class="w-full" />
+    <Select
+      v-model="model"
+      :options="props.options"
+      :option-label="props.optionLabel"
+      :option-value="props.optionValue"
+      class="w-full"
+    />
     <label>{{ props.label }}</label>
   </FloatLabel>
 </template>

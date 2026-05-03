@@ -5,11 +5,11 @@ const props = defineProps({
     required: true,
   }
 })
-const model = defineModel({ type: Number, default: 0})
+const model = defineModel({ type: Number, default: 0 })
 </script>
 
 <template>
-  <Rating v-model="model" :name="props.name"/>
+  <Rating v-model="model" :name="props.name" />
 </template>
 
 <style scoped>

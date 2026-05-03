@@ -1,14 +1,14 @@
 <script setup>
+import { zodResolver } from "@primevue/forms/resolvers/zod";
 import { ref, onMounted } from "vue";
+import { useRouter } from "vue-router";
+import { z } from "zod";
+import CurrentlyReading from "./_components/CurrentlyReading.vue";
 import Header from "./_components/Header.vue";
 import Quotes from "./_components/Quotes.vue";
-import CurrentlyReading from "./_components/CurrentlyReading.vue";
 import ILBoxButton from "../../components/ILBoxButton.vue";
-import { useRouter } from "vue-router";
 import ILDrawer from "../../components/primevue/ILDrawer.vue";
 import ILTextArea from "../../components/primevue/ILTextArea.vue";
-import {zodResolver} from "@primevue/forms/resolvers/zod";
-import {z} from "zod";
 import API from "../../helper/api.js";
 
 const router = useRouter();
@@ -60,18 +60,18 @@ onMounted(() => {
       </div>
       <ILDivider />
 
-      <div class="swipe-wrapper" ref="swipeContainer">
+      <div ref="swipeContainer" class="swipe-wrapper">
         <div class="swipe-actions">
           <ILBoxButton text="Add read" icon="pi-plus" />
           <ILBoxButton
-            @click="router.push({ name: 'newBook' })"
             text="New read"
             icon="pi-plus"
+            @click="router.push({ name: 'newBook' })"
           />
         </div>
 
         <div class="swipe-main">
-          <CurrentlyReading title="Lunch baby" author="Me" @addQuote="activeBook = 1; addQuote = true"/>
+          <CurrentlyReading title="Lunch baby" author="Me" @add-quote="activeBook = 1; addQuote = true" />
         </div>
       </div>
 
@@ -86,7 +86,7 @@ onMounted(() => {
 
     <ILDrawer v-model="addQuote" title="Add Quote">
       <template #body>
-        <Form @submit="saveQuote" :resolver="resolver">
+        <Form :resolver="resolver" @submit="saveQuote">
           <ILTextArea name="quote" label="Quote" />
           <ILTextButton text="Save Quote" type="submit" />
         </Form>

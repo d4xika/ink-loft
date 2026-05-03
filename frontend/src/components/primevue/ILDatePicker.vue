@@ -14,7 +14,13 @@ const model = defineModel({ type: Date, default: null });
 
 <template>
   <FloatLabel variant="on">
-    <DatePicker v-model="model" :name="props.name" :inputId="props.label" showIcon iconDisplay="input" />
+    <DatePicker
+      v-model="model"
+      :name="props.name"
+      :input-id="props.label"
+      show-icon
+      icon-display="input"
+    />
     <label>{{ props.label }}</label>
   </FloatLabel>
 </template>

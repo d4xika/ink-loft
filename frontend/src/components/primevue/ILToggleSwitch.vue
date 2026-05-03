@@ -9,7 +9,7 @@ const props = defineProps({
     required: true,
   }
 })
-const model = defineModel({ type: Boolean, default: false})
+const model = defineModel({ type: Boolean, default: false })
 </script>
 
 <template>
@@ -17,7 +17,7 @@ const model = defineModel({ type: Boolean, default: false})
     <p>{{ props.label }}</p>
     <ToggleSwitch v-model="model" :name="props.name">
       <template #handle="{ checked }">
-        <i :class="['!text-xs pi', { 'pi-check': checked, 'pi-times': !checked }]" />
+        <i :class="['!text-xs pi', { 'pi-check': checked, 'pi-times': !checked }]"></i>
       </template>
     </ToggleSwitch>
   </div>

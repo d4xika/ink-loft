@@ -1,10 +1,10 @@
 <script setup>
-import { computed, ref } from "vue";
 import { zodResolver } from "@primevue/forms/resolvers/zod";
-import { z } from "zod";
-import { REGEX } from "../helper/regex.js";
-import API from "../helper/api.js";
+import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
+import { z } from "zod";
+import API from "../helper/api.js";
+import { REGEX } from "../helper/regex.js";
 
 const router = useRouter();
 
@@ -77,7 +77,6 @@ function submit(data) {
         // TODO: add toasti
       },
       (error) => {
-        console.log(error);
         if (error.status === 409) {
           // TODO: add toasti
         }
@@ -95,11 +94,11 @@ function submit(data) {
       <div class="auth-card">
         <ILSelectButton v-model="tab" :options="tabOptions" />
         <Form
-          @submit="submit"
-          :initialValues="initUser"
-          :resolver="resolver"
           :key="tab"
+          :initial-values="initUser"
+          :resolver="resolver"
           class="form-container"
+          @submit="submit"
         >
           <ILTextInput
             v-if="tab === 'REGISTER'"
@@ -107,7 +106,7 @@ function submit(data) {
             label="Email"
             type="email"
           />
-          <ILTextInput name="username" label="Username"></ILTextInput>
+          <ILTextInput name="username" label="Username" />
           <ILTextInput name="password" label="Password" type="password" />
           <ILTextInput
             v-if="tab === 'REGISTER'"
