@@ -1,8 +1,112 @@
 <script setup>
+import { zodResolver } from "@primevue/forms/resolvers/zod";
+import { ref } from "vue";
+import { z } from "zod";
 import Header from "./_components/Header.vue";
-import ILAddItem from "../../components/ILAddItem.vue";
-import ILQuotes from "../../components/quote/ILQuotes.vue";
-import ILQuoteSmall from "../../components/quote/ILQuoteSmall.vue";
+import API from "../../helper/api.js";
+
+const addQuoteDrawer = ref(false);
+const editQuoteDrawer = ref(false);
+const quotes = ref([]);
+const dailyQuote = ref(null);
+const addInitialValues = ref({});
+
+const resolver = zodResolver(
+  z.object({
+    content: z.string().min(1, "Quote is required."),
+    book: z.any().refine((val) => val && val.id, "Book is required."),
+  }),
+);
+
+function saveQuote(event) {
+  if (!event.valid) {
+    return;
+  }
+
+  API.post("quotes", {
+    quote: {
+      book_id: event.values.book.id,
+      content: event.values.content,
+    },
+  }).then(
+    (response) => {
+      addQuoteDrawer.value = false;
+      loadQuotes();
+      // TODO: add toasti
+    },
+    (error) => {
+      // TODO: add toasti
+    },
+  );
+}
+
+function loadQuotes() {
+  API.get("quotes").then(
+    (response) => {
+      quotes.value = response.data;
+      // TODO: add toasti
+    },
+    (error) => {
+      // TODO: add toasti
+    },
+  );
+}
+
+function loadDailyQuote() {
+  API.get("quotes/daily_quote").then(
+    (response) => {
+      dailyQuote.value = response.data;
+    },
+    (error) => {},
+  );
+}
+
+function deleteQuote(quote) {
+  API.delete(`quotes/${quote.id}`).then(
+    (response) => {
+      loadQuotes();
+      // TODO: add toasti
+    },
+    (error) => {
+      // TODO: add toasti
+    },
+  );
+}
+
+function openEditQuote(quote) {
+  addInitialValues.value = {
+    id: quote.id,
+    book: quote.book,
+    content: quote.content,
+  };
+
+  editQuoteDrawer.value = true;
+}
+
+function editQuote(event) {
+  if (!event.valid) {
+    return;
+  }
+
+  API.put(`quotes/${addInitialValues.value.id}`, {
+    quote: {
+      book_id: event.values.book.id,
+      content: event.values.content,
+    },
+  }).then(
+    (response) => {
+      editQuoteDrawer.value = false;
+      loadQuotes();
+      // TODO: add toasti
+    },
+    (error) => {
+      // TODO: add toasti
+    },
+  );
+}
+
+loadQuotes();
+loadDailyQuote();
 </script>
 
 <template>
@@ -10,21 +114,61 @@ import ILQuoteSmall from "../../components/quote/ILQuoteSmall.vue";
     <Header />
     <div class="quotes-view">
       <ILQuotes
-        quote="hey"
-        source="I killed your man, Katja Daxberger"
+        :quote="dailyQuote?.content || 'You look beautiful today!'"
+        :source="`${dailyQuote?.book?.title || 'Ink Loft'} ${dailyQuote?.book?.author ? `, ${dailyQuote?.book?.author}` : ''}`"
         editEnabled
         refreshEnabled
       />
 
       <ILDivider />
       <div class="more-quotes">
-        <ILAddItem text="Add Quote" />
-        <ILQuoteSmall
-          quote="Do you want to build a snowman?"
-          source="I killed your man, Katja Daxberger"
-        />
+        <ILAddItem text="Add Quote" @click="addQuoteDrawer = true" />
+        <div v-for="quote in quotes" :key="quote.id">
+          <ILQuoteSmall
+            :quote="quote.content"
+            :source="`${quote.book.title}, ${quote.book.author}`"
+            @delete="deleteQuote(quote)"
+            @edit="openEditQuote(quote)"
+          />
+        </div>
       </div>
     </div>
+    <ILDrawer v-model="addQuoteDrawer" title="Add Quote">
+      <template #body>
+        <Form :resolver="resolver" class="form-container" @submit="saveQuote">
+          <ILAutoComplete
+            name="book"
+            optionLabel="title"
+            url="books/autocomplete"
+          />
+          <ILTextArea name="content" label="Quote" />
+          <ILTextButton text="Save Quote" type="submit" />
+        </Form>
+      </template>
+    </ILDrawer>
+    <ILDrawer v-model="editQuoteDrawer" title="Edit Quote">
+      <template #body>
+        <Form
+          :initialValues="addInitialValues"
+          :resolver="resolver"
+          class="form-container"
+          @submit="editQuote"
+        >
+          <ILAutoComplete
+            v-model="addInitialValues.book"
+            name="book"
+            optionLabel="title"
+            url="books/autocomplete"
+          />
+          <ILTextArea
+            v-model="addInitialValues.content"
+            name="content"
+            label="Quote"
+          />
+          <ILTextButton text="Save Quote" type="submit" />
+        </Form>
+      </template>
+    </ILDrawer>
   </div>
 </template>
 
@@ -40,5 +184,11 @@ import ILQuoteSmall from "../../components/quote/ILQuoteSmall.vue";
     flex-direction: column;
     gap: var(--gap-3);
   }
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-3);
 }
 </style>

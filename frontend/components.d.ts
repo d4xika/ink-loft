@@ -11,6 +11,7 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    AutoComplete: typeof import('primevue/autocomplete')['default']
     Avatar: typeof import('primevue/avatar')['default']
     Button: typeof import('primevue/button')['default']
     DatePicker: typeof import('primevue/datepicker')['default']
@@ -20,6 +21,7 @@ declare module 'vue' {
     FloatLabel: typeof import('primevue/floatlabel')['default']
     Form: typeof import('@primevue/forms/form')['default']
     ILAddItem: typeof import('./src/components/ILAddItem.vue')['default']
+    ILAutoComplete: typeof import('./src/components/primevue/ILAutoComplete.vue')['default']
     ILAvatar: typeof import('./src/components/primevue/ILAvatar.vue')['default']
     ILBookCover: typeof import('./src/components/ILBookCover.vue')['default']
     ILBoxButton: typeof import('./src/components/ILBoxButton.vue')['default']

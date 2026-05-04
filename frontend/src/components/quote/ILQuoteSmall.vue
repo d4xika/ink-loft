@@ -1,6 +1,5 @@
 <script setup>
 import { onMounted, ref } from "vue";
-import ILBoxButton from "../ILBoxButton.vue";
 
 const props = defineProps({
   quote: {

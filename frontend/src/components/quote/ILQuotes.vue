@@ -2,7 +2,7 @@
 const props = defineProps({
   quote: {
     type: String,
-    required: true,
+    default: "You look beautiful today!",
   },
   source: {
     type: String,
