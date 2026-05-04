@@ -12,11 +12,17 @@ class BooksController < ApplicationController
 
   def create
     @book = current_user.books.build(book_params)
+    @book.author = @book.author || "Unknown"
     if @book.save
       return render json: @book, status: :created
     else
       return render json: { errors: @book.errors.full_messages }, status: :unprocessable_entity
     end
+  end
+
+  def autocomplete
+    @books = current_user.books.where("title ILIKE ?", "%#{params[:term]}%").limit(3)
+    return render json: @books.map { |book| { id: book.id, title: book.title } }
   end
 
   private

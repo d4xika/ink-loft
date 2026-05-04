@@ -15,6 +15,7 @@ const router = useRouter();
 const swipeContainer = ref(null);
 const addQuote = ref(false);
 const activeBook = ref(null);
+const dailyQuote = ref(null);
 
 function saveQuote(form) {
   if (!form.valid) {
@@ -36,6 +37,17 @@ function saveQuote(form) {
   );
 }
 
+function loadDailyQuote() {
+  API.get("quotes/daily_quote").then(
+    (response) => {
+      dailyQuote.value = response.data;
+    },
+    (error) => {
+      console.log(error);
+    },
+  );
+}
+
 const resolver = zodResolver(
   z.object({
     quote: z.string().min(1, "Quote is required."),
@@ -47,6 +59,8 @@ onMounted(() => {
     swipeContainer.value.scrollLeft = swipeContainer.value.scrollWidth;
   }
 });
+
+loadDailyQuote();
 </script>
 
 <template>
@@ -54,7 +68,10 @@ onMounted(() => {
     <Header />
     <div class="content-container">
       <div @click="router.push({ name: 'quotes' })">
-        <IlQuotes quote="You are not alone." />
+        <IlQuotes
+          :quote="dailyQuote?.content"
+          :source="dailyQuote?.book?.author"
+        />
       </div>
       <ILDivider />
 
@@ -91,7 +108,11 @@ onMounted(() => {
 
     <ILDrawer v-model="addQuote" title="Add Quote">
       <template #body>
-        <Form :resolver="resolver" @submit="saveQuote">
+        <Form
+          :resolver="resolver"
+          class="quote-drawer-form"
+          @submit="saveQuote"
+        >
           <ILTextArea name="quote" label="Quote" />
           <ILTextButton text="Save Quote" type="submit" />
         </Form>
@@ -151,5 +172,11 @@ onMounted(() => {
       }
     }
   }
+}
+
+.quote-drawer-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-3);
 }
 </style>

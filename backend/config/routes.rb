@@ -11,7 +11,15 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :books, only: [ :index, :create, :show ]
+  resources :books, only: [ :index, :create, :show ] do
+    collection do
+      get :autocomplete
+    end
+  end
 
-  resources :quotes, only: [ :index, :create ]
+  resources :quotes, only: [ :index, :create, :destroy, :update ] do
+    collection do
+      get :daily_quote
+      end
+  end
 end

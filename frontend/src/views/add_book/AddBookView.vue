@@ -129,7 +129,7 @@ function submit(data) {
     display: flex;
     flex-direction: column;
     gap: var(--gap-3);
-    padding-bottom: calc(var(--gap-1) + 2px)
+    padding-bottom: calc(var(--gap-1) + 2px);
   }
 
   .main-content-container {
@@ -149,7 +149,7 @@ function submit(data) {
         padding-left: var(--gap-3);
         padding-right: var(--gap-3);
         width: calc(100%);
-      };
+      }
     }
   }
 }
