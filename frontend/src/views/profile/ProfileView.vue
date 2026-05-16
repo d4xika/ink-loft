@@ -1,11 +1,14 @@
 <script setup>
 import { ref } from "vue";
+import { useI18n } from "vue-i18n";
 import Header from "./_components/Header.vue";
 import API from "../../helper/api.js";
+import { languages } from "../../helper/i18n/i18n.js";
 
 const user = ref(JSON.parse(localStorage.getItem("user")));
 const avatarUrl = ref(user.value?.avatar_url || null);
 const avatarLoading = ref(false);
+const { locale } = useI18n();
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -60,32 +63,54 @@ async function removeProfilePicture() {
   formData.append("delete_avatar", "true");
   avatarLoading.value = true;
 
-  API.put("/users/update_profile", formData).then((response) => {
-    user.value = response.data.user;
-    avatarUrl.value = response.data.user?.avatar_url || null;
-    localStorage.setItem("user", JSON.stringify(response.data.user));
-  }).finally(() => {
-    avatarLoading.value = false;
-  });
+  API.put("/users/update_profile", formData)
+    .then((response) => {
+      user.value = response.data.user;
+      avatarUrl.value = response.data.user?.avatar_url || null;
+      localStorage.setItem("user", JSON.stringify(response.data.user));
+    })
+    .finally(() => {
+      avatarLoading.value = false;
+    });
+}
+function updateLanguage(event) {
+  if (!event?.value?.value) return;
+  locale.value = event.value.value;
 }
 </script>
 
 <template>
   <div>
     <Header />
-    <div class="profile-view-content">
-      <ILImageUploader
-        :imageSrc="avatarUrl"
-        :loading="avatarLoading"
-        @file-selected="(file) => updateProfilePicture(file)"
-        @file-removed="removeProfilePicture()"
-      />
-    </div>
+    <Form>
+      <div class="profile-view-content">
+        <ILImageUploader
+          :imageSrc="avatarUrl"
+          :loading="avatarLoading"
+          @file-selected="(file) => updateProfilePicture(file)"
+          @file-removed="removeProfilePicture()"
+        />
+      </div>
+      <div class="language-select-container">
+        <ILSelect
+          v-if="languages"
+          :options="languages"
+          :name="'language'"
+          :label="'Language'"
+          optionLabel="label"
+          @change="(event) => updateLanguage(event)"
+        />
+      </div>
+    </Form>
   </div>
 </template>
 
 <style scoped>
 .profile-view-content {
-  margin-top: var(--gap-5);
+  margin: var(--gap-5) 0 var(--gap-4) 0;
+}
+
+.language-select-container {
+  padding: var(--gap-3);
 }
 </style>

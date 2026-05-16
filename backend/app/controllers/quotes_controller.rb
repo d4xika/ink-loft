@@ -17,7 +17,11 @@ class QuotesController < ApplicationController
       return render json: { message: "No quotes found" }, status: :ok
     end
 
-    rng = Random.new(Date.today.to_time.to_i)
+    if params[:refresh]
+      current_user.update_column(:daily_quote_seed, current_user.daily_quote_seed + 1)
+    end
+
+    rng = Random.new((Date.today.to_time.to_i + current_user.daily_quote_seed).to_i)
     @quote = current_user.quotes.order(created_at: :desc)[rng.rand(current_user.quotes.count)]
     @book = current_user.books.find(@quote.book_id)
 

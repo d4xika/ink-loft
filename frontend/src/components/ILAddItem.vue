@@ -29,6 +29,7 @@ const props = defineProps({
   display: flex;
   justify-content: space-between;
   align-items: center;
+  cursor: pointer;
   width: v-bind(props.width);
   height: v-bind(props.height);
   padding: 0 var(--gap-2);

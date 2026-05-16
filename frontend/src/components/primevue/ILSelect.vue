@@ -15,9 +15,10 @@ const props = defineProps({
   optionValue: {
     type: String,
     default: undefined,
-  }
-})
-const model = defineModel({ type: String, default: "" })
+  },
+});
+const model = defineModel({ type: String, default: "" });
+const emit = defineEmits(["change"]);
 </script>
 
 <template>
@@ -27,8 +28,21 @@ const model = defineModel({ type: String, default: "" })
       :options="props.options"
       :optionLabel="props.optionLabel"
       :optionValue="props.optionValue"
-      class="w-full"
-    />
+      @change="(event) => emit('change', event)"
+    >
+      <template #value="slotProps">
+        <div v-if="slotProps.value?.image" class="line-container">
+          <img :src="slotProps.value?.image" alt="flag" class="image" />
+          <p>{{ slotProps.value?.[props.optionLabel] }}</p>
+        </div>
+      </template>
+      <template #option="slotProps">
+        <div v-if="slotProps.option?.image" class="line-container">
+          <img :src="slotProps.option?.image" alt="flag" class="image" />
+          <p>{{ slotProps.option?.[props.optionLabel] }}</p>
+        </div>
+      </template>
+    </Select>
     <label>{{ props.label }}</label>
   </FloatLabel>
 </template>
@@ -43,7 +57,7 @@ const model = defineModel({ type: String, default: "" })
   background-color: var(--color-0);
   border: 1px solid var(--color-2);
   font-size: var(--font-size-3);
-  padding: 11px !important;
+  padding: 2px !important;
 
   &:not(.p-disabled).p-focus {
     border: 1px solid var(--text-color-1) !important;
@@ -56,6 +70,21 @@ label {
   color: var(--text-color-1-light) !important;
 }
 
+.line-container {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-3);
+
+  p {
+    margin: 0;
+    padding-top: 3px;
+  }
+
+  .image {
+    width: 18px;
+    border-radius: 2px;
+  }
+}
 </style>
 
 <style lang="scss">

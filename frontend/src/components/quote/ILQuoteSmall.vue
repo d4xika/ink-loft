@@ -32,7 +32,9 @@ const emit = defineEmits(["edit", "delete"]);
             <i class="pi pi-pen-to-square"></i>
           </div>
           <div>
-            <h2 class="quote">"{{ props.quote }}"</h2>
+            <h2 class="quote">
+              "{{ props.quote }}"
+            </h2>
             <h3 class="source">
               {{ props.source }}
             </h3>

@@ -52,8 +52,14 @@ function loadQuotes() {
   );
 }
 
-function loadDailyQuote() {
-  API.get("quotes/daily_quote").then(
+function loadDailyQuote(refresh = false) {
+  let params = {};
+  if (refresh) {
+    params = {
+      refresh: true,
+    };
+  }
+  API.get("quotes/daily_quote", { params: params }).then(
     (response) => {
       dailyQuote.value = response.data;
     },
@@ -97,6 +103,7 @@ function editQuote(event) {
     (response) => {
       editQuoteDrawer.value = false;
       loadQuotes();
+      loadDailyQuote();
       // TODO: add toasti
     },
     (error) => {
@@ -118,6 +125,8 @@ loadDailyQuote();
         :source="`${dailyQuote?.book?.title || 'Ink Loft'} ${dailyQuote?.book?.author ? `, ${dailyQuote?.book?.author}` : ''}`"
         editEnabled
         refreshEnabled
+        @edit="openEditQuote(dailyQuote)"
+        @refresh="loadDailyQuote(true)"
       />
 
       <ILDivider />
