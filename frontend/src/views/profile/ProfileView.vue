@@ -5,10 +5,15 @@ import Header from "./_components/Header.vue";
 import API from "../../helper/api.js";
 import { languages } from "../../helper/i18n/i18n.js";
 
+const { locale } = useI18n();
 const user = ref(JSON.parse(localStorage.getItem("user")));
 const avatarUrl = ref(user.value?.avatar_url || null);
 const avatarLoading = ref(false);
-const { locale } = useI18n();
+
+const selectedLanguage = ref(
+  languages.find((language) => language.value === user.value?.language) ||
+    languages[0],
+);
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -76,6 +81,13 @@ async function removeProfilePicture() {
 function updateLanguage(event) {
   if (!event?.value?.value) return;
   locale.value = event.value.value;
+  API.put("/users/update_profile", { language: event.value.value }).then(
+    (response) => {
+      user.value = response.data.user;
+      localStorage.setItem("user", JSON.stringify(response.data.user));
+      // TODO: add toast
+    },
+  );
 }
 </script>
 
@@ -94,6 +106,7 @@ function updateLanguage(event) {
       <div class="language-select-container">
         <ILSelect
           v-if="languages"
+          v-model="selectedLanguage"
           :options="languages"
           :name="'language'"
           :label="'Language'"

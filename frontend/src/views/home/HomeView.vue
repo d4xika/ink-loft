@@ -16,6 +16,21 @@ const swipeContainer = ref(null);
 const addQuote = ref(false);
 const activeBook = ref(null);
 const dailyQuote = ref(null);
+const showIndicator = ref(false);
+const showLeftIndicator = ref(false);
+const firstBook = ref(null);
+
+const books = ref([
+  { id: 1, title: "Lunch baby", author: "Me" },
+  { id: 2, title: "Dinner baby", author: "You" },
+]);
+
+function handleScroll() {
+  if (!swipeContainer.value) return;
+  const { scrollLeft, scrollWidth, clientWidth } = swipeContainer.value;
+  showIndicator.value = scrollLeft + clientWidth < scrollWidth - 10;
+  showLeftIndicator.value = scrollLeft > 150;
+}
 
 function saveQuote(form) {
   if (!form.valid) {
@@ -27,11 +42,11 @@ function saveQuote(form) {
       content: form.values.quote,
     },
   }).then(
-    (response) => {
+    () => {
       addQuote.value = false;
       // TODO: add toasti
     },
-    (error) => {
+    () => {
       // TODO: add toasti
     },
   );
@@ -42,7 +57,7 @@ function loadDailyQuote() {
     (response) => {
       dailyQuote.value = response.data;
     },
-    (error) => {},
+    () => {},
   );
 }
 
@@ -53,8 +68,16 @@ const resolver = zodResolver(
 );
 
 onMounted(() => {
-  if (swipeContainer.value) {
-    swipeContainer.value.scrollLeft = swipeContainer.value.scrollWidth;
+  if (swipeContainer.value && firstBook.value) {
+    firstBook.value.scrollIntoView({
+      behavior: "auto",
+      block: "nearest",
+      inline: "center",
+    });
+    setTimeout(handleScroll, 100);
+  } else if (swipeContainer.value) {
+    swipeContainer.value.scrollLeft = 0;
+    handleScroll();
   }
 });
 
@@ -73,25 +96,43 @@ loadDailyQuote();
       </div>
       <ILDivider />
 
-      <div ref="swipeContainer" class="swipe-wrapper">
-        <div class="swipe-actions">
-          <ILBoxButton text="Add read" icon="pi-plus" />
-          <ILBoxButton
-            text="New read"
-            icon="pi-plus"
-            @click="router.push({ name: 'newBook' })"
-          />
+      <p class="section-title">Currently Reading</p>
+      <div class="swipe-container-relative">
+        <div v-if="showLeftIndicator" class="swipe-indicator left">
+          <i class="pi pi-angle-left"></i>
         </div>
+        <div ref="swipeContainer" class="swipe-wrapper" @scroll="handleScroll">
+          <div class="swipe-actions">
+            <ILBoxButton text="Add read" icon="pi-plus" />
+            <ILBoxButton
+              text="New read"
+              icon="pi-plus"
+              @click="router.push({ name: 'newBook' })"
+            />
+          </div>
 
-        <div class="swipe-main">
-          <CurrentlyReading
-            title="Lunch baby"
-            author="Me"
-            @add-quote="
-              activeBook = 1;
-              addQuote = true;
+          <div
+            v-for="(book, index) in books"
+            :key="book.id"
+            :ref="
+              (el) => {
+                if (index === 0) firstBook = el;
+              }
             "
-          />
+            class="swipe-main"
+          >
+            <CurrentlyReading
+              :title="book.title"
+              :author="book.author"
+              @add-quote="
+                activeBook = book.id;
+                addQuote = true;
+              "
+            />
+          </div>
+        </div>
+        <div v-if="showIndicator" class="swipe-indicator right">
+          <i class="pi pi-angle-right"></i>
         </div>
       </div>
 
@@ -131,11 +172,50 @@ loadDailyQuote();
     margin-top: var(--gap-4);
     gap: var(--gap-4);
 
+    .section-title {
+      font-family: "IM Fell English", serif;
+      font-size: var(--font-size-6);
+      padding-left: var(--gap-3);
+      margin: 0;
+    }
+
+    .swipe-container-relative {
+      position: relative;
+      display: flex;
+      align-items: center;
+
+      .swipe-indicator {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        pointer-events: none;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        color: var(--text-color-1-light);
+        z-index: 1;
+
+        &.right {
+          right: 0;
+          padding-left: var(--gap-4);
+          padding-right: var(--gap-1);
+        }
+
+        &.left {
+          left: 0;
+          padding-right: var(--gap-4);
+          padding-left: var(--gap-1);
+        }
+      }
+    }
+
     .swipe-wrapper {
       display: flex;
       overflow-x: auto;
       scroll-snap-type: x mandatory;
-      gap: var(--gap-3);
+      gap: calc(var(--gap-5) * 2);
+      width: 100%;
+      padding-right: var(--gap-4);
 
       scrollbar-width: none;
       &::-webkit-scrollbar {
@@ -146,15 +226,15 @@ loadDailyQuote();
         display: flex;
         flex-direction: column;
         justify-content: center;
-        margin-top: var(--gap-4);
         gap: var(--gap-2);
         flex-shrink: 0;
         scroll-snap-align: start;
+        margin-right: calc(-1.7 * var(--gap-5));
       }
 
       .swipe-main {
         flex-shrink: 0;
-        scroll-snap-align: end;
+        scroll-snap-align: center;
         width: calc(100% - 30px);
       }
     }

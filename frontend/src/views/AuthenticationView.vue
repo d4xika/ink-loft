@@ -1,12 +1,14 @@
 <script setup>
 import { zodResolver } from "@primevue/forms/resolvers/zod";
 import { computed, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import { z } from "zod";
 import API from "../helper/api.js";
 import { REGEX } from "../helper/regex.js";
 
 const router = useRouter();
+const { locale } = useI18n();
 
 const tab = ref("LOGIN");
 const tabOptions = ["LOGIN", "REGISTER"];
@@ -57,6 +59,7 @@ function submit(data) {
     }).then(
       (response) => {
         localStorage.setItem("user", JSON.stringify(response.data));
+        locale.value = response.data.language;
         router.push({ name: "home" });
         // TODO: add toasti
       },
