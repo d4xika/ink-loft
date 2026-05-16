@@ -17,16 +17,30 @@ const props = defineProps({
     default: false,
   },
 });
+
+const emit = defineEmits(["edit", "refresh"]);
 </script>
 
 <template>
   <div class="quotes-container">
     <div v-if="props.editEnabled || props.refreshEnabled" class="edit-buttons">
-      <i v-if="props.editEnabled" class="pi pi-pencil"></i>
-      <i v-if="props.refreshEnabled" class="pi pi-sync"></i>
+      <i
+        v-if="props.editEnabled"
+        class="pi pi-pencil"
+        @click="emit('edit')"
+      ></i>
+      <i
+        v-if="props.refreshEnabled"
+        class="pi pi-sync"
+        @click="emit('refresh')"
+      ></i>
     </div>
-    <h2 class="quote">"{{ props.quote }}"</h2>
-    <h3 class="source">~ {{ props.source }}</h3>
+    <h2 class="quote">
+      "{{ props.quote }}"
+    </h2>
+    <h3 class="source">
+      ~ {{ props.source }}
+    </h3>
   </div>
 </template>
 
@@ -41,6 +55,7 @@ const props = defineProps({
   border-radius: var(--border-radius-1);
   padding: var(--gap-4);
   gap: var(--gap-2);
+  cursor: pointer;
 
   .edit-buttons {
     width: 100%;

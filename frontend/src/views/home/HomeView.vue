@@ -42,9 +42,7 @@ function loadDailyQuote() {
     (response) => {
       dailyQuote.value = response.data;
     },
-    (error) => {
-      console.log(error);
-    },
+    (error) => {},
   );
 }
 

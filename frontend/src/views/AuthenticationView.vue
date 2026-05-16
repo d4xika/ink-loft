@@ -89,7 +89,7 @@ function submit(data) {
 <template>
   <div class="authentication-view-container">
     <div class="content">
-      <h1>Welcome Reader</h1>
+      <h1>{{ $t("authentication.title") }}</h1>
 
       <div class="auth-card">
         <ILSelectButton v-model="tab" :options="tabOptions" />

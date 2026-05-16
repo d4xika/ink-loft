@@ -15,7 +15,8 @@ const model = defineModel({ type: Boolean, default: false });
     position="bottom"
     style="height: fit-content"
   >
-    <slot name="body"> </slot>
+    <slot name="body">
+    </slot>
   </Drawer>
 </template>
 
