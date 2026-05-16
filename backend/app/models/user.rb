@@ -25,6 +25,8 @@ class User < ApplicationRecord
                        colorspace: "Gray"
   end
 
+  enum :language, [ :en, :de, :noe, :sue ]
+
   def generate_auth_key
     auth_key = "ink-loft-#{SecureRandom.hex(16)}"
     return AuthKey.create(user: self, key: auth_key)

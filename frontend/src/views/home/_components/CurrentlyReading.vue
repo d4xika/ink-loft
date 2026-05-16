@@ -4,15 +4,15 @@ import ILBookCover from "../../../components/ILBookCover.vue";
 const props = defineProps({
   covers: {
     type: String,
-    default: undefined
+    default: undefined,
   },
   title: {
     type: String,
-    default: undefined
+    default: undefined,
   },
   author: {
     type: String,
-    default: undefined
+    default: undefined,
   },
 });
 
@@ -21,9 +21,6 @@ const emit = defineEmits(["addQuote"]);
 
 <template>
   <div class="currently-reading-container">
-    <p class="header-title">
-      Currently Reading
-    </p>
     <div class="content-container">
       <div class="left-container">
         <ILBookCover cover="/Test_Cover.jpg" />
@@ -33,9 +30,7 @@ const emit = defineEmits(["addQuote"]);
           <p class="title">
             {{ props.title }}
           </p>
-          <p class="author">
-            ~ {{ props.author }}
-          </p>
+          <p class="author">~ {{ props.author }}</p>
         </div>
         <div class="btn-container">
           <div class="quote-btn-container">
@@ -59,12 +54,6 @@ const emit = defineEmits(["addQuote"]);
 .currently-reading-container {
   gap: var(--gap-3);
   padding: var(--gap-1);
-
-  .header-title {
-    font-family: "IM Fell English", serif;
-    font-size: var(--font-size-6);
-    margin: var(--gap-2) 0 var(--gap-4) 0;
-  }
 
   .content-container {
     display: flex;

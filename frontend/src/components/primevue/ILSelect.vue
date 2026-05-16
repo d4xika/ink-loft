@@ -22,7 +22,7 @@ const emit = defineEmits(["change"]);
 </script>
 
 <template>
-  <FloatLabel class="w-full md:w-56" variant="on">
+  <FloatLabel variant="on">
     <Select
       v-model="model"
       :options="props.options"

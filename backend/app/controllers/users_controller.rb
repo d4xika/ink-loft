@@ -47,6 +47,14 @@ class UsersController < ApplicationController
       user.avatar.attach(io: processed_avatar, filename: params[:avatar].original_filename, content_type: params[:avatar].content_type)
     end
 
+    if params[:language].present?
+      if User.languages.key?(params[:language])
+        user.language = params[:language]
+      else
+        return render json: { error: "Invalid language" }, status: :bad_request
+      end
+    end
+
     if user.save
       return render json: {
         user: render_user(user)
@@ -62,7 +70,8 @@ class UsersController < ApplicationController
     return {
       username: user.username,
       avatar_url: user.avatar.attached? ? Rails.application.routes.url_helpers.rails_representation_url(user.avatar.variant(:large), host: '127.0.0.1:3000') : nil,
-      avatar_small_url: user.avatar.attached? ? Rails.application.routes.url_helpers.rails_representation_url(user.avatar.variant(:small), host: '127.0.0.1:3000') : nil
+      avatar_small_url: user.avatar.attached? ? Rails.application.routes.url_helpers.rails_representation_url(user.avatar.variant(:small), host: '127.0.0.1:3000') : nil,
+      language: user.language
     }
   end
 end
