@@ -15,14 +15,24 @@ const routes = [
     component: () => import("@/views/home/HomeView.vue"),
   },
   {
+    path: "/read",
+    children: [
+      {
+        path: "/new",
+        name: "newRead",
+        component: () => import("@/views/read/NewView.vue"),
+      },
+      {
+        path: "/edit/:id",
+        name: "editRead",
+        component: () => import("@/views/read/EditView.vue"),
+      },
+    ],
+  },
+  {
     path: "/profile",
     name: "profile",
     component: () => import("@/views/profile/ProfileView.vue"),
-  },
-  {
-    path: "/newBook",
-    name: "newBook",
-    component: () => import("@/views/add_book/NewBookView.vue"),
   },
   {
     path: "/quotes",

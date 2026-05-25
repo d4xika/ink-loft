@@ -13,7 +13,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :books, only: [ :index, :create, :show ] do
+  resources :books, only: [ :index, :create, :show, :update ] do
     collection do
       get :autocomplete
       get :currently_reading

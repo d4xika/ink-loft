@@ -1,26 +1,17 @@
 <script setup>
 import { zodResolver } from "@primevue/forms/resolvers/zod";
-import { useRouter } from "vue-router";
 import { z } from "zod";
 import Header from "./Header.vue";
 import ILSelect from "../../components/primevue/ILSelect.vue";
-import API from "@/helper/api.js";
 import { READING_STATUSES } from "@/helper/constants.js";
 
-const router = useRouter();
-
-const initBook = {
-  title: null,
-  author: null,
-  cover: null,
-  platform: null,
-  pairing: null,
-  chapters: null,
-  words: null,
-  pages: null,
-  rating: null,
-  recommended: null,
-};
+const props = defineProps({
+  initialValues: {
+    type: Object,
+    default: () => ({}),
+  },
+});
+const emit = defineEmits(["save"]);
 
 const resolver = zodResolver(
   z.object({
@@ -32,49 +23,20 @@ const resolver = zodResolver(
     words: z.coerce.number().nullable(),
     pages: z.coerce.number().nullable(),
     rating: z.number().nullable(),
-    start_date: z.coerce.date().nullable().optional(),
-    end_date: z.coerce.date().nullable().optional(),
+    start_date: z.string().nullable().optional(),
+    end_date: z.string().nullable().optional(),
     recommended: z.boolean().nullable(),
     reading_status: z.coerce.number().nullable(),
   }),
 );
-
-function submit(data) {
-  if (!data.valid) {
-    // TODO: add toasti
-    return;
-  }
-
-  API.post("books", {
-    book: {
-      title: data.states.title.value,
-      author: data.states.author?.value,
-      cover: data.states.cover?.value,
-      platform: data.states.platform?.value,
-      pairing: data.states.pairing?.value,
-      chapters: data.states.chapters?.value,
-      words: data.states.words?.value,
-      pages: data.states.pages?.value,
-      rating: data.states.rating?.value,
-      recommended: data.states.recommended?.value,
-      start_date: data.states.start_date?.value,
-      end_date: data.states.end_date?.value,
-      reading_status: data.states.reading_status?.value,
-    },
-  }).then(
-    (response) => {
-      router.push({ name: "home" });
-      // TODO: add toasti
-    },
-    (error) => {
-      // TODO: add toasti
-    },
-  );
-}
 </script>
 
 <template>
-  <Form :initialValues="initBook" :resolver="resolver" @submit="submit">
+  <Form
+    :initialValues="props.initialValues"
+    :resolver="resolver"
+    @submit="(data) => emit('save', data)"
+  >
     <Header />
     <div class="content-container">
       <div class="main-content-container">
@@ -85,7 +47,7 @@ function submit(data) {
         </div>
         <div class="rating-section">
           <ILImageUploader variant="rectangle" title="Cover" name="cover" />
-          <ILRating name="rating" />
+          <ILRating name="rating" v-model="initialValues.rating" />
         </div>
       </div>
       <ILSelect
@@ -96,10 +58,22 @@ function submit(data) {
         name="reading_status"
       />
       <div class="side-by-side">
-        <ILDatePicker label="Start Date" name="start_date" />
-        <ILDatePicker label="End Date" name="end_date" />
+        <ILDatePicker
+          label="Start Date"
+          name="start_date"
+          v-model="initialValues.start_date"
+        />
+        <ILDatePicker
+          label="End Date"
+          name="end_date"
+          v-model="initialValues.end_date"
+        />
       </div>
-      <ILToggleSwitch label="Would recommend:" name="recommended" />
+      <ILToggleSwitch
+        label="Would recommend:"
+        name="recommended"
+        v-model="initialValues.recommended"
+      />
       <!-- TODO: maybe change to combobox -->
       <ILTextInput label="Platform" name="platform" />
       <ILNumberInput label="Chapters" name="chapters" />
