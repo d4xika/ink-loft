@@ -22,7 +22,7 @@ const routes = [
   {
     path: "/newBook",
     name: "newBook",
-    component: () => import("@/views/add_book/AddBookView.vue"),
+    component: () => import("@/views/add_book/NewBookView.vue"),
   },
   {
     path: "/quotes",

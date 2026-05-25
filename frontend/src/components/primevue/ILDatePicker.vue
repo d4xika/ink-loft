@@ -7,7 +7,7 @@ const props = defineProps({
   name: {
     type: String,
     required: true,
-  }
+  },
 });
 const model = defineModel({ type: Date, default: null });
 </script>
@@ -55,11 +55,11 @@ label {
 
 <style lang="scss">
 .p-datepicker-panel {
-  .p-datepicker-day-cell {
-    .p-datepicker-day-selected {
-      background: var(--color-3) !important;
-      color: white !important;
-    }
+  .p-datepicker-day-selected,
+  .p-datepicker-month-selected,
+  .p-datepicker-year-selected {
+    background: var(--color-3) !important;
+    color: white !important;
   }
 }
 </style>

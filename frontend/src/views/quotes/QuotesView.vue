@@ -121,10 +121,10 @@ loadDailyQuote();
     <Header />
     <div class="quotes-view">
       <ILQuotes
-        :quote="dailyQuote?.content || 'You look beautiful today!'"
+        :quote="dailyQuote?.content"
         :source="`${dailyQuote?.book?.title || 'Ink Loft'} ${dailyQuote?.book?.author ? `, ${dailyQuote?.book?.author}` : ''}`"
-        editEnabled
-        refreshEnabled
+        :editEnabled="!!dailyQuote?.content"
+        :refreshEnabled="!!dailyQuote?.content"
         @edit="openEditQuote(dailyQuote)"
         @refresh="loadDailyQuote(true)"
       />
