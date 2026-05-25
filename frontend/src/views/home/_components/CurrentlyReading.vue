@@ -81,6 +81,7 @@ const emit = defineEmits(["addQuote"]);
         .author {
           font-size: var(--font-size-2);
           color: var(--text-color-1-light);
+          margin: 0;
         }
       }
 
