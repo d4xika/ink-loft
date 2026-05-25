@@ -16,6 +16,10 @@ const props = defineProps({
     type: String,
     default: undefined,
   },
+  name: {
+    type: String,
+    required: true,
+  },
 });
 const model = defineModel({ type: String, default: "" });
 const emit = defineEmits(["change"]);
@@ -28,6 +32,7 @@ const emit = defineEmits(["change"]);
       :options="props.options"
       :optionLabel="props.optionLabel"
       :optionValue="props.optionValue"
+      :name="props.name"
       @change="(event) => emit('change', event)"
     >
       <template #value="slotProps">

@@ -40,7 +40,6 @@ const resolver = zodResolver(
 );
 
 function submit(data) {
-  console.log(data);
   if (!data.valid) {
     // TODO: add toasti
     return;
@@ -60,7 +59,7 @@ function submit(data) {
       recommended: data.states.recommended?.value,
       start_date: data.states.start_date?.value,
       end_date: data.states.end_date?.value,
-      reading_status: data.states.status?.value,
+      reading_status: data.states.reading_status?.value,
     },
   }).then(
     (response) => {

@@ -12,12 +12,17 @@ const props = defineProps({
     type: String,
     default: "100%",
   },
+  variant: {
+    type: String,
+    default: "horizontal",
+    validator: (value) => ["horizontal", "vertical"].includes(value),
+  },
 });
 </script>
 
 <template>
-  <div class="add-item">
-    <div>
+  <div class="add-item" :class="`variant-${props.variant}`">
+    <div class="add-item-icon">
       <i class="pi pi-plus"></i>
     </div>
     <p>{{ props.text }}</p>
@@ -40,9 +45,23 @@ const props = defineProps({
     transparent 2px,
     transparent 8px
   );
-
   border: 1px solid var(--color-2);
   border-radius: var(--border-radius-1);
+
+  &.variant-vertical {
+    flex-direction: column;
+    padding: var(--gap-2);
+    justify-content: center;
+    gap: var(--gap-2);
+
+    p {
+      margin: 0;
+    }
+
+    .add-item-icon {
+      order: 1;
+    }
+  }
 
   i {
     background-color: var(--color-0);

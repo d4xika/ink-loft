@@ -1,6 +1,6 @@
 <script setup>
 import { zodResolver } from "@primevue/forms/resolvers/zod";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, nextTick } from "vue";
 import { useRouter } from "vue-router";
 import { z } from "zod";
 import CurrentlyReading from "./_components/CurrentlyReading.vue";
@@ -20,10 +20,7 @@ const showIndicator = ref(false);
 const showLeftIndicator = ref(false);
 const firstBook = ref(null);
 
-const books = ref([
-  { id: 1, title: "Lunch baby", author: "Me" },
-  { id: 2, title: "Dinner baby", author: "You" },
-]);
+const books = ref([]);
 
 function handleScroll() {
   if (!swipeContainer.value) return;
@@ -61,6 +58,25 @@ function loadDailyQuote() {
   );
 }
 
+function loadCurrentlyReading() {
+  API.get("books/currently_reading").then(
+    (response) => {
+      books.value = response.data;
+      nextTick(() => {
+        if (swipeContainer.value && firstBook.value) {
+          firstBook.value.scrollIntoView({
+            behavior: "auto",
+            block: "nearest",
+            inline: "center",
+          });
+          setTimeout(handleScroll, 100);
+        }
+      });
+    },
+    () => {},
+  );
+}
+
 const resolver = zodResolver(
   z.object({
     quote: z.string().min(1, "Quote is required."),
@@ -68,20 +84,14 @@ const resolver = zodResolver(
 );
 
 onMounted(() => {
-  if (swipeContainer.value && firstBook.value) {
-    firstBook.value.scrollIntoView({
-      behavior: "auto",
-      block: "nearest",
-      inline: "center",
-    });
-    setTimeout(handleScroll, 100);
-  } else if (swipeContainer.value) {
+  if (swipeContainer.value) {
     swipeContainer.value.scrollLeft = 0;
     handleScroll();
   }
 });
 
 loadDailyQuote();
+loadCurrentlyReading();
 </script>
 
 <template>
@@ -108,10 +118,9 @@ loadDailyQuote();
             @scroll="handleScroll"
           >
             <div class="swipe-actions">
-              <ILBoxButton text="Add read" icon="pi-plus" />
-              <ILBoxButton
-                text="New read"
-                icon="pi-plus"
+              <ILAddItem
+                text="Add New Read"
+                variant="vertical"
                 @click="router.push({ name: 'newBook' })"
               />
             </div>

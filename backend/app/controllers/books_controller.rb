@@ -25,6 +25,11 @@ class BooksController < ApplicationController
     return render json: @books.map { |book| { id: book.id, title: book.title } }
   end
 
+  def currently_reading
+    @books = current_user.books.where(reading_status: :currently_reading).order(updated_at: :desc)
+    return render json: @books, status: :ok
+  end
+
   private
 
   def book_params
