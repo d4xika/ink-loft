@@ -19,6 +19,8 @@ const dailyQuote = ref(null);
 const showIndicator = ref(false);
 const showLeftIndicator = ref(false);
 const firstBook = ref(null);
+const finishRead = ref(false);
+const finishedReadInitialValues = ref({});
 
 const books = ref([]);
 
@@ -47,6 +49,34 @@ function saveQuote(form) {
       // TODO: add toasti
     },
   );
+}
+
+function openFinishReadDrawer(book) {
+  activeBook.value = book.id;
+  finishedReadInitialValues.value = {
+    reading_status: 2,
+    rating: parseInt(book.rating),
+    recommended: book.recommended === "t",
+  };
+  finishRead.value = true;
+}
+
+function saveFinishedRead(form) {
+  if (!form.valid) {
+    return;
+  }
+
+  API.put(`books/${activeBook.value}`, {
+    book: {
+      reading_status: form.values.reading_status,
+      rating: form.values.rating,
+      recommended: form.values.recommended,
+      end_date: new Date().toJSON(),
+    },
+  }).then(() => {
+    finishRead.value = false;
+    loadCurrentlyReading();
+  });
 }
 
 function loadDailyQuote() {
@@ -121,7 +151,7 @@ loadCurrentlyReading();
               <ILAddItem
                 text="Add New Read"
                 variant="vertical"
-                @click="router.push({ name: 'newBook' })"
+                @click="router.push({ name: 'newRead' })"
               />
             </div>
 
@@ -138,10 +168,14 @@ loadCurrentlyReading();
               <CurrentlyReading
                 :title="book.title"
                 :author="book.author"
-                @add-quote="
+                @addQuote="
                   activeBook = book.id;
                   addQuote = true;
                 "
+                @editRead="
+                  router.push({ name: 'editRead', params: { id: book.id } })
+                "
+                @finishRead="openFinishReadDrawer(book)"
               />
             </div>
           </div>
@@ -169,6 +203,34 @@ loadCurrentlyReading();
         >
           <ILTextArea name="quote" label="Quote" />
           <ILTextButton text="Save Quote" type="submit" />
+        </Form>
+      </template>
+    </ILDrawer>
+
+    <ILDrawer v-model="finishRead" title="Finish Read">
+      <template #body>
+        <Form
+          class="finish-read-form"
+          @submit="saveFinishedRead"
+          :initialValues="finishedReadInitialValues"
+        >
+          <ILSelectButton
+            name="reading_status"
+            optionLabel="label"
+            :options="[
+              { id: 2, label: 'Finished' },
+              { id: 3, label: 'Dropped' },
+            ]"
+            optionValue="id"
+          />
+          <ILRating name="rating" v-model="finishedReadInitialValues.rating" />
+          <ILToggleSwitch
+            name="recommended"
+            label="Would recommend:"
+            v-model="finishedReadInitialValues.recommended"
+            class="toggle-switch"
+          />
+          <ILTextButton text="Submit" type="submit" />
         </Form>
       </template>
     </ILDrawer>
@@ -278,5 +340,16 @@ loadCurrentlyReading();
   display: flex;
   flex-direction: column;
   gap: var(--gap-3);
+}
+
+.finish-read-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--gap-4);
+
+  .toggle-switch {
+    width: 100%;
+  }
 }
 </style>

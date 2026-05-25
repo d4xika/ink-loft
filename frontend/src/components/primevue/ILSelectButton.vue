@@ -6,11 +6,21 @@ const props = defineProps({
     type: Array,
     required: true,
   },
+  name: {
+    type: String,
+  },
+  optionLabel: {
+    type: String,
+    default: undefined,
+  },
+  optionValue: {
+    type: String,
+    default: undefined,
+  },
 });
 
 const model = defineModel({
   type: String,
-  required: true,
 });
 
 const container = ref(null);
@@ -53,6 +63,9 @@ onUnmounted(() => {
       v-model="model"
       :options="props.options"
       :allowEmpty="false"
+      :name="props.name"
+      :optionLabel="props.optionLabel"
+      :optionValue="props.optionValue"
     />
   </div>
 </template>
@@ -90,7 +103,8 @@ onUnmounted(() => {
     background-color: transparent !important;
     font-size: var(--font-size-2);
     padding: 0;
-    border: none;
+    border: 1px solid var(--color-2) !important;
+    border-radius: calc(var(--border-radius-1) - var(--gap-1)) !important;
 
     &.p-togglebutton-checked {
       background-color: transparent !important;

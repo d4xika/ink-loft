@@ -1,7 +1,7 @@
 class BooksController < ApplicationController
   before_action :authenticate_user!
   def show
-    @book = current_user.books.find_by(title: params[:title])
+    @book = current_user.books.find(params[:id])
     return render json: @book, status: :ok
   end
 
@@ -15,6 +15,15 @@ class BooksController < ApplicationController
     @book.author = @book.author || "Unknown"
     if @book.save
       return render json: @book, status: :created
+    else
+      return render json: { errors: @book.errors.full_messages }, status: :unprocessable_entity
+    end
+  end
+
+  def update
+    @book = current_user.books.find(params[:id])
+    if @book.update(book_params)
+      return render json: @book, status: :ok
     else
       return render json: { errors: @book.errors.full_messages }, status: :unprocessable_entity
     end

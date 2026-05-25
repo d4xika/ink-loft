@@ -16,7 +16,7 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(["addQuote"]);
+const emit = defineEmits(["addQuote", "editRead", "finishRead"]);
 </script>
 
 <template>
@@ -41,8 +41,8 @@ const emit = defineEmits(["addQuote"]);
             />
           </div>
           <div class="edit-finish-btn-container">
-            <ILTextButton text="Edit read" />
-            <ILTextButton text="Finish read" />
+            <ILTextButton text="Edit read" @click="emit('editRead')" />
+            <ILTextButton text="Finish read" @click="emit('finishRead')" />
           </div>
         </div>
       </div>
