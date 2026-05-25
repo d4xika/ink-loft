@@ -100,26 +100,35 @@ function submit(data) {
       <div class="auth-card">
         <ILSelectButton v-model="tab" :options="tabOptions" />
         <Form
-          :key="tab"
           :initialValues="initUser"
           :resolver="resolver"
           class="form-container"
           @submit="submit"
         >
-          <ILTextInput
-            v-if="tab === 'REGISTER'"
-            name="email"
-            label="Email"
-            type="email"
-          />
-          <ILTextInput name="username" label="Username" />
-          <ILTextInput name="password" label="Password" type="password" />
-          <ILTextInput
-            v-if="tab === 'REGISTER'"
-            name="confirm_password"
-            label="Confirm password"
-            type="password"
-          />
+          <TransitionGroup name="list" tag="div" class="form-fields">
+            <ILTextInput
+              v-if="tab === 'REGISTER'"
+              key="email"
+              name="email"
+              label="Email"
+              type="email"
+            />
+            <ILTextInput key="username" name="username" label="Username" />
+            <ILTextInput
+              key="password"
+              name="password"
+              label="Password"
+              type="password"
+            />
+            <ILTextInput
+              v-if="tab === 'REGISTER'"
+              key="confirm_password"
+              name="confirm_password"
+              label="Confirm password"
+              type="password"
+            />
+          </TransitionGroup>
+
           <ILTextButton text="Submit" type="submit" />
         </Form>
       </div>
@@ -164,6 +173,39 @@ function submit(data) {
         gap: var(--gap-3);
         width: 80vw;
         max-width: 500px;
+
+        .form-fields {
+          display: flex;
+          flex-direction: column;
+          gap: var(--gap-3);
+          position: relative;
+          overflow: hidden;
+          padding: 5px;
+          margin: -5px;
+        }
+      }
+
+      .list-enter-active,
+      .list-leave-active {
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .list-enter-from {
+        opacity: 0;
+        transform: translateX(30px);
+      }
+
+      .list-leave-to {
+        opacity: 0;
+        transform: translateX(30px);
+      }
+
+      .list-enter-active {
+        z-index: 1;
+      }
+
+      .list-move {
+        transition: transform 0.4s ease;
       }
     }
   }

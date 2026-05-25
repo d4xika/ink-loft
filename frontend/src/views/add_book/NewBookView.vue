@@ -26,13 +26,12 @@ const resolver = zodResolver(
   z.object({
     title: z.string().min(1, "Title is required."),
     author: z.string().nullable(),
-    cover: z.string().nullable(),
     platform: z.string().nullable(),
     pairing: z.string().nullable(),
     chapters: z.coerce.number().nullable(),
     words: z.coerce.number().nullable(),
     pages: z.coerce.number().nullable(),
-    rating: z.string().nullable(),
+    rating: z.number().nullable(),
     start_date: z.coerce.date().nullable().optional(),
     end_date: z.coerce.date().nullable().optional(),
     recommended: z.boolean().nullable(),
@@ -41,6 +40,7 @@ const resolver = zodResolver(
 );
 
 function submit(data) {
+  console.log(data);
   if (!data.valid) {
     // TODO: add toasti
     return;

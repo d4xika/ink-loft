@@ -96,43 +96,49 @@ loadDailyQuote();
       </div>
       <ILDivider />
 
-      <p class="section-title">Currently Reading</p>
-      <div class="swipe-container-relative">
-        <div v-if="showLeftIndicator" class="swipe-indicator left">
-          <i class="pi pi-angle-left"></i>
-        </div>
-        <div ref="swipeContainer" class="swipe-wrapper" @scroll="handleScroll">
-          <div class="swipe-actions">
-            <ILBoxButton text="Add read" icon="pi-plus" />
-            <ILBoxButton
-              text="New read"
-              icon="pi-plus"
-              @click="router.push({ name: 'newBook' })"
-            />
+      <div class="box-container">
+        <p class="section-title">Currently Reading</p>
+        <div class="swipe-container-relative">
+          <div v-if="showLeftIndicator" class="swipe-indicator left">
+            <i class="pi pi-angle-left"></i>
           </div>
-
           <div
-            v-for="(book, index) in books"
-            :key="book.id"
-            :ref="
-              (el) => {
-                if (index === 0) firstBook = el;
-              }
-            "
-            class="swipe-main"
+            ref="swipeContainer"
+            class="swipe-wrapper"
+            @scroll="handleScroll"
           >
-            <CurrentlyReading
-              :title="book.title"
-              :author="book.author"
-              @add-quote="
-                activeBook = book.id;
-                addQuote = true;
+            <div class="swipe-actions">
+              <ILBoxButton text="Add read" icon="pi-plus" />
+              <ILBoxButton
+                text="New read"
+                icon="pi-plus"
+                @click="router.push({ name: 'newBook' })"
+              />
+            </div>
+
+            <div
+              v-for="(book, index) in books"
+              :key="book.id"
+              :ref="
+                (el) => {
+                  if (index === 0) firstBook = el;
+                }
               "
-            />
+              class="swipe-main"
+            >
+              <CurrentlyReading
+                :title="book.title"
+                :author="book.author"
+                @add-quote="
+                  activeBook = book.id;
+                  addQuote = true;
+                "
+              />
+            </div>
           </div>
-        </div>
-        <div v-if="showIndicator" class="swipe-indicator right">
-          <i class="pi pi-angle-right"></i>
+          <div v-if="showIndicator" class="swipe-indicator right">
+            <i class="pi pi-angle-right"></i>
+          </div>
         </div>
       </div>
 
@@ -172,39 +178,46 @@ loadDailyQuote();
     margin-top: var(--gap-4);
     gap: var(--gap-4);
 
-    .section-title {
-      font-family: "IM Fell English", serif;
-      font-size: var(--font-size-6);
-      padding-left: var(--gap-3);
-      margin: 0;
-    }
-
-    .swipe-container-relative {
-      position: relative;
+    .box-container {
       display: flex;
-      align-items: center;
+      flex-direction: column;
+      gap: var(--gap-3);
 
-      .swipe-indicator {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        pointer-events: none;
-        height: 100%;
+      .section-title {
+        font-family: "IM Fell English", serif;
+        font-size: var(--font-size-6);
+        padding-left: var(--gap-3);
+        margin: 0;
+      }
+
+      .swipe-container-relative {
+        position: relative;
         display: flex;
         align-items: center;
-        color: var(--text-color-1-light);
-        z-index: 1;
+        overflow-y: hidden;
 
-        &.right {
-          right: 0;
-          padding-left: var(--gap-4);
-          padding-right: var(--gap-1);
-        }
+        .swipe-indicator {
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          pointer-events: none;
+          height: 100%;
+          display: flex;
+          align-items: center;
+          color: var(--text-color-1-light);
+          z-index: 1;
 
-        &.left {
-          left: 0;
-          padding-right: var(--gap-4);
-          padding-left: var(--gap-1);
+          &.right {
+            right: 0;
+            padding-left: var(--gap-4);
+            padding-right: var(--gap-1);
+          }
+
+          &.left {
+            left: 0;
+            padding-right: var(--gap-4);
+            padding-left: var(--gap-1);
+          }
         }
       }
     }
