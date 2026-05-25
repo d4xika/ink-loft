@@ -6,6 +6,7 @@ import { useRouter } from "vue-router";
 import { z } from "zod";
 import API from "../helper/api.js";
 import { REGEX } from "../helper/regex.js";
+import { setAuthStatus } from "../router/router.js";
 
 const router = useRouter();
 const { locale } = useI18n();
@@ -60,6 +61,7 @@ function submit(data) {
       (response) => {
         localStorage.setItem("user", JSON.stringify(response.data));
         locale.value = response.data.language;
+        setAuthStatus(true);
         router.push({ name: "home" });
         // TODO: add toasti
       },
@@ -76,6 +78,7 @@ function submit(data) {
     }).then(
       (response) => {
         localStorage.setItem("user", JSON.stringify(response.data));
+        setAuthStatus(true);
         router.push({ name: "home" });
         // TODO: add toasti
       },

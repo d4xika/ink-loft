@@ -17,6 +17,27 @@ class UsersController < ApplicationController
     return render json: render_user(user), status: :ok
   end
 
+  def is_logged_in
+    if current_user
+      render json: { authenticated: true, user: render_user(current_user) }, status: :ok
+    else
+      render json: { authenticated: false }, status: :ok
+    end
+  end
+
+  def logout
+    token = cookies.signed[:auth_token]
+
+    if token
+      auth_record = AuthKey.find_by(key: token)
+      auth_record.destroy if auth_record
+    end
+
+    cookies.delete(:auth_token)
+
+    render status: :ok
+  end
+
   def register
     if User.find_by(username: params[:username]) || User.find_by(email: params[:email])
       return render json: { error: "User already exists" }, status: :conflict

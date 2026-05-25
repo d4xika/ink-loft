@@ -12,6 +12,11 @@ const props = defineProps({
     type: String,
     default: "full-width",
   },
+  color: {
+    type: String,
+    default: "primary",
+    validator: (value) => ["primary", "red"].includes(value),
+  },
 });
 </script>
 
@@ -19,7 +24,7 @@ const props = defineProps({
   <Button
     :icon="`pi ${props.icon}`"
     class="icon-button"
-    :class="`variant-${props.variant}`"
+    :class="`variant-${props.variant} color-${props.color}`"
   />
 </template>
 
@@ -35,7 +40,12 @@ const props = defineProps({
     height: 100%;
   }
 
-  &.variant-square {
+  &.color-primary {
+    background-color: var(--color-3);
+  }
+
+  &.color-red {
+    background-color: var(--color-1);
   }
 
   &:hover {
