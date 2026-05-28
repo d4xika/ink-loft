@@ -1,17 +1,18 @@
 export const READING_STATUSES = [
   {
-    id: 0,
-    label: "Want to Read"
+    id: "want_to_read",
+    label: "Want to Read",
   },
   {
-    id: 1,
-    label: "Currently Reading"
+    id: "currently_reading",
+    label: "Currently Reading",
   },
   {
-    id: 2,
-    label: "Finished"
+    id: "have_read",
+    label: "Finished",
   },
   {
-    id: 3,
-    label: "Dropped"
-  }];
+    id: "dropped",
+    label: "Dropped",
+  },
+];

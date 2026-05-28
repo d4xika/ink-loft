@@ -77,6 +77,7 @@ onUnmounted(() => {
   background-color: var(--color-0);
   border-radius: var(--border-radius-1);
   padding: var(--gap-1);
+  border: solid 1px var(--color-3) !important;
 
   .slider {
     position: absolute;
@@ -93,7 +94,6 @@ onUnmounted(() => {
 .p-selectbutton {
   z-index: 1;
   background-color: transparent !important;
-  border: none !important;
 
   &:hover {
     background-color: transparent !important;
@@ -103,8 +103,7 @@ onUnmounted(() => {
     background-color: transparent !important;
     font-size: var(--font-size-2);
     padding: 0;
-    border: 1px solid var(--color-2) !important;
-    border-radius: calc(var(--border-radius-1) - var(--gap-1)) !important;
+    border: none !important;
 
     &.p-togglebutton-checked {
       background-color: transparent !important;

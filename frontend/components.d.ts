@@ -25,6 +25,7 @@ declare module 'vue' {
     ILAvatar: typeof import('./src/components/primevue/ILAvatar.vue')['default']
     ILBookCover: typeof import('./src/components/ILBookCover.vue')['default']
     ILBoxButton: typeof import('./src/components/ILBoxButton.vue')['default']
+    ILConfirmationDrawer: typeof import('./src/components/drawer/ILConfirmationDrawer.vue')['default']
     ILDatePicker: typeof import('./src/components/primevue/ILDatePicker.vue')['default']
     ILDivider: typeof import('./src/components/ILDivider.vue')['default']
     ILDrawer: typeof import('./src/components/primevue/ILDrawer.vue')['default']

@@ -13,20 +13,25 @@ const props = defineProps({
     default: undefined,
     validator: (value) => ["submit", undefined].includes(value),
   },
+  color: {
+    type: String,
+    default: "primary",
+    validator: (value) => ["primary", "red", "transparent"].includes(value),
+  },
 });
 </script>
 
 <template>
-  <Button :class="`variant-${props.variant}`" :type="props.type">
-    {{
-      props.text
-    }}
+  <Button
+    :class="`variant-${props.variant} color-${props.color}`"
+    :type="props.type"
+  >
+    {{ props.text }}
   </Button>
 </template>
 
 <style scoped>
 .p-button {
-  background-color: var(--color-3);
   border: 1px solid transparent !important;
   color: var(--text-color-1);
   padding: 9px 10px 6px 10px;
@@ -35,6 +40,19 @@ const props = defineProps({
 
   &.variant-full-width {
     width: 100%;
+  }
+
+  &.color-primary {
+    background-color: var(--color-3);
+  }
+
+  &.color-red {
+    background-color: var(--color-1);
+  }
+
+  &.color-transparent {
+    border: 1px solid var(--color-3) !important;
+    background-color: transparent;
   }
 
   &:hover {

@@ -4,6 +4,8 @@ import ReadForm from "./ReadForm.vue";
 import { useRoute } from "vue-router";
 import API from "../../helper/api.js";
 import router from "../../router/router.js";
+import Header from "./Header.vue";
+import ILConfirmationDrawer from "../../components/drawer/ILConfirmationDrawer.vue";
 
 const route = useRoute();
 
@@ -11,11 +13,11 @@ const readInitValues = ref({});
 
 const isLoaded = ref(false);
 
+const deleteReadDrawer = ref(false);
+
 function getReadData() {
   API.get(`books/${route.params.id}`).then((response) => {
     readInitValues.value = response.data;
-    readInitValues.value.rating = parseInt(readInitValues.value.rating);
-    readInitValues.value.recommended = readInitValues.value.recommended === "t";
     isLoaded.value = true;
   });
 }
@@ -26,12 +28,35 @@ function saveRead(data) {
     return;
   }
 
-  const read = {};
+  const formData = new FormData();
   Object.keys(data.states).forEach((state) => {
-    read[state] = data.states[state].value;
+    formData.append(`book[${state}]`, data.states[state].value);
   });
 
-  API.put(`books/${route.params.id}`, read).then((response) => {
+  if (data.coverImage) {
+    formData.append("book[cover]", data.coverImage);
+  }
+
+  if (data.coverRemoved) {
+    formData.append("remove_cover", "true");
+  }
+
+  API.put(`books/${route.params.id}`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  }).then((response) => {
+    router.push({ name: "home" });
+  });
+}
+
+function openDeleteReadDrawer() {
+  deleteReadDrawer.value = true;
+}
+
+function deleteRead() {
+  API.delete(`books/${route.params.id}`).then((response) => {
+    deleteReadDrawer.value = false;
     router.push({ name: "home" });
   });
 }
@@ -41,12 +66,39 @@ getReadData();
 
 <template>
   <div>
-    <ReadForm
-      v-if="isLoaded"
-      @save="(read) => saveRead(read)"
-      :initialValues="readInitValues"
+    <Header />
+    <div class="read-edit-view">
+      <ReadForm
+        v-if="isLoaded"
+        @save="(read) => saveRead(read)"
+        :initialValues="readInitValues"
+      />
+
+      <div class="button-container" v-if="isLoaded">
+        <ILTextButton
+          text="Delete read"
+          @click="openDeleteReadDrawer()"
+          color="red"
+        />
+      </div>
+    </div>
+
+    <ILConfirmationDrawer
+      v-model="deleteReadDrawer"
+      title="Delete read"
+      confirmText="Delete"
+      textContent="Are you sure you want to delete this read? All quotes will be lost."
+      type="negative"
+      @confirm="deleteRead()"
     />
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.read-edit-view {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-3);
+  padding: var(--gap-3);
+}
+</style>
