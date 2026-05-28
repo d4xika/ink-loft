@@ -35,12 +35,8 @@ const emit = defineEmits(["edit", "refresh"]);
         @click="emit('refresh')"
       ></i>
     </div>
-    <h2 class="quote">
-      "{{ props.quote }}"
-    </h2>
-    <h3 class="source">
-      ~ {{ props.source }}
-    </h3>
+    <h2 class="quote">"{{ props.quote }}"</h2>
+    <h3 class="source">~ {{ props.source }}</h3>
   </div>
 </template>
 
@@ -65,6 +61,7 @@ const emit = defineEmits(["edit", "refresh"]);
     gap: var(--gap-3);
     margin-top: calc(var(--gap-2) * -1);
     margin-right: calc(var(--gap-2) * -1);
+    margin-bottom: var(--gap-1);
 
     i {
       cursor: pointer;
@@ -72,8 +69,8 @@ const emit = defineEmits(["edit", "refresh"]);
   }
 
   .quote {
-    font-family: "EB Garamond", serif;
-    font-style: italic;
+    font-family: "Petit Formal Script", serif;
+    font-size: var(--font-size-4);
     font-weight: normal;
     letter-spacing: 2px;
   }

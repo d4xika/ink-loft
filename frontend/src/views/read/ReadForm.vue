@@ -4,6 +4,13 @@ import { zodResolver } from "@primevue/forms/resolvers/zod";
 import { z } from "zod";
 import Header from "./Header.vue";
 import ILSelect from "../../components/primevue/ILSelect.vue";
+import ILTextInput from "../../components/primevue/ILTextInput.vue";
+import ILImageUploader from "../../components/primevue/ILImageUploader.vue";
+import ILRating from "../../components/primevue/ILRating.vue";
+import ILDatePicker from "../../components/primevue/ILDatePicker.vue";
+import ILToggleSwitch from "../../components/primevue/ILToggleSwitch.vue";
+import ILNumberInput from "../../components/primevue/ILNumberInput.vue";
+import ILTextArea from "../../components/primevue/ILTextArea.vue";
 import { READING_STATUSES } from "@/helper/constants.js";
 
 const props = defineProps({
@@ -51,6 +58,7 @@ function onFileRemoved() {
     :resolver="resolver"
     @submit="(data) => emit('save', { ...data, coverImage, coverRemoved })"
   >
+    <Header />
     <div class="content-container">
       <div class="main-content-container">
         <div class="title-author-container">

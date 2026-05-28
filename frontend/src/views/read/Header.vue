@@ -1,4 +1,5 @@
 <script setup>
+import ILIconButton from "../../components/primevue/ILIconButton.vue";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
@@ -20,6 +21,6 @@ const router = useRouter();
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: var(--gap-3);
+  padding-bottom: var(--gap-3);
 }
 </style>
