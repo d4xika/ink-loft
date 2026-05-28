@@ -6,6 +6,7 @@ import API from "../../helper/api.js";
 import router from "../../router/router.js";
 import Header from "./Header.vue";
 import ILConfirmationDrawer from "../../components/drawer/ILConfirmationDrawer.vue";
+import ILTextButton from "../../components/primevue/ILTextButton.vue";
 
 const route = useRoute();
 
@@ -29,12 +30,16 @@ function saveRead(data) {
   }
 
   const formData = new FormData();
+
+  const book = {};
   Object.keys(data.states).forEach((state) => {
-    formData.append(`book[${state}]`, data.states[state].value);
+    book[`${state}`] = data.states[state].value;
   });
 
+  formData.append("book", JSON.stringify(book));
+
   if (data.coverImage) {
-    formData.append("book[cover]", data.coverImage);
+    formData.append("cover", data.coverImage);
   }
 
   if (data.coverRemoved) {
@@ -66,12 +71,11 @@ getReadData();
 
 <template>
   <div>
-    <Header />
     <div class="read-edit-view">
       <ReadForm
         v-if="isLoaded"
-        @save="(read) => saveRead(read)"
         :initialValues="readInitValues"
+        @save="(read) => saveRead(read)"
       />
 
       <div class="button-container" v-if="isLoaded">

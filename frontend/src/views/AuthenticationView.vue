@@ -155,7 +155,7 @@ function submit(data) {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: var(--gap-5);
+    gap: var(--gap-4);
 
     .auth-card {
       background-color: var(--color-2);

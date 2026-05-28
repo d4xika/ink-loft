@@ -27,7 +27,6 @@ function saveRead(data) {
 
   const book = {};
   Object.keys(data.states).forEach((state) => {
-    if (state === "cover") return;
     book[`${state}`] = data.states[state].value;
   });
 
@@ -55,9 +54,8 @@ function saveRead(data) {
 
 <template>
   <div>
-    <Header />
     <div class="read-new-view">
-      <ReadForm @save="(read) => saveRead(read)" :initialValues="initRead" />
+      <ReadForm :initialValues="initRead" @save="(read) => saveRead(read)" />
     </div>
   </div>
 </template>
