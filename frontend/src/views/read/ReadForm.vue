@@ -1,4 +1,5 @@
 <script setup>
+import { ref } from "vue";
 import { zodResolver } from "@primevue/forms/resolvers/zod";
 import { z } from "zod";
 import Header from "./Header.vue";
@@ -26,18 +27,30 @@ const resolver = zodResolver(
     start_date: z.string().nullable().optional(),
     end_date: z.string().nullable().optional(),
     recommended: z.boolean().nullable(),
-    reading_status: z.coerce.number().nullable(),
+    reading_status: z.string().nullable(),
   }),
 );
+
+const coverImage = ref(null);
+const coverRemoved = ref(false);
+
+function onFileSelected(file) {
+  coverImage.value = file;
+  coverRemoved.value = false;
+}
+
+function onFileRemoved() {
+  coverImage.value = null;
+  coverRemoved.value = true;
+}
 </script>
 
 <template>
   <Form
     :initialValues="props.initialValues"
     :resolver="resolver"
-    @submit="(data) => emit('save', data)"
+    @submit="(data) => emit('save', { ...data, coverImage, coverRemoved })"
   >
-    <Header />
     <div class="content-container">
       <div class="main-content-container">
         <div class="title-author-container">
@@ -46,7 +59,14 @@ const resolver = zodResolver(
           <ILTextInput label="Author" name="author" />
         </div>
         <div class="rating-section">
-          <ILImageUploader variant="rectangle" title="Cover" name="cover" />
+          <ILImageUploader
+            variant="rectangle"
+            title="Cover"
+            name="cover"
+            :imageSrc="props.initialValues.cover_url"
+            @file-selected="onFileSelected"
+            @file-removed="onFileRemoved"
+          />
           <ILRating name="rating" v-model="initialValues.rating" />
         </div>
       </div>
@@ -91,7 +111,6 @@ const resolver = zodResolver(
   display: flex;
   flex-direction: column;
   gap: var(--gap-3);
-  padding: var(--gap-3);
 
   .side-by-side {
     display: flex;

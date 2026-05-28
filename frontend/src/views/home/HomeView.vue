@@ -54,9 +54,9 @@ function saveQuote(form) {
 function openFinishReadDrawer(book) {
   activeBook.value = book.id;
   finishedReadInitialValues.value = {
-    reading_status: 2,
-    rating: parseInt(book.rating),
-    recommended: book.recommended === "t",
+    reading_status: "have_read",
+    rating: book.rating,
+    recommended: book.recommended,
   };
   finishRead.value = true;
 }
@@ -155,6 +155,10 @@ loadCurrentlyReading();
               />
             </div>
 
+            <div v-if="books.length <= 0" class="no-books-image-container">
+              <img src="/kitty_on_shelf.png" alt="Kitty on shelf" />
+            </div>
+
             <div
               v-for="(book, index) in books"
               :key="book.id"
@@ -168,6 +172,7 @@ loadCurrentlyReading();
               <CurrentlyReading
                 :title="book.title"
                 :author="book.author"
+                :coverImageUrl="book.cover_url"
                 @addQuote="
                   activeBook = book.id;
                   addQuote = true;
@@ -314,6 +319,14 @@ loadCurrentlyReading();
         flex-shrink: 0;
         scroll-snap-align: start;
         margin-right: calc(-1.7 * var(--gap-5));
+      }
+
+      .no-books-image-container {
+        height: var(--read-cover-height);
+
+        img {
+          height: 70%;
+        }
       }
 
       .swipe-main {

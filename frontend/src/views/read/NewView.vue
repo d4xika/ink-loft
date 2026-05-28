@@ -2,6 +2,7 @@
 import ReadForm from "./ReadForm.vue";
 import API from "../../helper/api.js";
 import router from "../../router/router.js";
+import Header from "./Header.vue";
 
 const initRead = {
   title: null,
@@ -22,13 +23,24 @@ function saveRead(data) {
     return;
   }
 
-  const read = {};
+  const formData = new FormData();
+
+  const book = {};
   Object.keys(data.states).forEach((state) => {
-    read[state] = data.states[state].value;
+    if (state === "cover") return;
+    book[`${state}`] = data.states[state].value;
   });
 
-  API.post("books", {
-    book: read,
+  formData.append("book", JSON.stringify(book));
+
+  if (data.coverImage) {
+    formData.append("cover", data.coverImage);
+  }
+
+  API.post("books", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
   }).then(
     (response) => {
       router.push({ name: "home" });
@@ -43,8 +55,15 @@ function saveRead(data) {
 
 <template>
   <div>
-    <ReadForm @save="(read) => saveRead(read)" :initialValues="initRead" />
+    <Header />
+    <div class="read-new-view">
+      <ReadForm @save="(read) => saveRead(read)" :initialValues="initRead" />
+    </div>
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.read-new-view {
+  padding: var(--gap-3);
+}
+</style>

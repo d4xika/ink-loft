@@ -11,7 +11,7 @@ class UsersController < ApplicationController
       value: auth_key.key,
       httponly: true,
       expires: 2.weeks.from_now,
-      same_site: :lax,
+      same_site: Rails.env.production? ? :none : :lax,
       secure: Rails.env.production?
     }
     return render json: render_user(user), status: :ok
@@ -33,7 +33,10 @@ class UsersController < ApplicationController
       auth_record.destroy if auth_record
     end
 
-    cookies.delete(:auth_token)
+    cookies.delete(:auth_token,
+                   same_site: Rails.env.production? ? :none : :lax,
+                   secure: Rails.env.production?
+    )
 
     render status: :ok
   end
@@ -50,7 +53,7 @@ class UsersController < ApplicationController
       value: auth_key.key,
       httponly: true,
       expires: 2.weeks.from_now,
-      same_site: :lax,
+      same_site: Rails.env.production? ? :none : :lax,
       secure: Rails.env.production?
     }
 
@@ -88,10 +91,12 @@ class UsersController < ApplicationController
   private
 
   def render_user(user)
+    base_url = Rails.env.production? ? 'https://inkloft-backend.p4s3r0.it' : 'http://127.0.0.1:3000'
+
     return {
       username: user.username,
-      avatar_url: user.avatar.attached? ? Rails.application.routes.url_helpers.rails_representation_url(user.avatar.variant(:large), host: '127.0.0.1:3000') : nil,
-      avatar_small_url: user.avatar.attached? ? Rails.application.routes.url_helpers.rails_representation_url(user.avatar.variant(:small), host: '127.0.0.1:3000') : nil,
+      avatar_url: user.avatar.attached? ? Rails.application.routes.url_helpers.rails_representation_url(user.avatar.variant(:large), host: base_url) : nil,
+      avatar_small_url: user.avatar.attached? ? Rails.application.routes.url_helpers.rails_representation_url(user.avatar.variant(:small), host: base_url) : nil,
       language: user.language
     }
   end

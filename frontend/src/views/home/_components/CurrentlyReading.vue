@@ -2,7 +2,7 @@
 import ILBookCover from "../../../components/ILBookCover.vue";
 
 const props = defineProps({
-  covers: {
+  coverImageUrl: {
     type: String,
     default: undefined,
   },
@@ -23,7 +23,9 @@ const emit = defineEmits(["addQuote", "editRead", "finishRead"]);
   <div class="currently-reading-container">
     <div class="content-container">
       <div class="left-container">
-        <ILBookCover cover="/Test_Cover.jpg" />
+        <ILBookCover
+          :cover="props.coverImageUrl ? props.coverImageUrl : undefined"
+        />
       </div>
       <div class="right-container">
         <div class="title-author-container">
@@ -53,7 +55,6 @@ const emit = defineEmits(["addQuote", "editRead", "finishRead"]);
 <style scoped>
 .currently-reading-container {
   gap: var(--gap-3);
-  padding: var(--gap-1);
 
   .content-container {
     display: flex;
