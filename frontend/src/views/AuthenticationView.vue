@@ -47,48 +47,52 @@ const resolver = computed(() => {
   return zodResolver(loginSchema);
 });
 
-function submit(data) {
+async function submit(data) {
   if (!data.valid) {
     // TODO: add toasti
     return;
   }
 
-  if (tab.value === "LOGIN") {
-    API.post("users/login", {
-      username: data.values.username,
-      password: data.values.password,
-    }).then(
-      (response) => {
-        localStorage.setItem("user", JSON.stringify(response.data));
-        locale.value = response.data.language;
-        setAuthStatus(true);
-        router.push({ name: "home" });
-        // TODO: add toasti
-      },
-      (error) => {
-        // TODO: add toasti
-      },
-    );
-  }
-  if (tab.value === "REGISTER") {
-    API.post("users/register", {
-      username: data.values.username,
-      password: data.values.password,
-      email: data.values.email,
-    }).then(
-      (response) => {
-        localStorage.setItem("user", JSON.stringify(response.data));
-        setAuthStatus(true);
-        router.push({ name: "home" });
-        // TODO: add toasti
-      },
-      (error) => {
-        if (error.status === 409) {
+  API.get("/csrf").then((response) => {
+    API.defaults.headers.common["X-CSRF-Token"] = response.data.csrf_token;
+
+    if (tab.value === "LOGIN") {
+      API.post("users/login", {
+        username: data.values.username,
+        password: data.values.password,
+      }).then(
+        (response) => {
+          localStorage.setItem("user", JSON.stringify(response.data));
+          locale.value = response.data.language;
+          setAuthStatus(true);
+          router.push({ name: "home" });
           // TODO: add toasti
-        }
-      },
-    );
-  }
+        },
+        (error) => {
+          // TODO: add toasti
+        },
+      );
+    }
+    if (tab.value === "REGISTER") {
+      API.post("users/register", {
+        username: data.values.username,
+        password: data.values.password,
+        email: data.values.email,
+      }).then(
+        (response) => {
+          localStorage.setItem("user", JSON.stringify(response.data));
+          setAuthStatus(true);
+          router.push({ name: "home" });
+          // TODO: add toasti
+        },
+        (error) => {
+          if (error.status === 409) {
+            // TODO: add toasti
+          }
+        },
+      );
+    }
+  });
 }
 </script>
 

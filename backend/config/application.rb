@@ -23,8 +23,10 @@ module Backend
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+    # 1. Wir definieren zuerst den Namen der Session (die Gästeliste)
+    config.session_store :cookie_store, key: '_backend_api_session'
     config.middleware.use ActionDispatch::Cookies
-    config.middleware.use ActionDispatch::Session::CookieStore
+    config.middleware.use config.session_store, config.session_options
     config.active_storage.variant_processor = :mini_magick
 
     # Only loads a smaller set of middleware suitable for API only apps.

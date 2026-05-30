@@ -1,10 +1,9 @@
-import path from 'node:path'
+import path from "node:path";
 import { PrimeVueResolver } from "@primevue/auto-import-resolver";
 import vue from "@vitejs/plugin-vue";
 import Components from "unplugin-vue-components/vite";
 import { defineConfig, loadEnv } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
-
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
@@ -17,7 +16,7 @@ export default defineConfig(({ mode }) => {
         dirs: ["src/components", "src/views/sections"],
         extensions: ["vue"],
         deep: true,
-        dts: true
+        dts: true,
       }),
       VitePWA({
         registerType: "autoUpdate",
@@ -32,8 +31,18 @@ export default defineConfig(({ mode }) => {
     ],
     resolve: {
       alias: {
-        '@': path.resolve(__dirname, './src'),
+        "@": path.resolve(__dirname, "./src"),
       },
-    }
+    },
+    server: {
+      port: 8000,
+      strictPort: true,
+      proxy: {
+        "/api": {
+          target: "http://localhost:3000",
+          changeOrigin: false,
+        },
+      },
+    },
   };
 });
