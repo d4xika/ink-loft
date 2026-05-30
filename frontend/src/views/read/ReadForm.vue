@@ -58,7 +58,7 @@ function onFileRemoved() {
     :resolver="resolver"
     @submit="(data) => emit('save', { ...data, coverImage, coverRemoved })"
   >
-    <Header />
+    <Header saveButtonEnabled />
     <div class="content-container">
       <div class="main-content-container">
         <div class="title-author-container">
@@ -75,7 +75,7 @@ function onFileRemoved() {
             @file-selected="onFileSelected"
             @file-removed="onFileRemoved"
           />
-          <ILRating name="rating" v-model="initialValues.rating" />
+          <ILRating name="rating" v-model="initialValues.rating" editEnabled />
         </div>
       </div>
       <ILSelect

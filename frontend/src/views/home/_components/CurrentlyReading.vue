@@ -16,13 +16,13 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(["addQuote", "editRead", "finishRead"]);
+const emit = defineEmits(["addQuote", "editRead", "finishRead", "showRead"]);
 </script>
 
 <template>
   <div class="currently-reading-container">
     <div class="content-container">
-      <div class="left-container">
+      <div class="left-container" @click="emit('showRead')">
         <ILBookCover
           :cover="props.coverImageUrl ? props.coverImageUrl : undefined"
         />
