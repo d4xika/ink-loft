@@ -91,7 +91,7 @@ class Api::UsersController < Api::ApplicationController
   private
 
   def render_user(user)
-    base_url = Rails.env.production? ? 'https://inkloft-backend.p4s3r0.it' : 'http://127.0.0.1:3000'
+    base_url = Rails.env.production? ? "https://ink-loft.d4xika.com" : "http://127.0.0.1:3000"
 
     return {
       username: user.username,

@@ -181,6 +181,9 @@ loadCurrentlyReading();
                   router.push({ name: 'editRead', params: { id: book.id } })
                 "
                 @finishRead="openFinishReadDrawer(book)"
+                @showRead="
+                  router.push({ name: 'showRead', params: { id: book.id } })
+                "
               />
             </div>
           </div>

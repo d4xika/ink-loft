@@ -37,6 +37,7 @@ declare module 'vue' {
     ILRating: typeof import('./src/components/primevue/ILRating.vue')['default']
     ILSelect: typeof import('./src/components/primevue/ILSelect.vue')['default']
     ILSelectButton: typeof import('./src/components/primevue/ILSelectButton.vue')['default']
+    ILTag: typeof import('./src/components/primevue/ILTag.vue')['default']
     ILTextArea: typeof import('./src/components/primevue/ILTextArea.vue')['default']
     ILTextButton: typeof import('./src/components/primevue/ILTextButton.vue')['default']
     ILTextInput: typeof import('./src/components/primevue/ILTextInput.vue')['default']

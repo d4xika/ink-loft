@@ -27,6 +27,11 @@ const routes = [
         name: "editRead",
         component: () => import("@/views/read/EditView.vue"),
       },
+      {
+        path: "/:id",
+        name: "showRead",
+        component: () => import("@/views/read/ShowReadView.vue"),
+      },
     ],
   },
   {

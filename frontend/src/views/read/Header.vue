@@ -2,7 +2,20 @@
 import ILIconButton from "../../components/primevue/ILIconButton.vue";
 import { useRouter } from "vue-router";
 
+const props = defineProps({
+  saveButtonEnabled: {
+    type: Boolean,
+    default: false,
+  },
+  editButtonEnabled: {
+    type: Boolean,
+    default: false,
+  },
+});
+
 const router = useRouter();
+
+const emit = defineEmits(["edit"]);
 </script>
 
 <template>
@@ -10,9 +23,14 @@ const router = useRouter();
     <ILIconButton
       icon="pi-chevron-left"
       variant="square"
-      @click="router.push({ name: 'home' })"
+      @click="router.go(-1)"
     />
-    <ILIconButton icon="pi-save" variant="square" type="submit" />
+    <ILIconButton
+      :icon="props.saveButtonEnabled ? 'pi-save' : 'pi-pen-to-square'"
+      variant="square"
+      :type="props.saveButtonEnabled ? 'submit' : 'button'"
+      @click="props.saveButtonEnabled ? undefined : emit('edit')"
+    />
   </div>
 </template>
 
