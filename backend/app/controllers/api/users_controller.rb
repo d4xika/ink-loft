@@ -1,4 +1,4 @@
-class UsersController < ApplicationController
+class Api::UsersController < Api::ApplicationController
   def login
     user = User.find_by(username: params[:username])
     if !user || !user.authenticate(params[:password])
@@ -11,7 +11,7 @@ class UsersController < ApplicationController
       value: auth_key.key,
       httponly: true,
       expires: 2.weeks.from_now,
-      same_site: Rails.env.production? ? :none : :lax,
+      same_site: :lax,
       secure: Rails.env.production?
     }
     return render json: render_user(user), status: :ok
@@ -19,7 +19,7 @@ class UsersController < ApplicationController
 
   def is_logged_in
     if current_user
-      render json: { authenticated: true, user: render_user(current_user) }, status: :ok
+      render json: { authenticated: true, user: render_user(current_user), csrf_token: form_authenticity_token }, status: :ok
     else
       render json: { authenticated: false }, status: :ok
     end
@@ -53,7 +53,7 @@ class UsersController < ApplicationController
       value: auth_key.key,
       httponly: true,
       expires: 2.weeks.from_now,
-      same_site: Rails.env.production? ? :none : :lax,
+      same_site: :lax,
       secure: Rails.env.production?
     }
 

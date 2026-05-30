@@ -67,6 +67,8 @@ router.beforeEach(async (to, from, next) => {
   if (!isAuthChecked) {
     try {
       const response = await API.get("users/is_logged_in");
+      API.defaults.headers.common["X-CSRF-Token"] = response.data.csrf_token;
+
       isAuthenticated = response.data.authenticated;
     } catch (error) {
       isAuthenticated = false;

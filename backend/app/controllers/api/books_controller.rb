@@ -1,4 +1,4 @@
-class BooksController < ApplicationController
+class Api::BooksController < Api::ApplicationController
   before_action :authenticate_user!
   def show
     @book = current_user.books.find(params[:id])
