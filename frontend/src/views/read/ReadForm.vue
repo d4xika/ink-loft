@@ -1,17 +1,20 @@
 <script setup>
-import { ref } from "vue";
 import { zodResolver } from "@primevue/forms/resolvers/zod";
+import { ref } from "vue";
+import { useI18n } from "vue-i18n";
 import { z } from "zod";
 import Header from "./Header.vue";
-import ILSelect from "../../components/primevue/ILSelect.vue";
-import ILTextInput from "../../components/primevue/ILTextInput.vue";
-import ILImageUploader from "../../components/primevue/ILImageUploader.vue";
-import ILRating from "../../components/primevue/ILRating.vue";
 import ILDatePicker from "../../components/primevue/ILDatePicker.vue";
-import ILToggleSwitch from "../../components/primevue/ILToggleSwitch.vue";
+import ILImageUploader from "../../components/primevue/ILImageUploader.vue";
 import ILNumberInput from "../../components/primevue/ILNumberInput.vue";
+import ILRating from "../../components/primevue/ILRating.vue";
+import ILSelect from "../../components/primevue/ILSelect.vue";
 import ILTextArea from "../../components/primevue/ILTextArea.vue";
+import ILTextInput from "../../components/primevue/ILTextInput.vue";
+import ILToggleSwitch from "../../components/primevue/ILToggleSwitch.vue";
 import { READING_STATUSES } from "@/helper/constants.js";
+
+const { t } = useI18n();
 
 const props = defineProps({
   initialValues: {
@@ -63,53 +66,57 @@ function onFileRemoved() {
       <div class="main-content-container">
         <div class="title-author-container">
           <img src="/divider_book.png" alt="divider" />
-          <ILTextInput label="Title" name="title" />
-          <ILTextInput label="Author" name="author" />
+          <ILTextInput :label="t('read.title')" name="title" />
+          <ILTextInput :label="t('read.author')" name="author" />
         </div>
         <div class="rating-section">
           <ILImageUploader
             variant="rectangle"
-            title="Cover"
+            :title="t('read.cover')"
             name="cover"
             :imageSrc="props.initialValues.cover_url"
             @file-selected="onFileSelected"
             @file-removed="onFileRemoved"
           />
-          <ILRating name="rating" v-model="initialValues.rating" editEnabled />
+          <ILRating
+            :name="t('read.rating')"
+            v-model="initialValues.rating"
+            editEnabled
+          />
         </div>
       </div>
       <ILSelect
         :options="READING_STATUSES"
         optionLabel="label"
         optionValue="id"
-        label="Reading Status"
+        :label="t('read.reading_status')"
         name="reading_status"
       />
       <div class="side-by-side">
         <ILDatePicker
-          label="Start Date"
+          :label="t('read.start_date')"
           name="start_date"
           v-model="initialValues.start_date"
         />
         <ILDatePicker
-          label="End Date"
+          :label="t('read.end_date')"
           name="end_date"
           v-model="initialValues.end_date"
         />
       </div>
       <ILToggleSwitch
-        label="Would recommend:"
+        :label="t('read.would_recommend')"
         name="recommended"
         v-model="initialValues.recommended"
       />
       <!-- TODO: maybe change to combobox -->
-      <ILTextInput label="Platform" name="platform" />
-      <ILNumberInput label="Chapters" name="chapters" />
-      <ILNumberInput label="Words" name="words" />
-      <ILNumberInput label="Pages" name="pages" />
-      <ILTextInput label="Pairing" name="pairing" />
-      <ILTextArea label="Notes" name="notes" />
-      <ILTextInput label="Link" name="link" />
+      <ILTextInput :label="t('read.platform')" name="platform" />
+      <ILNumberInput :label="t('read.chapters')" name="chapters" />
+      <ILNumberInput :label="t('read.words')" name="words" />
+      <ILNumberInput :label="t('read.pages')" name="pages" />
+      <ILTextInput :label="t('read.pairing')" name="pairing" />
+      <ILTextArea :label="t('read.notes')" name="notes" />
+      <ILTextInput :label="t('read.link')" name="link" />
     </div>
   </Form>
 </template>

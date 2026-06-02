@@ -8,11 +8,15 @@ import API from "../helper/api.js";
 import { REGEX } from "../helper/regex.js";
 import { setAuthStatus } from "../router/router.js";
 
+const { t } = useI18n();
 const router = useRouter();
 const { locale } = useI18n();
 
 const tab = ref("LOGIN");
-const tabOptions = ["LOGIN", "REGISTER"];
+const tabOptions = computed(() => [
+  { value: "LOGIN", label: t("authentication.login") },
+  { value: "REGISTER", label: t("authentication.register") },
+]);
 
 const initUser = {
   username: "",
@@ -99,10 +103,14 @@ async function submit(data) {
 <template>
   <div class="authentication-view-container">
     <div class="content">
-      <h1>{{ $t("authentication.title") }}</h1>
+      <h1>{{ t("authentication.title") }}</h1>
 
       <div class="auth-card">
-        <ILSelectButton v-model="tab" :options="tabOptions" />
+        <ILSelectButton
+          v-model="tab"
+          :options="tabOptions"
+          optionLabel="label"
+        />
         <Form
           :initialValues="initUser"
           :resolver="resolver"
@@ -114,26 +122,30 @@ async function submit(data) {
               v-if="tab === 'REGISTER'"
               key="email"
               name="email"
-              label="Email"
+              :label="t('authentication.email')"
               type="email"
             />
-            <ILTextInput key="username" name="username" label="Username" />
+            <ILTextInput
+              key="username"
+              name="username"
+              :label="t('authentication.username')"
+            />
             <ILTextInput
               key="password"
               name="password"
-              label="Password"
+              :label="t('authentication.password')"
               type="password"
             />
             <ILTextInput
               v-if="tab === 'REGISTER'"
               key="confirm_password"
               name="confirm_password"
-              label="Confirm password"
+              :label="t('authentication.confirm_password')"
               type="password"
             />
           </TransitionGroup>
 
-          <ILTextButton text="Submit" type="submit" />
+          <ILTextButton :text="t('general.submit')" type="submit" />
         </Form>
       </div>
     </div>

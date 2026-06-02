@@ -1,6 +1,7 @@
 <script setup>
 import { zodResolver } from "@primevue/forms/resolvers/zod";
 import { ref, onMounted, nextTick } from "vue";
+import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import { z } from "zod";
 import CurrentlyReading from "./_components/CurrentlyReading.vue";
@@ -11,6 +12,7 @@ import ILTextArea from "../../components/primevue/ILTextArea.vue";
 import IlQuotes from "../../components/quote/ILQuotes.vue";
 import API from "../../helper/api.js";
 
+const { t } = useI18n();
 const router = useRouter();
 const swipeContainer = ref(null);
 const addQuote = ref(false);
@@ -137,7 +139,9 @@ loadCurrentlyReading();
       <ILDivider />
 
       <div class="box-container">
-        <p class="section-title">Currently Reading</p>
+        <p class="section-title">
+          {{ t("read.reading_status.currently_reading") }}
+        </p>
         <div class="swipe-container-relative">
           <div v-if="showLeftIndicator" class="swipe-indicator left">
             <i class="pi pi-angle-left"></i>
@@ -196,26 +200,26 @@ loadCurrentlyReading();
       <ILDivider />
       <div class="box-container">
         <div class="box-buttons-container">
-          <ILBoxButton text="Want to read" icon="pi-bookmark" />
-          <ILBoxButton text="Have read" icon="pi-book" />
+          <ILBoxButton :text="t('home.want_to_read')" icon="pi-bookmark" />
+          <ILBoxButton :text="t('home.have_read')" icon="pi-book" />
         </div>
       </div>
     </div>
 
-    <ILDrawer v-model="addQuote" title="Add Quote">
+    <ILDrawer v-model="addQuote" :title="t('quote.add')">
       <template #body>
         <Form
           :resolver="resolver"
           class="quote-drawer-form"
           @submit="saveQuote"
         >
-          <ILTextArea name="quote" label="Quote" />
-          <ILTextButton text="Save Quote" type="submit" />
+          <ILTextArea name="quote" :label="t('quotes.quote')" />
+          <ILTextButton :text="t('quotes.save')" type="submit" />
         </Form>
       </template>
     </ILDrawer>
 
-    <ILDrawer v-model="finishRead" title="Finish Read">
+    <ILDrawer v-model="finishRead" :title="t('quotes.finish_read')">
       <template #body>
         <Form
           class="finish-read-form"
@@ -226,15 +230,15 @@ loadCurrentlyReading();
             name="reading_status"
             optionLabel="label"
             :options="[
-              { id: 2, label: 'Finished' },
-              { id: 3, label: 'Dropped' },
+              { id: 2, label: t('read.reading_status.finished') },
+              { id: 3, label: t('read.reading_status.dropped') },
             ]"
             optionValue="id"
           />
           <ILRating name="rating" v-model="finishedReadInitialValues.rating" />
           <ILToggleSwitch
             name="recommended"
-            label="Would recommend:"
+            :label="t('read.would_recommend')"
             v-model="finishedReadInitialValues.recommended"
             class="toggle-switch"
           />

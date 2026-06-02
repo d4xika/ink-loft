@@ -6,6 +6,7 @@ import API from "../../helper/api.js";
 import { languages } from "../../helper/i18n/i18n.js";
 
 const { locale } = useI18n();
+const { t } = useI18n();
 const user = ref(JSON.parse(localStorage.getItem("user")));
 const avatarUrl = ref(user.value?.avatar_url || null);
 const avatarLoading = ref(false);
@@ -109,7 +110,7 @@ function updateLanguage(event) {
           v-model="selectedLanguage"
           :options="languages"
           :name="'language'"
-          :label="'Language'"
+          :label="t('profile.language')"
           optionLabel="label"
           @change="(event) => updateLanguage(event)"
         />

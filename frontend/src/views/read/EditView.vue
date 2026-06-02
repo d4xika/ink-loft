@@ -1,13 +1,14 @@
 <script setup>
 import { ref } from "vue";
-import ReadForm from "./ReadForm.vue";
+import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
-import API from "../../helper/api.js";
-import router from "../../router/router.js";
-import Header from "./Header.vue";
+import ReadForm from "./ReadForm.vue";
 import ILConfirmationDrawer from "../../components/drawer/ILConfirmationDrawer.vue";
 import ILTextButton from "../../components/primevue/ILTextButton.vue";
+import API from "../../helper/api.js";
+import router from "../../router/router.js";
 
+const { t } = useI18n();
 const route = useRoute();
 
 const readInitValues = ref({});
@@ -80,7 +81,7 @@ getReadData();
 
       <div class="button-container" v-if="isLoaded">
         <ILTextButton
-          text="Delete read"
+          :text="t('read.delete')"
           @click="openDeleteReadDrawer()"
           color="red"
         />
@@ -89,9 +90,9 @@ getReadData();
 
     <ILConfirmationDrawer
       v-model="deleteReadDrawer"
-      title="Delete read"
-      confirmText="Delete"
-      textContent="Are you sure you want to delete this read? All quotes will be lost."
+      :title="t('read.delete')"
+      :confirmText="t('general.delete')"
+      :textContent="t('read.delete_confirmation')"
       type="negative"
       @confirm="deleteRead()"
     />

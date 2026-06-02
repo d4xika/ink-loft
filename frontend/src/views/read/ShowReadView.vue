@@ -1,12 +1,14 @@
 <script setup>
-import Header from "./Header.vue";
-import { useRoute } from "vue-router";
-import API from "../../helper/api.js";
 import { ref } from "vue";
-import router from "../../router/router.js";
+import { useI18n } from "vue-i18n";
+import { useRoute } from "vue-router";
+import Header from "./Header.vue";
 import ILTag from "../../components/primevue/ILTag.vue";
+import API from "../../helper/api.js";
 import { READING_STATUSES } from "../../helper/constants.js";
+import router from "../../router/router.js";
 
+const { t } = useI18n();
 const route = useRoute();
 
 const read = ref({});
@@ -38,7 +40,11 @@ getReadData();
           <ILTag
             :icon="read.recommended ? 'pi-check' : 'pi-times'"
             :color="read.recommended ? 'green' : 'red'"
-            :text="read.recommended ? 'Recommended' : 'Not recommended'"
+            :text="
+              read.recommended
+                ? t('read.recommended')
+                : t('read.not_recommended')
+            "
           />
         </div>
       </div>
