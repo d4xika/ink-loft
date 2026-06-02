@@ -125,7 +125,7 @@ onUnmounted(() => {
       position: relative;
       z-index: 2;
       transition: color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      color: var(--color-4);
+      color: var(--text-color-1);
     }
   }
 }

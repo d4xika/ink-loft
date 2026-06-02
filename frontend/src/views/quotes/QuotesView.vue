@@ -1,10 +1,12 @@
 <script setup>
 import { zodResolver } from "@primevue/forms/resolvers/zod";
 import { ref } from "vue";
+import { useI18n } from "vue-i18n";
 import { z } from "zod";
 import Header from "./_components/Header.vue";
 import API from "../../helper/api.js";
 
+const { t } = useI18n();
 const addQuoteDrawer = ref(false);
 const editQuoteDrawer = ref(false);
 const quotes = ref([]);
@@ -131,7 +133,7 @@ loadDailyQuote();
 
       <ILDivider />
       <div class="more-quotes">
-        <ILAddItem text="Add Quote" @click="addQuoteDrawer = true" />
+        <ILAddItem :text="t('quotes.add')" @click="addQuoteDrawer = true" />
         <div v-for="quote in quotes" :key="quote.id">
           <ILQuoteSmall
             :quote="quote.content"
@@ -142,7 +144,7 @@ loadDailyQuote();
         </div>
       </div>
     </div>
-    <ILDrawer v-model="addQuoteDrawer" title="Add Quote">
+    <ILDrawer v-model="addQuoteDrawer" :title="t('quotes.add')">
       <template #body>
         <Form :resolver="resolver" class="form-container" @submit="saveQuote">
           <ILAutoComplete
@@ -150,12 +152,12 @@ loadDailyQuote();
             optionLabel="title"
             url="books/autocomplete"
           />
-          <ILTextArea name="content" label="Quote" />
-          <ILTextButton text="Save Quote" type="submit" />
+          <ILTextArea name="content" :label="t('quotes.quote')" />
+          <ILTextButton :text="t('quotes.save')" type="submit" />
         </Form>
       </template>
     </ILDrawer>
-    <ILDrawer v-model="editQuoteDrawer" title="Edit Quote">
+    <ILDrawer v-model="editQuoteDrawer" :title="t('quotes.edit')">
       <template #body>
         <Form
           :initialValues="addInitialValues"
@@ -172,9 +174,9 @@ loadDailyQuote();
           <ILTextArea
             v-model="addInitialValues.content"
             name="content"
-            label="Quote"
+            :label="t('quotes.quote')"
           />
-          <ILTextButton text="Save Quote" type="submit" />
+          <ILTextButton :text="t('quotes.save')" type="submit" />
         </Form>
       </template>
     </ILDrawer>

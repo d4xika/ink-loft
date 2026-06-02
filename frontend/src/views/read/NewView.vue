@@ -2,7 +2,6 @@
 import ReadForm from "./ReadForm.vue";
 import API from "../../helper/api.js";
 import router from "../../router/router.js";
-import Header from "./Header.vue";
 
 const initRead = {
   title: null,

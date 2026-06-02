@@ -1,18 +1,22 @@
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
+
 export const READING_STATUSES = [
   {
     id: "want_to_read",
-    label: "Want to Read",
+    label: t("read.want_to_read"),
   },
   {
     id: "currently_reading",
-    label: "Currently Reading",
+    label: t("read.currently_reading"),
   },
   {
     id: "have_read",
-    label: "Finished",
+    label: t("read.finished"),
   },
   {
     id: "dropped",
-    label: "Dropped",
+    label: t("read.dropped"),
   },
 ];
