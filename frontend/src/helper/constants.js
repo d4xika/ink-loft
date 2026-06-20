@@ -1,22 +1,20 @@
-import { useI18n } from "vue-i18n";
-
-const { t } = useI18n();
+import { i18n } from "./i18n/i18n.js";
 
 export const READING_STATUSES = [
   {
     id: "want_to_read",
-    label: t("read.want_to_read"),
+    label: i18n.global.t("read.reading_status.want_to_read"),
   },
   {
     id: "currently_reading",
-    label: t("read.currently_reading"),
+    label: i18n.global.t("read.reading_status.currently_reading"),
   },
   {
     id: "have_read",
-    label: t("read.finished"),
+    label: i18n.global.t("read.reading_status.finished"),
   },
   {
     id: "dropped",
-    label: t("read.dropped"),
+    label: i18n.global.t("read.reading_status.dropped"),
   },
 ];

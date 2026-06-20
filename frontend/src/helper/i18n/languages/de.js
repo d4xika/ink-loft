@@ -15,7 +15,8 @@ export const de = {
   home: {
     want_to_read: "Leseliste",
     have_read: "Gelesen",
-    finish_read: "Lektüre beenden",
+    finish_read: "beenden",
+    edit_read: "bearbeiten",
   },
   quotes: {
     quote: "Zitat",

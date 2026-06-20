@@ -15,7 +15,8 @@ export const noe = {
   home: {
     want_to_read: "Leselistn",
     have_read: "Glesn",
-    finish_read: "Lektüre beendn",
+    finish_read: "beendn",
+    edit_read: "beoaweitn",
   },
   quotes: {
     quote: "Zitat",

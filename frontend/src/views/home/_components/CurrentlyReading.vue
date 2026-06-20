@@ -1,5 +1,6 @@
 <script setup>
 import ILBookCover from "../../../components/ILBookCover.vue";
+import { useI18n } from "vue-i18n";
 
 const props = defineProps({
   coverImageUrl: {
@@ -16,6 +17,8 @@ const props = defineProps({
   },
 });
 
+const { t } = useI18n();
+
 const emit = defineEmits(["addQuote", "editRead", "finishRead", "showRead"]);
 </script>
 
@@ -28,7 +31,7 @@ const emit = defineEmits(["addQuote", "editRead", "finishRead", "showRead"]);
         />
       </div>
       <div class="right-container">
-        <div class="title-author-container">
+        <div class="title-author-container" @click="emit('showRead')">
           <p class="title">
             {{ props.title }}
           </p>
@@ -43,8 +46,14 @@ const emit = defineEmits(["addQuote", "editRead", "finishRead", "showRead"]);
             />
           </div>
           <div class="edit-finish-btn-container">
-            <ILTextButton text="Edit read" @click="emit('editRead')" />
-            <ILTextButton text="Finish read" @click="emit('finishRead')" />
+            <ILTextButton
+              :text="t('home.edit_read')"
+              @click="emit('editRead')"
+            />
+            <ILTextButton
+              :text="t('home.finish_read')"
+              @click="emit('finishRead')"
+            />
           </div>
         </div>
       </div>

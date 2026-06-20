@@ -16,6 +16,7 @@ export const en = {
     want_to_read: "Want to read",
     have_read: "Have read",
     finish_read: "Finish Read",
+    edit_read: "Edit Read",
   },
   quotes: {
     quote: "Quote",

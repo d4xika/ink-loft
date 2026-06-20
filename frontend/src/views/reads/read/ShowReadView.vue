@@ -96,6 +96,21 @@ getReadData();
               color="brown-4"
             />
           </div>
+
+          <div class="bottom-container">
+            <p v-if="read.pairing">{{ read.pairing }}</p>
+
+            <div class="notes-container" v-if="read.notes">
+              <p>{{ read.notes }}</p>
+            </div>
+
+            <ILTag
+              v-if="read.link"
+              :text="read.link"
+              icon="pi-link"
+              color="white"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -119,7 +134,7 @@ getReadData();
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: var(--gap-2);
+      gap: var(--gap-3);
       width: 85%;
 
       .cover-container {
@@ -154,7 +169,7 @@ getReadData();
         display: flex;
         flex-direction: column;
         margin-top: var(--gap-3);
-        gap: var(--gap-1);
+        gap: var(--gap-2);
 
         .date-container {
           display: flex;
@@ -176,6 +191,23 @@ getReadData();
           display: flex;
           flex-wrap: wrap;
           gap: var(--gap-2);
+        }
+
+        .bottom-container {
+          display: flex;
+          flex-direction: column;
+          gap: var(--gap-3);
+          padding-top: var(--gap-3);
+
+          .notes-container {
+            border: solid 1px var(--text-color-1-light);
+            padding: var(--gap-3);
+            border-radius: var(--border-radius-2);
+          }
+
+          p {
+            margin: 0;
+          }
         }
       }
     }

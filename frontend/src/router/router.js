@@ -15,22 +15,27 @@ const routes = [
     component: () => import("@/views/home/HomeView.vue"),
   },
   {
-    path: "/read",
+    path: "/reads",
     children: [
       {
         path: "/new",
         name: "newRead",
-        component: () => import("@/views/read/NewView.vue"),
+        component: () => import("@/views/reads/read/NewView.vue"),
       },
       {
         path: "/edit/:id",
         name: "editRead",
-        component: () => import("@/views/read/EditView.vue"),
+        component: () => import("@/views/reads/read/EditView.vue"),
       },
       {
         path: "/:id",
         name: "showRead",
-        component: () => import("@/views/read/ShowReadView.vue"),
+        component: () => import("@/views/reads/read/ShowReadView.vue"),
+      },
+      {
+        path: "",
+        name: "reads",
+        component: () => import("@/views/reads/ReadListView.vue"),
       },
     ],
   },

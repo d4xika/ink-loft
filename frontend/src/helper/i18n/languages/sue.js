@@ -15,13 +15,14 @@ export const sue = {
   home: {
     want_to_read: "Leseliste",
     have_read: "Glesen",
-    finish_read: "Lektüre beendn",
+    finish_read: "beendn",
+    edit_read: "beorbetn",
   },
   quotes: {
     quote: "Zitat",
     save: "Zitat speichern",
     add: "Zitat hinzuafügen",
-    edit: "Zitat beorbeiten",
+    edit: "Zitat beorbetn",
   },
   read: {
     title: "Titl",

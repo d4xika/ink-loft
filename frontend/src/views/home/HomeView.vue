@@ -200,13 +200,17 @@ loadCurrentlyReading();
       <ILDivider />
       <div class="box-container">
         <div class="box-buttons-container">
-          <ILBoxButton :text="t('home.want_to_read')" icon="pi-bookmark" />
+          <ILBoxButton
+            :text="t('home.want_to_read')"
+            icon="pi-bookmark"
+            @click="router.push({ name: 'reads' })"
+          />
           <ILBoxButton :text="t('home.have_read')" icon="pi-book" />
         </div>
       </div>
     </div>
 
-    <ILDrawer v-model="addQuote" :title="t('quote.add')">
+    <ILDrawer v-model="addQuote" :title="t('quotes.add')">
       <template #body>
         <Form
           :resolver="resolver"
@@ -219,7 +223,7 @@ loadCurrentlyReading();
       </template>
     </ILDrawer>
 
-    <ILDrawer v-model="finishRead" :title="t('quotes.finish_read')">
+    <ILDrawer v-model="finishRead" :title="t('home.finish_read')">
       <template #body>
         <Form
           class="finish-read-form"

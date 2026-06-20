@@ -5,6 +5,7 @@ import { noe } from "./languages/noe.js";
 import { sue } from "./languages/sue.js";
 
 export const i18n = createI18n({
+  legacy: false,
   locale: "en",
   fallbackLocale: "en",
   messages: {
