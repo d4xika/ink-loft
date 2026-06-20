@@ -48,6 +48,11 @@ const props = defineProps({
     background-color: var(--color-1);
   }
 
+  &.color-white {
+    background-color: var(--text-color-1-light);
+    color: var(--color-0);
+  }
+
   &.color-brown-1 {
     background-color: var(--color-7);
   }

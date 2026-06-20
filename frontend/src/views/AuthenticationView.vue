@@ -108,6 +108,7 @@ async function submit(data) {
       <div class="auth-card">
         <ILSelectButton
           v-model="tab"
+          optionValue="value"
           :options="tabOptions"
           optionLabel="label"
         />

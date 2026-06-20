@@ -89,7 +89,7 @@ function onFileRemoved() {
         :options="READING_STATUSES"
         optionLabel="label"
         optionValue="id"
-        :label="t('read.reading_status')"
+        :label="t('read.reading_status.reading_status')"
         name="reading_status"
       />
       <div class="side-by-side">
