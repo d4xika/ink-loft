@@ -4,9 +4,15 @@ const props = defineProps({
     type: String,
     default: "green",
     validator: (value) =>
-      ["green", "red", "brown-1", "brown-2", "brown-3", "brown-4"].includes(
-        value,
-      ),
+      [
+        "green",
+        "red",
+        "brown-1",
+        "brown-2",
+        "brown-3",
+        "brown-4",
+        "white",
+      ].includes(value),
   },
   text: {
     type: [String, Number],

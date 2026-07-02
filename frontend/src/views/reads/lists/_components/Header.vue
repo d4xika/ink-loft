@@ -1,6 +1,13 @@
 <script setup>
 import { useRouter } from "vue-router";
 
+const props = defineProps({
+  title: {
+    type: String,
+    required: true,
+  },
+});
+
 const router = useRouter();
 </script>
 
@@ -12,12 +19,24 @@ const router = useRouter();
       @click="router.push({ name: 'home' })"
     />
 
-    <h1>Want to read</h1>
+    <h1>{{ props.title }}</h1>
+
+    <ILIconButton
+      icon="pi-plus"
+      variant="square"
+      color="brown"
+      @click="router.push({ name: 'newRead' })"
+    />
+
+    <ILDivider />
   </div>
 </template>
 
 <style scoped>
 .header-container {
+  display: flex;
+  flex-direction: column;
   padding: var(--gap-3);
+  gap: var(--gap-4);
 }
 </style>

@@ -33,9 +33,19 @@ const routes = [
         component: () => import("@/views/reads/read/ShowReadView.vue"),
       },
       {
-        path: "",
-        name: "reads",
-        component: () => import("@/views/reads/ReadListView.vue"),
+        path: "/want_to_read",
+        name: "wantToRead",
+        component: () => import("@/views/reads/lists/WantToReadView.vue"),
+      },
+      {
+        path: "/have_read",
+        name: "haveRead",
+        component: () => import("@/views/reads/lists/HaveReadView.vue"),
+      },
+      {
+        path: "/dropped",
+        name: "dropped",
+        component: () => import("@/views/reads/lists/DroppedView.vue"),
       },
     ],
   },

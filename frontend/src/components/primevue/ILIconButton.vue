@@ -15,7 +15,7 @@ const props = defineProps({
   color: {
     type: String,
     default: "primary",
-    validator: (value) => ["primary", "red"].includes(value),
+    validator: (value) => ["primary", "red", "brown"].includes(value),
   },
 });
 </script>
@@ -46,6 +46,10 @@ const props = defineProps({
 
   &.color-red {
     background-color: var(--color-1);
+  }
+
+  &.color-brown {
+    background-color: var(--color-6);
   }
 
   &:hover {
