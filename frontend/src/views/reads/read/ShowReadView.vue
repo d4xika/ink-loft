@@ -3,10 +3,9 @@ import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
 import Header from "./Header.vue";
-import ILTag from "../../components/primevue/ILTag.vue";
-import API from "../../helper/api.js";
-import { READING_STATUSES } from "../../helper/constants.js";
-import router from "../../router/router.js";
+import API from "../../../helper/api.js";
+import { READING_STATUSES } from "../../../helper/constants.js";
+import router from "../../../router/router.js";
 
 const { t } = useI18n();
 const route = useRoute();

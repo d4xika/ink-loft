@@ -4,14 +4,6 @@ import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { z } from "zod";
 import Header from "./Header.vue";
-import ILDatePicker from "../../components/primevue/ILDatePicker.vue";
-import ILImageUploader from "../../components/primevue/ILImageUploader.vue";
-import ILNumberInput from "../../components/primevue/ILNumberInput.vue";
-import ILRating from "../../components/primevue/ILRating.vue";
-import ILSelect from "../../components/primevue/ILSelect.vue";
-import ILTextArea from "../../components/primevue/ILTextArea.vue";
-import ILTextInput from "../../components/primevue/ILTextInput.vue";
-import ILToggleSwitch from "../../components/primevue/ILToggleSwitch.vue";
 import { READING_STATUSES } from "@/helper/constants.js";
 
 const { t } = useI18n();

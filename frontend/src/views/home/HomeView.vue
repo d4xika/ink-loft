@@ -203,9 +203,13 @@ loadCurrentlyReading();
           <ILBoxButton
             :text="t('home.want_to_read')"
             icon="pi-bookmark"
-            @click="router.push({ name: 'reads' })"
+            @click="router.push({ name: 'wantToRead' })"
           />
-          <ILBoxButton :text="t('home.have_read')" icon="pi-book" />
+          <ILBoxButton
+            :text="t('home.have_read')"
+            icon="pi-book"
+            @click="router.push({ name: 'haveRead' })"
+          />
         </div>
       </div>
     </div>

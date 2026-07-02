@@ -6,7 +6,11 @@ class Api::BooksController < Api::ApplicationController
   end
 
   def index
-    @books = current_user.books
+    if params[:reading_status] && Book.reading_statuses.keys.include?(params[:reading_status])
+      @books = current_user.books.where(reading_status: params[:reading_status])
+    else
+      @books = current_user.books
+    end
     return render json: @books, status: :ok
   end
 

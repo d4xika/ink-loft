@@ -1,5 +1,4 @@
 <script setup>
-import ILIconButton from "../../components/primevue/ILIconButton.vue";
 import { useRouter } from "vue-router";
 
 const props = defineProps({
