@@ -2,6 +2,11 @@ export const noe = {
   general: {
     delete: "Löschn",
     submit: "Speichan",
+    error: "Fehla",
+    success: "Erfoig",
+    validation_error: "Validierungsfehla",
+    validation_error_detail: "Schau da deine Eingabn nuamoi au.",
+    generic_error: "Irgendwos is schief gonga.",
   },
   authentication: {
     title: "Grias di Lesa!",
@@ -11,18 +16,32 @@ export const noe = {
     username: "Benutzernaum",
     password: "Passwoat",
     confirm_password: "Passwoat bestätign",
+    login_success: "Eiloggn erfoigreich",
+    login_success_detail: "Grias di scho wieda!",
+    login_error: "Eiloggn hot ned hihaut",
+    login_error_detail: "Benutzernaum oda Passwoat passn ned.",
+    logout_error: "Ausloggn hot ned hihaut",
+    register_success: "Registrian erfoigreich",
+    register_success_detail: "Du kaunst di jetzt eiloggne.",
+    register_error: "Registrian hot ned hihaut",
+    register_error_conflict: "Benutzernaum oda Mail gibts scho.",
   },
   home: {
     want_to_read: "Leselistn",
     have_read: "Glesn",
+    graveyard: "Friedhof",
     finish_read: "beendn",
     edit_read: "beoaweitn",
   },
   quotes: {
+    quotes: "Zitate",
     quote: "Zitat",
     save: "Zitat speichan",
     add: "Zitat hinzufüng",
     edit: "Zitat beoaweitn",
+    save_success: "Zitat erfoigreich gspeichat.",
+    delete_success: "Zitat erfoigreich glöscht.",
+    load_error: "Zitate hom ned gladn weadn kina.",
   },
   read: {
     title: "Titl",
@@ -44,7 +63,9 @@ export const noe = {
     delete: "Lektüre löschn",
     delete_confirmation:
       "Bist da sicha, dass du de Lektüre löschn wüst? Olle Zitate dazua wean glöscht.",
-
+    save_success: "Lektüre erfoigreich gspeichat.",
+    delete_success: "Lektüre erfoigreich glöscht.",
+    load_error: "Daten hom ned gladn weadn kina.",
     reading_status: {
       reading_status: "Lesestatus",
       want_to_read: "Leselistn",
@@ -55,5 +76,9 @@ export const noe = {
   },
   profile: {
     language: "Sproch",
+    update_success: "Profil erfoigreich aktualisiert.",
+    update_error: "Profil hot ned aktualisiert weadn kina.",
+    avatar_update_success: "Profilbüd aktualisiert.",
+    avatar_remove_success: "Profilbüd glöscht.",
   },
 };

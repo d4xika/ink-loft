@@ -2,7 +2,8 @@ class Api::BooksController < Api::ApplicationController
   before_action :authenticate_user!
   def show
     @book = current_user.books.find(params[:id])
-    return render json: @book, status: :ok
+    @quotes = @book.quotes.order(created_at: :desc).select(:id, :content)
+    return render json: @book.as_json.merge(quotes: @quotes), status: :ok
   end
 
   def index

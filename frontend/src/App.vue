@@ -1,6 +1,6 @@
-<script setup>
-</script>
+<script setup></script>
 
 <template>
+  <ILToast />
   <router-view />
 </template>

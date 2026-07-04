@@ -38,7 +38,7 @@ class Api::UsersController < Api::ApplicationController
                    secure: Rails.env.production?
     )
 
-    render status: :ok
+    head(:ok)
   end
 
   def register

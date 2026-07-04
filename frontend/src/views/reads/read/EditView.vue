@@ -6,9 +6,11 @@ import ReadForm from "./ReadForm.vue";
 import ILConfirmationDrawer from "@/components/drawer/ILConfirmationDrawer.vue";
 import API from "@/helper/api.js";
 import router from "@/router/router.js";
+import { useToast } from "primevue/usetoast";
 
 const { t } = useI18n();
 const route = useRoute();
+const toast = useToast();
 
 const readInitValues = ref({});
 
@@ -17,15 +19,28 @@ const isLoaded = ref(false);
 const deleteReadDrawer = ref(false);
 
 function getReadData() {
-  API.get(`books/${route.params.id}`).then((response) => {
-    readInitValues.value = response.data;
-    isLoaded.value = true;
-  });
+  API.get(`books/${route.params.id}`).then(
+    (response) => {
+      readInitValues.value = response.data;
+      isLoaded.value = true;
+    },
+    (error) => {
+      toast.add({
+        severity: "error",
+        message: t("read.load_error"),
+        life: 3000,
+      });
+    },
+  );
 }
 
 function saveRead(data) {
   if (!data.valid) {
-    // TODO: add toasti
+    toast.add({
+      severity: "error",
+      message: t("general.validation_error_detail"),
+      life: 3000,
+    });
     return;
   }
 
@@ -50,9 +65,23 @@ function saveRead(data) {
     headers: {
       "Content-Type": "multipart/form-data",
     },
-  }).then((response) => {
-    router.push({ name: "home" });
-  });
+  }).then(
+    (response) => {
+      router.push({ name: "home" });
+      toast.add({
+        severity: "success",
+        message: t("read.save_success"),
+        life: 3000,
+      });
+    },
+    (error) => {
+      toast.add({
+        severity: "error",
+        message: t("general.generic_error"),
+        life: 3000,
+      });
+    },
+  );
 }
 
 function openDeleteReadDrawer() {
@@ -60,10 +89,24 @@ function openDeleteReadDrawer() {
 }
 
 function deleteRead() {
-  API.delete(`books/${route.params.id}`).then((response) => {
-    deleteReadDrawer.value = false;
-    router.push({ name: "home" });
-  });
+  API.delete(`books/${route.params.id}`).then(
+    (response) => {
+      deleteReadDrawer.value = false;
+      router.push({ name: "home" });
+      toast.add({
+        severity: "success",
+        message: t("read.delete_success"),
+        life: 3000,
+      });
+    },
+    (error) => {
+      toast.add({
+        severity: "error",
+        message: t("general.generic_error"),
+        life: 3000,
+      });
+    },
+  );
 }
 
 getReadData();

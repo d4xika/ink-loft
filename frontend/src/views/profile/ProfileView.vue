@@ -4,9 +4,11 @@ import { useI18n } from "vue-i18n";
 import Header from "./_components/Header.vue";
 import API from "../../helper/api.js";
 import { languages } from "../../helper/i18n/i18n.js";
+import { useToast } from "primevue/usetoast";
 
 const { locale } = useI18n();
 const { t } = useI18n();
+const toast = useToast();
 const user = ref(JSON.parse(localStorage.getItem("user")));
 const avatarUrl = ref(user.value?.avatar_url || null);
 const avatarLoading = ref(false);
@@ -56,9 +58,17 @@ async function updateProfilePicture(file) {
     user.value = response.data.user;
     localStorage.setItem("user", JSON.stringify(response.data.user));
     avatarUrl.value = await waitForAvatarUrl(response.data.user?.avatar_url);
-    // TODO: add toast
+    toast.add({
+      severity: "success",
+      message: t("profile.avatar_update_success"),
+      life: 3000,
+    });
   } catch (error) {
-    // TODO: add toast
+    toast.add({
+      severity: "error",
+      message: t("profile.update_error"),
+      life: 3000,
+    });
   } finally {
     avatarLoading.value = false;
   }
@@ -74,6 +84,18 @@ async function removeProfilePicture() {
       user.value = response.data.user;
       avatarUrl.value = response.data.user?.avatar_url || null;
       localStorage.setItem("user", JSON.stringify(response.data.user));
+      toast.add({
+        severity: "success",
+        message: t("profile.avatar_remove_success"),
+        life: 3000,
+      });
+    })
+    .catch(() => {
+      toast.add({
+        severity: "error",
+        message: t("profile.update_error"),
+        life: 3000,
+      });
     })
     .finally(() => {
       avatarLoading.value = false;
@@ -86,7 +108,18 @@ function updateLanguage(event) {
     (response) => {
       user.value = response.data.user;
       localStorage.setItem("user", JSON.stringify(response.data.user));
-      // TODO: add toast
+      toast.add({
+        severity: "success",
+        message: t("profile.update_success"),
+        life: 3000,
+      });
+    },
+    (error) => {
+      toast.add({
+        severity: "error",
+        message: t("profile.update_error"),
+        life: 3000,
+      });
     },
   );
 }

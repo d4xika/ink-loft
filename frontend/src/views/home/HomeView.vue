@@ -11,8 +11,10 @@ import ILDrawer from "../../components/primevue/ILDrawer.vue";
 import ILTextArea from "../../components/primevue/ILTextArea.vue";
 import IlQuotes from "../../components/quote/ILQuotes.vue";
 import API from "../../helper/api.js";
+import { useToast } from "primevue/usetoast";
 
 const { t } = useI18n();
+const toast = useToast();
 const router = useRouter();
 const swipeContainer = ref(null);
 const addQuote = ref(false);
@@ -45,10 +47,18 @@ function saveQuote(form) {
   }).then(
     () => {
       addQuote.value = false;
-      // TODO: add toasti
+      toast.add({
+        severity: "success",
+        message: t("quotes.save_success"),
+        life: 3000,
+      });
     },
     () => {
-      // TODO: add toasti
+      toast.add({
+        severity: "error",
+        message: t("general.generic_error"),
+        life: 3000,
+      });
     },
   );
 }
@@ -75,10 +85,24 @@ function saveFinishedRead(form) {
       recommended: form.values.recommended,
       end_date: new Date().toJSON(),
     },
-  }).then(() => {
-    finishRead.value = false;
-    loadCurrentlyReading();
-  });
+  }).then(
+    () => {
+      finishRead.value = false;
+      loadCurrentlyReading();
+      toast.add({
+        severity: "success",
+        message: t("read.save_success"),
+        life: 3000,
+      });
+    },
+    (error) => {
+      toast.add({
+        severity: "error",
+        message: t("general.generic_error"),
+        life: 3000,
+      });
+    },
+  );
 }
 
 function loadDailyQuote() {
@@ -211,6 +235,11 @@ loadCurrentlyReading();
             @click="router.push({ name: 'haveRead' })"
           />
         </div>
+        <ILBoxButton
+          :text="t('home.graveyard')"
+          icon="pi-bitcoin"
+          @click="router.push({ name: 'dropped' })"
+        />
       </div>
     </div>
 
