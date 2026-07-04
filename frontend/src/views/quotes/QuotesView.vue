@@ -5,8 +5,10 @@ import { useI18n } from "vue-i18n";
 import { z } from "zod";
 import Header from "./_components/Header.vue";
 import API from "../../helper/api.js";
+import { useToast } from "primevue/usetoast";
 
 const { t } = useI18n();
+const toast = useToast();
 const addQuoteDrawer = ref(false);
 const editQuoteDrawer = ref(false);
 const quotes = ref([]);
@@ -34,10 +36,18 @@ function saveQuote(event) {
     (response) => {
       addQuoteDrawer.value = false;
       loadQuotes();
-      // TODO: add toasti
+      toast.add({
+        severity: "success",
+        message: t("quotes.save_success"),
+        life: 3000,
+      });
     },
     (error) => {
-      // TODO: add toasti
+      toast.add({
+        severity: "error",
+        message: t("general.generic_error"),
+        life: 3000,
+      });
     },
   );
 }
@@ -46,10 +56,13 @@ function loadQuotes() {
   API.get("quotes").then(
     (response) => {
       quotes.value = response.data;
-      // TODO: add toasti
     },
     (error) => {
-      // TODO: add toasti
+      toast.add({
+        severity: "error",
+        message: t("quotes.load_error"),
+        life: 3000,
+      });
     },
   );
 }
@@ -65,7 +78,15 @@ function loadDailyQuote(refresh = false) {
     (response) => {
       dailyQuote.value = response.data;
     },
-    (error) => {},
+    (error) => {
+      if (refresh) {
+        toast.add({
+          severity: "error",
+          message: t("general.generic_error"),
+          life: 3000,
+        });
+      }
+    },
   );
 }
 
@@ -73,10 +94,18 @@ function deleteQuote(quote) {
   API.delete(`quotes/${quote.id}`).then(
     (response) => {
       loadQuotes();
-      // TODO: add toasti
+      toast.add({
+        severity: "success",
+        message: t("quotes.delete_success"),
+        life: 3000,
+      });
     },
     (error) => {
-      // TODO: add toasti
+      toast.add({
+        severity: "error",
+        message: t("general.generic_error"),
+        life: 3000,
+      });
     },
   );
 }
@@ -106,10 +135,18 @@ function editQuote(event) {
       editQuoteDrawer.value = false;
       loadQuotes();
       loadDailyQuote();
-      // TODO: add toasti
+      toast.add({
+        severity: "success",
+        message: t("quotes.save_success"),
+        life: 3000,
+      });
     },
     (error) => {
-      // TODO: add toasti
+      toast.add({
+        severity: "error",
+        message: t("general.generic_error"),
+        life: 3000,
+      });
     },
   );
 }

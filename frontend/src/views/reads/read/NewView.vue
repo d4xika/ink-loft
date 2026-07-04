@@ -2,6 +2,11 @@
 import ReadForm from "./ReadForm.vue";
 import API from "../../../helper/api.js";
 import router from "../../../router/router.js";
+import { useToast } from "primevue/usetoast";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
+const toast = useToast();
 
 const initRead = {
   title: null,
@@ -18,7 +23,11 @@ const initRead = {
 
 function saveRead(data) {
   if (!data.valid) {
-    // TODO: add toasti
+    toast.add({
+      severity: "error",
+      message: t("general.validation_error_detail"),
+      life: 3000,
+    });
     return;
   }
 
@@ -42,10 +51,18 @@ function saveRead(data) {
   }).then(
     (response) => {
       router.push({ name: "home" });
-      // TODO: add toasti
+      toast.add({
+        severity: "success",
+        message: t("read.save_success"),
+        life: 3000,
+      });
     },
     (error) => {
-      // TODO: add toasti
+      toast.add({
+        severity: "error",
+        message: t("general.generic_error"),
+        life: 3000,
+      });
     },
   );
 }

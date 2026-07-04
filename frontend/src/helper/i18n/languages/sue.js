@@ -2,6 +2,11 @@ export const sue = {
   general: {
     delete: "Löschen",
     submit: "Speichern",
+    error: "Fehler",
+    success: "Erfolg",
+    validation_error: "Validierungsfehler",
+    validation_error_detail: "Bitte überprüf deine Eingobn.",
+    generic_error: "Etwas isch schiafglaufn.",
   },
   authentication: {
     title: "Servus Leser!",
@@ -11,18 +16,32 @@ export const sue = {
     username: "Benutzernome",
     password: "Passwort",
     confirm_password: "Passwort bestetign",
+    login_success: "Onmeldung erfolgreich",
+    login_success_detail: "Griaß di wieder!",
+    login_error: "Onmeldung fehlgschlogn",
+    login_error_detail: "Ungültiger Benutzernome oder Passwort.",
+    logout_error: "Obmeldung fehlgschlogn",
+    register_success: "Registrierung erfolgreich",
+    register_success_detail: "Du konnsch di iatz onmeldn.",
+    register_error: "Registrierung fehlgschlogn",
+    register_error_conflict: "Benutzernome oder E-Mail gibts schun.",
   },
   home: {
     want_to_read: "Leseliste",
     have_read: "Glesen",
+    graveyard: "Friedhof",
     finish_read: "beendn",
     edit_read: "beorbetn",
   },
   quotes: {
+    quotes: "Zitate",
     quote: "Zitat",
     save: "Zitat speichern",
     add: "Zitat hinzuafügen",
     edit: "Zitat beorbetn",
+    save_success: "Zitat erfolgreich gspeichert.",
+    delete_success: "Zitat erfolgreich glöscht.",
+    load_error: "Zitate hobn net glodn werdn kennen.",
   },
   read: {
     title: "Titl",
@@ -44,7 +63,9 @@ export const sue = {
     delete: "Lektüre löschen",
     delete_confirmation:
       "Bisch du dor sicher, dass du de Lektüre löschen willsch? Olle Zitate de dorzuaghearn werdn glöscht.",
-
+    save_success: "Lektüre erfolgreich gspeichert.",
+    delete_success: "Lektüre erfolgreich glöscht.",
+    load_error: "Dotn hobn net glodn werdn kennen.",
     reading_status: {
       reading_status: "Lesestatus",
       want_to_read: "Leseliste",
@@ -55,5 +76,9 @@ export const sue = {
   },
   profile: {
     language: "Sproch",
+    update_success: "Profil erfolgreich aktualisiert.",
+    update_error: "Profil hot net aktualisiert werdn kennen.",
+    avatar_update_success: "Profilbild aktualisiert.",
+    avatar_remove_success: "Profilbild entfernt.",
   },
 };

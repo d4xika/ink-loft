@@ -21,7 +21,7 @@ const props = defineProps({
     required: true,
   },
 });
-const model = defineModel({ type: String, default: "" });
+const model = defineModel({ type: [String, Object], default: "" });
 const emit = defineEmits(["change"]);
 </script>
 

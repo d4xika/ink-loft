@@ -2,6 +2,11 @@ export const en = {
   general: {
     delete: "Delete",
     submit: "Submit",
+    error: "Error",
+    success: "Success",
+    validation_error: "Validation Error",
+    validation_error_detail: "Please check your input.",
+    generic_error: "Something went wrong.",
   },
   authentication: {
     title: "Welcome Reader!",
@@ -11,18 +16,32 @@ export const en = {
     username: "Username",
     password: "Password",
     confirm_password: "Confirm Password",
+    login_success: "Login Successful",
+    login_success_detail: "Welcome back!",
+    login_error: "Login Failed",
+    login_error_detail: "Invalid username or password.",
+    logout_error: "Logout Failed",
+    register_success: "Registration Successful",
+    register_success_detail: "You can now log in.",
+    register_error: "Registration Failed",
+    register_error_conflict: "Username or email already exists.",
   },
   home: {
     want_to_read: "Want to read",
     have_read: "Have read",
+    graveyard: "Graveyard",
     finish_read: "Finish Read",
     edit_read: "Edit Read",
   },
   quotes: {
+    quotes: "Quotes",
     quote: "Quote",
     save: "Save Quote",
     add: "Add Quote",
     edit: "Edit Quote",
+    save_success: "Quote saved successfully.",
+    delete_success: "Quote deleted successfully.",
+    load_error: "Could not load quotes.",
   },
   read: {
     title: "Title",
@@ -44,7 +63,9 @@ export const en = {
     delete: "Delete read",
     delete_confirmation:
       "Are you sure you want to delete this read? All quotes will be lost.",
-
+    save_success: "Read saved successfully.",
+    delete_success: "Read deleted successfully.",
+    load_error: "Could not load data.",
     reading_status: {
       reading_status: "Reading status",
       want_to_read: "Want to Read",
@@ -55,5 +76,9 @@ export const en = {
   },
   profile: {
     language: "Language",
+    update_success: "Profile updated successfully.",
+    update_error: "Could not update profile.",
+    avatar_update_success: "Profile picture updated.",
+    avatar_remove_success: "Profile picture removed.",
   },
 };

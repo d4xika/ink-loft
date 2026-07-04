@@ -43,7 +43,8 @@ const props = defineProps({
 .tag {
   display: flex;
   align-items: center;
-
+  overflow: hidden;
+  word-break: break-word;
   color: var(--text-color);
 
   &.color-green {
@@ -78,7 +79,6 @@ const props = defineProps({
   &.size-small {
     gap: var(--gap-2);
     padding: var(--gap-1) calc(var(--gap-1) + var(--gap-2));
-    width: fit-content;
     border-radius: var(--border-radius-2);
 
     .icon-container {

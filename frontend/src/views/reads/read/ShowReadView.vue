@@ -6,18 +6,29 @@ import Header from "./Header.vue";
 import API from "../../../helper/api.js";
 import { READING_STATUSES } from "../../../helper/constants.js";
 import router from "../../../router/router.js";
+import { useToast } from "primevue/usetoast";
 
 const { t } = useI18n();
 const route = useRoute();
+const toast = useToast();
 
 const read = ref({});
 const isLoaded = ref(false);
 
 function getReadData() {
-  API.get(`books/${route.params.id}`).then((response) => {
-    read.value = response.data;
-    isLoaded.value = true;
-  });
+  API.get(`books/${route.params.id}`).then(
+    (response) => {
+      read.value = response.data;
+      isLoaded.value = true;
+    },
+    (error) => {
+      toast.add({
+        severity: "error",
+        message: t("read.load_error"),
+        life: 3000,
+      });
+    },
+  );
 }
 
 getReadData();
@@ -109,6 +120,23 @@ getReadData();
               icon="pi-link"
               color="white"
             />
+          </div>
+
+          <div class="quotes-area" v-if="read.quotes.length > 0">
+            <ILDivider />
+
+            <div class="quotes-container">
+              <h1>{{ t("quotes.quotes") }}</h1>
+
+              <div
+                v-for="(quote, index) in read.quotes"
+                :key="quote.id"
+                class="quote"
+              >
+                {{ quote.content }}
+                <ILDivider v-if="index !== read.quotes.length - 1" />
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -206,6 +234,34 @@ getReadData();
 
           p {
             margin: 0;
+          }
+        }
+
+        .quotes-area {
+          display: flex;
+          flex-direction: column;
+          margin-top: var(--gap-3);
+          gap: calc(var(--gap-3) + var(--gap-2));
+
+          .quotes-container {
+            display: flex;
+            flex-direction: column;
+            background-color: var(--color-2);
+            border-radius: var(--border-radius-2);
+            padding: calc(var(--gap-3) + var(--gap-1));
+            gap: var(--gap-3);
+
+            h1 {
+              margin-bottom: var(--gap-1);
+            }
+
+            .quote {
+              display: flex;
+              flex-direction: column;
+              gap: var(--gap-3);
+              font-style: italic;
+              color: var(--text-color-1-light);
+            }
           }
         }
       }

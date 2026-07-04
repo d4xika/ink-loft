@@ -2,6 +2,11 @@ export const de = {
   general: {
     delete: "Löschen",
     submit: "Speichern",
+    error: "Fehler",
+    success: "Erfolg",
+    validation_error: "Validierungsfehler",
+    validation_error_detail: "Bitte überprüfe deine Eingaben.",
+    generic_error: "Etwas ist schiefgelaufen.",
   },
   authentication: {
     title: "Willkommen Leser!",
@@ -11,18 +16,32 @@ export const de = {
     username: "Benutzername",
     password: "Passwort",
     confirm_password: "Passwort bestätigen",
+    login_success: "Anmeldung erfolgreich",
+    login_success_detail: "Willkommen zurück!",
+    login_error: "Anmeldung fehlgeschlagen",
+    login_error_detail: "Ungültiger Benutzername oder Passwort.",
+    logout_error: "Abmeldung fehlgeschlagen",
+    register_success: "Registrierung erfolgreich",
+    register_success_detail: "Du kannst dich jetzt anmelden.",
+    register_error: "Registrierung fehlgeschlagen",
+    register_error_conflict: "Benutzername oder E-Mail existiert bereits.",
   },
   home: {
     want_to_read: "Leseliste",
     have_read: "Gelesen",
+    graveyard: "Friedhof",
     finish_read: "beenden",
     edit_read: "bearbeiten",
   },
   quotes: {
+    quotes: "Zitate",
     quote: "Zitat",
     save: "Zitat speichern",
     add: "Zitat hinzufügen",
     edit: "Zitat bearbeiten",
+    save_success: "Zitat erfolgreich gespeichert.",
+    delete_success: "Zitat erfolgreich gelöscht.",
+    load_error: "Zitate konnten nicht geladen werden.",
   },
   read: {
     title: "Titel",
@@ -44,7 +63,9 @@ export const de = {
     delete: "Lektüre löschen",
     delete_confirmation:
       "Bist du dir sicher, dass du diese Lektüre löschen möchtest? Alle dazugehörigen Zitate werden gelöscht.",
-
+    save_success: "Lektüre erfolgreich gespeichert.",
+    delete_success: "Lektüre erfolgreich gelöscht.",
+    load_error: "Daten konnten nicht geladen werden.",
     reading_status: {
       reading_status: "Lesestatus",
       want_to_read: "Leseliste",
@@ -55,5 +76,9 @@ export const de = {
   },
   profile: {
     language: "Sprache",
+    update_success: "Profil erfolgreich aktualisiert.",
+    update_error: "Profil konnte nicht aktualisiert werden.",
+    avatar_update_success: "Profilbild aktualisiert.",
+    avatar_remove_success: "Profilbild entfernt.",
   },
 };

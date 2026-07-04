@@ -7,10 +7,12 @@ import { z } from "zod";
 import API from "../helper/api.js";
 import { REGEX } from "../helper/regex.js";
 import { setAuthStatus } from "../router/router.js";
+import { useToast } from "primevue/usetoast";
 
 const { t } = useI18n();
 const router = useRouter();
 const { locale } = useI18n();
+const toast = useToast();
 
 const tab = ref("LOGIN");
 const tabOptions = computed(() => [
@@ -53,7 +55,11 @@ const resolver = computed(() => {
 
 async function submit(data) {
   if (!data.valid) {
-    // TODO: add toasti
+    toast.add({
+      severity: "error",
+      message: t("general.validation_error_detail"),
+      life: 3000,
+    });
     return;
   }
 
@@ -70,10 +76,18 @@ async function submit(data) {
           locale.value = response.data.language;
           setAuthStatus(true);
           router.push({ name: "home" });
-          // TODO: add toasti
+          toast.add({
+            severity: "success",
+            message: t("authentication.login_success_detail"),
+            life: 3000,
+          });
         },
         (error) => {
-          // TODO: add toasti
+          toast.add({
+            severity: "error",
+            message: t("authentication.login_error_detail"),
+            life: 3000,
+          });
         },
       );
     }
@@ -87,11 +101,25 @@ async function submit(data) {
           localStorage.setItem("user", JSON.stringify(response.data));
           setAuthStatus(true);
           router.push({ name: "home" });
-          // TODO: add toasti
+          toast.add({
+            severity: "success",
+            message: t("authentication.register_success_detail"),
+            life: 3000,
+          });
         },
         (error) => {
           if (error.status === 409) {
-            // TODO: add toasti
+            toast.add({
+              severity: "error",
+              message: t("authentication.register_error_conflict"),
+              life: 3000,
+            });
+          } else {
+            toast.add({
+              severity: "error",
+              message: t("general.generic_error"),
+              life: 3000,
+            });
           }
         },
       );
