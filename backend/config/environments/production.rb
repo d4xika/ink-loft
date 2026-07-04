@@ -53,10 +53,10 @@ Rails.application.configure do
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
   # config.action_mailer.raise_delivery_errors = false
-  config.action_controller.default_url_options = { host: "ink-loft.p4s3r0.it", protocol: "https" }
+  config.action_controller.default_url_options = { host: "ink-loft.d4xika.com", protocol: "https" }
 
   # Set host to be used by links generated in mailer templates.
-  config.action_mailer.default_url_options = { host: "ink-loft.p4s3r0.it", protocol: "https" }
+  config.action_mailer.default_url_options = { host: "ink-loft.d4xika.com", protocol: "https" }
   # Specify outgoing SMTP server. Remember to add smtp/* credentials via bin/rails credentials:edit.
   # config.action_mailer.smtp_settings = {
   #   user_name: Rails.application.credentials.dig(:smtp, :user_name),
@@ -77,9 +77,9 @@ Rails.application.configure do
   config.active_record.attributes_for_inspect = [ :id ]
 
   # Enable DNS rebinding protection and other `Host` header attacks.
-  config.hosts = [ "ink-loft.p4s3r0.it" ]
-  config.hosts << "ink-loft.p4s3r0.it"
-  config.hosts << ".p4s3r0.it"
+  config.hosts = [ "ink-loft.d4xika.com" ]
+  config.hosts << "ink-loft.d4xika.com"
+  config.hosts << ".d4xika.com"
   config.hosts << "localhost"
   config.hosts << "127.0.0.1"
   #

@@ -11,7 +11,7 @@ class Book < ApplicationRecord
     json[:reading_status] = reading_status
 
     if cover.attached?
-      base_url = Rails.env.production? ? "https://inkloft-backend.p4s3r0.it" : "http://127.0.0.1:3000"
+      base_url = Rails.env.production? ? "https://ink-loft-backend.d4xika.com" : "http://127.0.0.1:3000"
       json[:cover_url] = Rails.application.routes.url_helpers.rails_blob_url(cover, host: base_url)
     end
 
