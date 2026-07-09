@@ -12,6 +12,10 @@ const props = defineProps({
     type: String,
     default: undefined,
   },
+  image: {
+    type: String,
+    default: undefined,
+  },
 });
 </script>
 
@@ -23,7 +27,8 @@ const props = defineProps({
     <p v-if="props.text2" class="text">
       {{ props.text2 }}
     </p>
-    <i :class="`pi ${props.icon}`"></i>
+    <img v-if="props.image" :src="props.image" class="image" alt="book icon" />
+    <i v-else-if="props.icon" :class="`pi ${props.icon}`"></i>
   </div>
 </template>
 
@@ -43,6 +48,11 @@ const props = defineProps({
     text-align: center;
     font-size: var(--font-size-4);
     margin: 0;
+  }
+
+  .image {
+    height: 60px;
+    object-fit: contain;
   }
 }
 </style>

@@ -30,7 +30,7 @@ getReads();
 
 <template>
   <div>
-    <Header title="Want to read" />
+    <Header title="Want to read" image="/dragon.png" />
     <ReadsList :reads="reads" />
   </div>
 </template>

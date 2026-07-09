@@ -63,9 +63,16 @@ getReadData();
         <p class="text">{{ read.author }}</p>
 
         <div class="detail-content-container">
-          <!-- TODO: add icons-->
           <ILTag
-            icon="pi-book"
+            :image="
+              read.reading_status === 'want_to_read'
+                ? '/read-list.png'
+                : read.reading_status === 'have_read'
+                  ? '/have-read.png'
+                  : read.reading_status === 'dropped'
+                    ? '/gravestone.png'
+                    : '/curr-reading.png'
+            "
             :text="
               READING_STATUSES.find(
                 (status) => status.id === read.reading_status,
