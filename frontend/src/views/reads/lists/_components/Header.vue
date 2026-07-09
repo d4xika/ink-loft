@@ -6,6 +6,10 @@ const props = defineProps({
     type: String,
     required: true,
   },
+  image: {
+    type: String,
+    default: undefined,
+  },
 });
 
 const router = useRouter();
@@ -19,14 +23,24 @@ const router = useRouter();
       @click="router.push({ name: 'home' })"
     />
 
-    <h1>{{ props.title }}</h1>
+    <div class="content-image-container">
+      <img
+        v-if="props.image"
+        :src="props.image"
+        class="header-image"
+        alt="header icon"
+      />
 
-    <ILIconButton
-      icon="pi-plus"
-      variant="square"
-      color="brown"
-      @click="router.push({ name: 'newRead' })"
-    />
+      <div class="title-plus-container">
+        <h1>{{ props.title }}</h1>
+        <ILIconButton
+          icon="pi-plus"
+          variant="square"
+          color="brown"
+          @click="router.push({ name: 'newRead' })"
+        />
+      </div>
+    </div>
 
     <ILDivider />
   </div>
@@ -38,5 +52,28 @@ const router = useRouter();
   flex-direction: column;
   padding: var(--gap-3);
   gap: var(--gap-4);
+
+  .content-image-container {
+    display: flex;
+    align-items: flex-end;
+    gap: var(--gap-3);
+
+    .title-plus-container {
+      display: flex;
+      flex-direction: column;
+      gap: var(--gap-2);
+      align-items: flex-start;
+      flex: 1;
+    }
+
+    .header-image {
+      height: 100px;
+      object-fit: contain;
+    }
+  }
+
+  h1 {
+    margin: 0;
+  }
 }
 </style>

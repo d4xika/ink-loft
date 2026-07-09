@@ -6,7 +6,11 @@ const props = defineProps({
   },
   icon: {
     type: String,
-    required: true,
+    default: undefined,
+  },
+  image: {
+    type: String,
+    default: undefined,
   },
   variant: {
     type: String,
@@ -22,10 +26,17 @@ const props = defineProps({
 
 <template>
   <Button
-    :icon="`pi ${props.icon}`"
+    :icon="props.image ? undefined : `pi ${props.icon}`"
     class="icon-button"
     :class="`variant-${props.variant} color-${props.color}`"
-  />
+  >
+    <img
+      v-if="props.image"
+      :src="props.image"
+      class="button-image"
+      alt="book icon"
+    />
+  </Button>
 </template>
 
 <style scoped>
@@ -52,10 +63,9 @@ const props = defineProps({
     background-color: var(--color-6);
   }
 
-  &:hover {
-    background-color: var(--color-3) !important;
-    border: 1px solid var(--text-color-1-light) !important;
-    color: var(--text-color-1) !important;
+  .button-image {
+    height: 60px;
+    object-fit: contain;
   }
 }
 </style>

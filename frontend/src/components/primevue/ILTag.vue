@@ -22,6 +22,10 @@ const props = defineProps({
     type: String,
     default: undefined,
   },
+  image: {
+    type: String,
+    default: undefined,
+  },
   size: {
     type: String,
     default: "small",
@@ -32,8 +36,14 @@ const props = defineProps({
 
 <template>
   <div :class="`color-${props.color} size-${props.size}`" class="tag">
-    <div v-if="props.icon" class="icon-container">
-      <i :class="`pi ${props.icon}`" class="icon"></i>
+    <div v-if="props.image || props.icon" class="icon-container">
+      <img
+        v-if="props.image"
+        :src="props.image"
+        class="tag-image"
+        alt="tag icon"
+      />
+      <i v-else-if="props.icon" :class="`pi ${props.icon}`" class="icon"></i>
     </div>
     <p class="text">{{ props.text }}</p>
   </div>
@@ -90,6 +100,10 @@ const props = defineProps({
         font-size: var(--font-size-2);
         margin-top: 1px;
       }
+
+      .tag-image {
+        height: 20px;
+      }
     }
 
     .text {
@@ -100,7 +114,7 @@ const props = defineProps({
   }
 
   &.size-big {
-    gap: var(--gap-2);
+    gap: var(--gap-3);
     padding: var(--gap-1) calc(var(--gap-1));
     width: 100%;
     border-radius: var(--border-radius-1);
@@ -110,11 +124,15 @@ const props = defineProps({
       align-items: center;
       justify-content: center;
       background-color: color-mix(in srgb, black 45%, var(--color-3));
-      padding: calc(var(--gap-1) + var(--gap-2));
+      padding: var(--gap-2);
       border-radius: var(--border-radius-1);
 
       .icon {
         font-size: var(--font-size-3);
+      }
+
+      .tag-image {
+        height: 30px;
       }
     }
 

@@ -40,7 +40,7 @@ const emit = defineEmits(["addQuote", "editRead", "finishRead", "showRead"]);
         <div class="btn-container">
           <div class="quote-btn-container">
             <ILIconButton
-              icon="pi-pen-to-square"
+              image="/quill.png"
               variant="full-width"
               @click="emit('addQuote')"
             />
@@ -70,6 +70,8 @@ const emit = defineEmits(["addQuote", "editRead", "finishRead", "showRead"]);
     gap: var(--gap-2);
 
     .left-container {
+      display: flex;
+      align-content: center;
       padding-right: var(--gap-2);
     }
 
@@ -83,6 +85,7 @@ const emit = defineEmits(["addQuote", "editRead", "finishRead", "showRead"]);
       .title-author-container {
         display: flex;
         flex-direction: column;
+        padding-bottom: var(--gap-2);
 
         .title {
           font-size: var(--font-size-4);

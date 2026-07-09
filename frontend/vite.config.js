@@ -22,7 +22,29 @@ export default defineConfig(({ mode }) => {
         registerType: "autoUpdate",
         manifest: {
           name: "Ink Loft",
+          short_name: "Ink Loft",
+          description: "Ink Loft - Your personal book tracker",
           theme_color: "#1c1917",
+          background_color: "#1c1917",
+          display: "standalone",
+          icons: [
+            {
+              src: "app-icon.png",
+              sizes: "192x192",
+              type: "image/png",
+            },
+            {
+              src: "app-icon.png",
+              sizes: "512x512",
+              type: "image/png",
+            },
+            {
+              src: "app-icon.png",
+              sizes: "512x512",
+              type: "image/png",
+              purpose: "any maskable",
+            },
+          ],
         },
         workbox: {
           globPatterns: ["**/*.{js,css,html,ico,png,svg}"],

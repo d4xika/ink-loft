@@ -226,18 +226,18 @@ loadCurrentlyReading();
         <div class="box-buttons-container">
           <ILBoxButton
             :text="t('home.want_to_read')"
-            icon="pi-bookmark"
+            image="/read-list.png"
             @click="router.push({ name: 'wantToRead' })"
           />
           <ILBoxButton
             :text="t('home.have_read')"
-            icon="pi-book"
+            image="/have-read.png"
             @click="router.push({ name: 'haveRead' })"
           />
         </div>
         <ILBoxButton
           :text="t('home.graveyard')"
-          icon="pi-bitcoin"
+          image="/gravestone.png"
           @click="router.push({ name: 'dropped' })"
         />
       </div>
