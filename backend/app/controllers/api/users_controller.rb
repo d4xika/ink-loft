@@ -66,9 +66,7 @@ class Api::UsersController < Api::ApplicationController
     if params[:delete_avatar] == "true"
       user.avatar.purge
     elsif params[:avatar].present?
-      processed_avatar = ImageProcessing::MiniMagick.source(params[:avatar].tempfile).resize_to_fill(500, 500).call
-      processed_avatar.rewind
-      user.avatar.attach(io: processed_avatar, filename: params[:avatar].original_filename, content_type: params[:avatar].content_type)
+      user.avatar.attach(params[:avatar])
     end
 
     if params[:language].present?
@@ -92,11 +90,12 @@ class Api::UsersController < Api::ApplicationController
 
   def render_user(user)
     base_url = Rails.env.production? ? "https://ink-loft.d4xika.com" : "http://127.0.0.1:3000"
+    avatar_url = user.avatar.attached? ? Rails.application.routes.url_helpers.rails_blob_url(user.avatar, host: base_url) : nil
 
     return {
       username: user.username,
-      avatar_url: user.avatar.attached? ? Rails.application.routes.url_helpers.rails_representation_url(user.avatar.variant(:large), host: base_url) : nil,
-      avatar_small_url: user.avatar.attached? ? Rails.application.routes.url_helpers.rails_representation_url(user.avatar.variant(:small), host: base_url) : nil,
+      avatar_url: avatar_url,
+      avatar_small_url: avatar_url,
       language: user.language
     }
   end
