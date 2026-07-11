@@ -66,7 +66,7 @@ function saveQuote(form) {
 function openFinishReadDrawer(book) {
   activeBook.value = book.id;
   finishedReadInitialValues.value = {
-    reading_status: "have_read",
+    reading_status: 2,
     rating: book.rating,
     recommended: book.recommended,
   };
@@ -272,7 +272,11 @@ loadCurrentlyReading();
             ]"
             optionValue="id"
           />
-          <ILRating name="rating" v-model="finishedReadInitialValues.rating" />
+          <ILRating
+            name="rating"
+            v-model="finishedReadInitialValues.rating"
+            :editEnabled="true"
+          />
           <ILToggleSwitch
             name="recommended"
             :label="t('read.would_recommend')"
