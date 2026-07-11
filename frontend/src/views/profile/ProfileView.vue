@@ -18,30 +18,6 @@ const selectedLanguage = ref(
     languages[0],
 );
 
-function sleep(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
-function canLoadImage(url) {
-  return new Promise((resolve) => {
-    const image = new Image();
-    image.onload = () => resolve(true);
-    image.onerror = () => resolve(false);
-    image.src = url;
-  });
-}
-
-async function waitForAvatarUrl(url) {
-  for (let attempt = 0; attempt < 20; attempt += 1) {
-    const imageUrl = `${url}?t=${Date.now()}`;
-    if (await canLoadImage(imageUrl)) {
-      return imageUrl;
-    }
-    await sleep(500);
-  }
-  return `${url}?t=${Date.now()}`;
-}
-
 async function updateProfilePicture(file) {
   const formData = new FormData();
   formData.append("avatar", file);
@@ -57,7 +33,7 @@ async function updateProfilePicture(file) {
 
     user.value = response.data.user;
     localStorage.setItem("user", JSON.stringify(response.data.user));
-    avatarUrl.value = await waitForAvatarUrl(response.data.user?.avatar_url);
+    avatarUrl.value = response.data.user?.avatar_url || null;
     toast.add({
       severity: "success",
       message: t("profile.avatar_update_success"),

@@ -43,6 +43,7 @@ namespace :import_data do
       "Nicht gelesen" => :want_to_read
     }
 
+    Log.warning("Importing with username Isabella")
     CSV.foreach(file_path, headers: true) do |row|
       book = Book.find_or_create_by(title: row["title"], user: User.find_by(username: "Isabella"))
 
