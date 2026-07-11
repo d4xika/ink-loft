@@ -44,7 +44,7 @@ namespace :import_data do
     }
 
     CSV.foreach(file_path, headers: true) do |row|
-      book = Book.find_or_create_by(title: row["title"], user: User.find_by(username: "Isi"))
+      book = Book.find_or_create_by(title: row["title"], user: User.find_by(username: "Isabella"))
 
       unless READING_STATUSES.key?(row["reading_status"].strip)
         Log.error("Unknown reading status: #{row["reading_status"]}")
