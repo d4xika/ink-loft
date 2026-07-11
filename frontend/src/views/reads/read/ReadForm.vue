@@ -70,11 +70,7 @@ function onFileRemoved() {
             @file-selected="onFileSelected"
             @file-removed="onFileRemoved"
           />
-          <ILRating
-            :name="t('read.rating')"
-            v-model="initialValues.rating"
-            editEnabled
-          />
+          <ILRating name="rating" v-model="initialValues.rating" editEnabled />
         </div>
       </div>
       <ILSelect
