@@ -43,7 +43,7 @@ getReadData();
     <div class="main-container" v-if="isLoaded">
       <div class="top-container">
         <div class="cover-container">
-          <ILBookCover :cover="$route.params.cover" />
+          <ILBookCover :cover="read.cover_url" />
         </div>
         <div class="below-cover-container">
           <ILRating v-model="read.rating" />
