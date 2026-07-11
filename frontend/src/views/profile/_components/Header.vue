@@ -1,28 +1,36 @@
 <script setup>
+import { useToast } from "primevue/usetoast";
+import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import API from "../../../helper/api.js";
 import { setAuthStatus } from "../../../router/router.js";
-import { useToast } from "primevue/usetoast";
-import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
 const router = useRouter();
 const toast = useToast();
 
 function logout() {
-  API.put("users/logout").then(
-    () => {
+  API.put("users/logout")
+    .then(
+      () => {
+        toast.add({
+          severity: "error",
+          message: "Logout successful",
+          life: 3000,
+        });
+      },
+      () => {
+        toast.add({
+          severity: "error",
+          message: t("authentication.logout_error"),
+          life: 3000,
+        });
+      },
+    )
+    .finally(() => {
       setAuthStatus(false);
       router.push({ name: "authentication" });
-    },
-    () => {
-      toast.add({
-        severity: "error",
-        message: t("authentication.logout_error"),
-        life: 3000,
-      });
-    },
-  );
+    });
 }
 </script>
 
