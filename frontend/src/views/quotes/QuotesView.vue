@@ -18,7 +18,7 @@ const addInitialValues = ref({});
 const resolver = zodResolver(
   z.object({
     content: z.string().min(1, "Quote is required."),
-    book: z.any().refine((val) => val && val.id, "Book is required."),
+    read: z.any().refine((val) => val && val.id, "Read is required."),
   }),
 );
 
@@ -29,7 +29,7 @@ function saveQuote(event) {
 
   API.post("quotes", {
     quote: {
-      book_id: event.values.book.id,
+      read_id: event.values.read.id,
       content: event.values.content,
     },
   }).then(
@@ -113,7 +113,7 @@ function deleteQuote(quote) {
 function openEditQuote(quote) {
   addInitialValues.value = {
     id: quote.id,
-    book: quote.book,
+    read: quote.read,
     content: quote.content,
   };
 
@@ -127,7 +127,7 @@ function editQuote(event) {
 
   API.put(`quotes/${addInitialValues.value.id}`, {
     quote: {
-      book_id: event.values.book.id,
+      read_id: event.values.read.id,
       content: event.values.content,
     },
   }).then(
@@ -161,7 +161,7 @@ loadDailyQuote();
     <div class="quotes-view">
       <ILQuotes
         :quote="dailyQuote?.content"
-        :source="`${dailyQuote?.book?.title || 'Ink Loft'}${dailyQuote?.book?.author ? `, ${dailyQuote?.book?.author}` : ''}`"
+        :source="`${dailyQuote?.read?.title || 'Ink Loft'}${dailyQuote?.read?.author ? `, ${dailyQuote?.read?.author}` : ''}`"
         :editEnabled="!!dailyQuote?.content"
         :refreshEnabled="!!dailyQuote?.content"
         @edit="openEditQuote(dailyQuote)"
@@ -174,7 +174,7 @@ loadDailyQuote();
         <div v-for="quote in quotes" :key="quote.id">
           <ILQuoteSmall
             :quote="quote.content"
-            :source="`${quote.book.title}, ${quote.book.author}`"
+            :source="`${quote.read.title}, ${quote.read.author}`"
             @delete="deleteQuote(quote)"
             @edit="openEditQuote(quote)"
           />
@@ -185,9 +185,9 @@ loadDailyQuote();
       <template #body>
         <Form :resolver="resolver" class="form-container" @submit="saveQuote">
           <ILAutoComplete
-            name="book"
+            name="read"
             optionLabel="title"
-            url="books/autocomplete"
+            url="reads/autocomplete"
           />
           <ILTextArea name="content" :label="t('quotes.quote')" />
           <ILTextButton :text="t('quotes.save')" type="submit" />
@@ -203,10 +203,10 @@ loadDailyQuote();
           @submit="editQuote"
         >
           <ILAutoComplete
-            v-model="addInitialValues.book"
-            name="book"
+            v-model="addInitialValues.read"
+            name="read"
             optionLabel="title"
-            url="books/autocomplete"
+            url="reads/autocomplete"
           />
           <ILTextArea
             v-model="addInitialValues.content"

@@ -9,13 +9,13 @@ const props = defineProps({
 </script>
 
 <template>
-  <div class="book-cover-container">
-    <img :src="props.cover" alt="Book cover" />
+  <div class="read-cover-container">
+    <img :src="props.cover" alt="Read cover" />
   </div>
 </template>
 
 <style scoped>
-.book-cover-container {
+.read-cover-container {
   width: 100%;
   max-width: 200px;
   aspect-ratio: 2 / 2.8;

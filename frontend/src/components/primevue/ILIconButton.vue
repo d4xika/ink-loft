@@ -34,7 +34,7 @@ const props = defineProps({
       v-if="props.image"
       :src="props.image"
       class="button-image"
-      alt="book icon"
+      alt="read icon"
     />
   </Button>
 </template>

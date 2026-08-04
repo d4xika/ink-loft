@@ -33,18 +33,18 @@ function saveRead(data) {
 
   const formData = new FormData();
 
-  const book = {};
+  const read = {};
   Object.keys(data.states).forEach((state) => {
-    book[`${state}`] = data.states[state].value;
+    read[`${state}`] = data.states[state].value;
   });
 
-  formData.append("book", JSON.stringify(book));
+  formData.append("read", JSON.stringify(read));
 
   if (data.coverImage) {
     formData.append("cover", data.coverImage);
   }
 
-  API.post("books", formData, {
+  API.post("reads", formData, {
     headers: {
       "Content-Type": "multipart/form-data",
     },

@@ -22,7 +22,7 @@ const model = defineModel({
 
 <template>
   <FloatLabel variant="on">
-    <InputNumber v-model="model" :name="props.name" />
+    <InputNumber v-model="model" :name="props.name" use-grouping />
     <label>{{ props.label }}</label>
   </FloatLabel>
 </template>

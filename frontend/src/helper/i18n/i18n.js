@@ -14,6 +14,40 @@ export const i18n = createI18n({
     noe: noe,
     sue: sue,
   },
+  numberFormats: {
+    en: {
+      decimal: {
+        style: "decimal",
+        useGrouping: true,
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      },
+    },
+    de: {
+      decimal: {
+        style: "decimal",
+        useGrouping: true,
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      },
+    },
+    noe: {
+      decimal: {
+        style: "decimal",
+        useGrouping: true,
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      },
+    },
+    sue: {
+      decimal: {
+        style: "decimal",
+        useGrouping: true,
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      },
+    },
+  },
 });
 
 export const languages = [
