@@ -66,7 +66,7 @@ function onFileRemoved() {
             variant="rectangle"
             :title="t('read.cover')"
             name="cover"
-            :imageSrc="props.initialValues.cover_url"
+            :imageSrc="props.initialValues.cover_small_url"
             @file-selected="onFileSelected"
             @file-removed="onFileRemoved"
           />

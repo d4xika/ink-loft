@@ -10,7 +10,7 @@ const { locale } = useI18n();
 const { t } = useI18n();
 const toast = useToast();
 const user = ref(JSON.parse(localStorage.getItem("user")));
-const avatarUrl = ref(user.value?.avatar_url || null);
+const avatarUrl = ref(user.value?.avatar_url.medium || null);
 const avatarLoading = ref(false);
 
 const selectedLanguage = ref(
@@ -33,7 +33,7 @@ async function updateProfilePicture(file) {
 
     user.value = response.data.user;
     localStorage.setItem("user", JSON.stringify(response.data.user));
-    avatarUrl.value = response.data.user?.avatar_url || null;
+    avatarUrl.value = response.data.user?.avatar_url.medium || null;
     toast.add({
       severity: "success",
       message: t("profile.avatar_update_success"),
@@ -58,7 +58,7 @@ async function removeProfilePicture() {
   API.put("/users/update_profile", formData)
     .then((response) => {
       user.value = response.data.user;
-      avatarUrl.value = response.data.user?.avatar_url || null;
+      avatarUrl.value = response.data.user?.avatar_url.medium || null;
       localStorage.setItem("user", JSON.stringify(response.data.user));
       toast.add({
         severity: "success",

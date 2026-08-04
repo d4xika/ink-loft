@@ -10,21 +10,21 @@ namespace :import_data do
     CSV.foreach(file_path, headers: true) do |row|
       if row["reading_status"] == "on list"
         stats[:skipped] += 1
-        Log.warning("Skipping on list book: #{row["title"]}")
+        Log.warning("Skipping on list read: #{row["title"]}")
         next
       end
-      book = Book.find_or_create_by(title: row["title"], user: User.find_by(username: "Katja"))
-      book.update(reading_status: row["reading_status"] == "currently reading" ? :currently_reading : :have_read)
-      book.update(author: row["author"])
-      book.update(platform: row["platform"])
-      book.update(pairing: row["pairing"])
-      book.update(words: row["words"])
-      book.update(chapters: row["chapters"])
-      book.update(recommended: row["recommended"] == "ja" ? true : false)
-      book.update(link: row["link"])
-      book.save!
+      read = Read.find_or_create_by(title: row["title"], user: User.find_by(username: "Katja"))
+      read.update(reading_status: row["reading_status"] == "currently reading" ? :currently_reading : :have_read)
+      read.update(author: row["author"])
+      read.update(platform: row["platform"])
+      read.update(pairing: row["pairing"])
+      read.update(words: row["words"])
+      read.update(chapters: row["chapters"])
+      read.update(recommended: row["recommended"] == "ja" ? true : false)
+      read.update(link: row["link"])
+      read.save!
       stats[:created] += 1
-      Log.success("Imported book: #{book.title}")
+      Log.success("Imported read: #{read.title}")
     end
     puts "---"
     Log.success("Created: #{stats[:created]}")
@@ -45,24 +45,24 @@ namespace :import_data do
 
     Log.warning("Importing with username Isabella")
     CSV.foreach(file_path, headers: true) do |row|
-      book = Book.find_or_create_by(title: row["title"], user: User.find_by(username: "Isabella"))
+      read = Read.find_or_create_by(title: row["title"], user: User.find_by(username: "Isabella"))
 
       unless READING_STATUSES.key?(row["reading_status"].strip)
         Log.error("Unknown reading status: #{row["reading_status"]}")
         exit
       end
 
-      book.update(reading_status: READING_STATUSES[row["reading_status"]])
-      book.update(author: row["author"])
-      book.update(platform: row["platform"])
-      book.update(pairing: row["pairing"])
-      book.update(words: row["words"])
-      book.update(chapters: row["chapters"])
-      book.update(rating: row["rating"].to_i / 2)
-      book.update(link: row["link"])
-      book.save!
+      read.update(reading_status: READING_STATUSES[row["reading_status"]])
+      read.update(author: row["author"])
+      read.update(platform: row["platform"])
+      read.update(pairing: row["pairing"])
+      read.update(words: row["words"])
+      read.update(chapters: row["chapters"])
+      read.update(rating: row["rating"].to_i / 2)
+      read.update(link: row["link"])
+      read.save!
       stats[:created] += 1
-      Log.success("Imported book: #{book.title}")
+      Log.success("Imported read: #{read.title}")
     end
     puts "---"
     Log.success("Created or Updated: #{stats[:created]}")
@@ -82,27 +82,27 @@ namespace :import_data do
     }
 
     CSV.foreach(file_path, headers: true) do |row|
-      book = Book.find_or_create_by(title: row["title"], user: User.find_by(username: "Lena"))
+      read = Read.find_or_create_by(title: row["title"], user: User.find_by(username: "Lena"))
 
       unless READING_STATUSES.key?(row["reading_status"].strip)
         Log.error("Unknown reading status: #{row["reading_status"]}")
         exit
       end
 
-      book.update(reading_status: READING_STATUSES[row["reading_status"].strip])
-      book.update(author: row["author"])
-      book.update(platform: row["platform"])
-      book.update(pairing: row["pairing"])
-      book.update(words: row["words"])
-      book.update(chapters: row["chapters"])
+      read.update(reading_status: READING_STATUSES[row["reading_status"].strip])
+      read.update(author: row["author"])
+      read.update(platform: row["platform"])
+      read.update(pairing: row["pairing"])
+      read.update(words: row["words"])
+      read.update(chapters: row["chapters"])
 
       if row["rating_note"]
-        book.update(rating: row["rating_note"].scan(/\d+\/10/).first.to_i / 2)
+        read.update(rating: row["rating_note"].scan(/\d+\/10/).first.to_i / 2)
       end
 
-      book.save!
+      read.save!
       stats[:created] += 1
-      Log.success("Imported book: #{book.title}")
+      Log.success("Imported read: #{read.title}")
     end
     puts "---"
     Log.success("Created or Updated: #{stats[:created]}")

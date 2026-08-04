@@ -46,7 +46,7 @@ function search(event) {
       fluid
       @complete="search"
     />
-    <label>Select a book</label>
+    <label>Select a read</label>
   </FloatLabel>
 </template>
 

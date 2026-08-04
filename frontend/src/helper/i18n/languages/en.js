@@ -30,7 +30,7 @@ export const en = {
     want_to_read: "Want to read",
     have_read: "Have read",
     graveyard: "Graveyard",
-    finish_read: "Finish Read",
+    finish_read: "Finish",
     edit_read: "Edit Read",
   },
   quotes: {

@@ -11,7 +11,7 @@ const toast = useToast();
 const reads = ref({});
 
 function getReads() {
-  API.get("books", { params: { reading_status: "want_to_read" } }).then(
+  API.get("reads", { params: { reading_status: "want_to_read" } }).then(
     (response) => {
       reads.value = response.data;
     },
