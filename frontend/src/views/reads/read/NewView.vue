@@ -4,9 +4,11 @@ import API from "@/helper/api.js";
 import router from "@/router/router.js";
 import { useToast } from "primevue/usetoast";
 import { useI18n } from "vue-i18n";
+import { useRoute } from "vue-router";
 
 const { t } = useI18n();
 const toast = useToast();
+const route = useRoute();
 
 const initRead = {
   title: null,
@@ -19,6 +21,7 @@ const initRead = {
   pages: null,
   rating: null,
   recommended: null,
+  reading_status: route.query.status || null,
 };
 
 function saveRead(data) {
