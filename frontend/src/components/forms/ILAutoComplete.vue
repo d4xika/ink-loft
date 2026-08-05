@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from "vue";
-import API from "../../helper/api.js";
+import API from "@/helper/api.js";
 
 const props = defineProps({
   suggestions: {

@@ -57,7 +57,7 @@ function onFileRemoved() {
     <div class="content-container">
       <div class="main-content-container">
         <div class="title-author-container">
-          <img src="/divider_book.png" alt="divider" />
+          <img src="/images/drawings/divider_book.png" alt="divider" />
           <ILTextInput :label="t('read.title')" name="title" />
           <ILTextInput :label="t('read.author')" name="author" />
         </div>

@@ -4,7 +4,7 @@ import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { z } from "zod";
 import Header from "./_components/Header.vue";
-import API from "../../helper/api.js";
+import API from "@/helper/api.js";
 import { useToast } from "primevue/usetoast";
 
 const { t } = useI18n();

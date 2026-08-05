@@ -1,5 +1,4 @@
 <script setup>
-import ILReadCover from "../../../components/ILReadCover.vue";
 import { useI18n } from "vue-i18n";
 
 const props = defineProps({
@@ -40,7 +39,7 @@ const emit = defineEmits(["addQuote", "editRead", "finishRead", "showRead"]);
         <div class="btn-container">
           <div class="quote-btn-container">
             <ILIconButton
-              image="/quill.png"
+              image="/images/drawings/quill.png"
               variant="full-width"
               @click="emit('addQuote')"
             />

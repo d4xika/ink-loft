@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
-import API from "../helper/api.js";
+import API from "@/helper/api.js";
 
 const AuthenticationView = () => import("../views/AuthenticationView.vue");
 
@@ -87,8 +87,7 @@ function matchesInvalidCsrfMarker(value) {
     return false;
   }
 
-  const content =
-    typeof value === "string" ? value : JSON.stringify(value);
+  const content = typeof value === "string" ? value : JSON.stringify(value);
 
   return INVALID_CSRF_MARKERS.some((marker) => content.includes(marker));
 }

@@ -13,7 +13,7 @@ const router = useRouter();
 
 <template>
   <div v-if="reads.length <= 0" class="no-reads-image-container">
-    <img src="/kitty_on_shelf.png" alt="Kitty on shelf" />
+    <img src="/images/drawings/kitty_on_shelf.png" alt="Kitty on shelf" />
   </div>
 
   <div class="reads-list" v-if="props.reads">

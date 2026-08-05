@@ -6,11 +6,7 @@ import { useRouter } from "vue-router";
 import { z } from "zod";
 import CurrentlyReading from "./_components/CurrentlyReading.vue";
 import Header from "./_components/Header.vue";
-import ILBoxButton from "../../components/ILBoxButton.vue";
-import ILDrawer from "../../components/primevue/ILDrawer.vue";
-import ILTextArea from "../../components/primevue/ILTextArea.vue";
-import IlQuotes from "../../components/quote/ILQuotes.vue";
-import API from "../../helper/api.js";
+import API from "@/helper/api.js";
 import { useToast } from "primevue/usetoast";
 
 const { t } = useI18n();
@@ -155,7 +151,7 @@ loadCurrentlyReading();
     <Header />
     <div class="content-container">
       <div @click="router.push({ name: 'quotes' })">
-        <IlQuotes
+        <ILQuotes
           :quote="dailyQuote?.content"
           :source="dailyQuote?.read?.author"
         />
@@ -184,7 +180,10 @@ loadCurrentlyReading();
             </div>
 
             <div v-if="reads.length <= 0" class="no-reads-image-container">
-              <img src="/kitty_on_shelf.png" alt="Kitty on shelf" />
+              <img
+                src="/images/drawings/kitty_on_shelf.png"
+                alt="Kitty on shelf"
+              />
             </div>
 
             <div
@@ -226,18 +225,18 @@ loadCurrentlyReading();
         <div class="box-buttons-container">
           <ILBoxButton
             :text="t('home.want_to_read')"
-            image="/read-list.png"
+            image="/images/drawings/read-list.png"
             @click="router.push({ name: 'wantToRead' })"
           />
           <ILBoxButton
             :text="t('home.have_read')"
-            image="/have-read.png"
+            image="/images/drawings/have-read.png"
             @click="router.push({ name: 'haveRead' })"
           />
         </div>
         <ILBoxButton
           :text="t('home.graveyard')"
-          image="/gravestone.png"
+          image="/images/drawings/gravestone.png"
           @click="router.push({ name: 'dropped' })"
         />
       </div>

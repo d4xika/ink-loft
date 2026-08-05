@@ -3,7 +3,7 @@ const props = defineProps({
   cover: {
     type: String,
     required: true,
-    default: "/default_cover.png",
+    default: "/images/drawings/default_cover.png",
   },
 });
 </script>
