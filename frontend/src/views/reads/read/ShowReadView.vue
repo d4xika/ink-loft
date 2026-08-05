@@ -3,9 +3,9 @@ import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
 import Header from "./Header.vue";
-import API from "../../../helper/api.js";
-import { READING_STATUSES } from "../../../helper/constants.js";
-import router from "../../../router/router.js";
+import API from "@/helper/api.js";
+import { READING_STATUSES } from "@/helper/constants.js";
+import router from "@/router/router.js";
 import { useToast } from "primevue/usetoast";
 
 const { t, n } = useI18n();
@@ -66,12 +66,12 @@ getReadData();
           <ILTag
             :image="
               read.reading_status === 'want_to_read'
-                ? '/read-list.png'
+                ? '/images/drawings/read-list.png'
                 : read.reading_status === 'have_read'
-                  ? '/have-read.png'
+                  ? '/images/drawings/have-read.png'
                   : read.reading_status === 'dropped'
-                    ? '/gravestone.png'
-                    : '/curr-reading.png'
+                    ? '/images/drawings/gravestone.png'
+                    : '/images/drawings/curr-reading.png'
             "
             :text="
               READING_STATUSES.find(
@@ -114,7 +114,10 @@ getReadData();
             />
           </div>
 
-          <div class="bottom-container">
+          <div
+            class="bottom-container"
+            v-if="read.pairing || read.notes || read.link"
+          >
             <p v-if="read.pairing">{{ read.pairing }}</p>
 
             <div class="notes-container" v-if="read.notes">
