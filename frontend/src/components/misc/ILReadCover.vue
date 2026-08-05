@@ -5,12 +5,18 @@ const props = defineProps({
     required: true,
     default: "/images/drawings/default_cover.png",
   },
+  loading: {
+    type: Boolean,
+    default: false,
+  },
 });
 </script>
 
 <template>
-  <div class="read-cover-container">
-    <img :src="props.cover" alt="Read cover" />
+  <div>
+    <div class="read-cover-container">
+      <img :src="props.cover" alt="Read cover" />
+    </div>
   </div>
 </template>
 

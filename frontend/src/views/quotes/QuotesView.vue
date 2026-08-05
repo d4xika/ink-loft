@@ -11,7 +11,7 @@ const { t } = useI18n();
 const toast = useToast();
 const addQuoteDrawer = ref(false);
 const editQuoteDrawer = ref(false);
-const quotes = ref([]);
+const quotes = ref({ loading: true });
 const dailyQuote = ref(null);
 const addInitialValues = ref({});
 
@@ -171,7 +171,12 @@ loadDailyQuote();
       <ILDivider />
       <div class="more-quotes">
         <ILAddItem :text="t('quotes.add')" @click="addQuoteDrawer = true" />
-        <div v-for="quote in quotes" :key="quote.id">
+
+        <div v-if="quotes.loading" v-for="quote in 3" :key="quote.id">
+          <Skeleton height="80px" />
+        </div>
+
+        <div v-else v-for="quote in quotes" :key="quote.id">
           <ILQuoteSmall
             :quote="quote.content"
             :source="`${quote.read.title}, ${quote.read.author}`"

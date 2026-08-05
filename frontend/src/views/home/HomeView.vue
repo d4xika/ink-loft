@@ -22,7 +22,7 @@ const firstRead = ref(null);
 const finishRead = ref(false);
 const finishedReadInitialValues = ref({});
 
-const reads = ref([]);
+const reads = ref({ loading: true });
 
 function handleScroll() {
   if (!swipeContainer.value) return;
@@ -186,7 +186,18 @@ loadCurrentlyReading();
               />
             </div>
 
+            <div v-if="reads.loading">
+              <div class="skeleton-container">
+                <Skeleton width="100px" height="150px" />
+                <div class="skeleton-column">
+                  <Skeleton width="120px" height="2rem" />
+                  <Skeleton width="120px" height="3rem" />
+                </div>
+              </div>
+            </div>
+
             <div
+              v-else
               v-for="(read, index) in reads"
               :key="read.id"
               :ref="
@@ -373,6 +384,18 @@ loadCurrentlyReading();
 
         img {
           height: 70%;
+        }
+      }
+
+      .skeleton-container {
+        display: flex;
+        gap: var(--gap-2);
+
+        .skeleton-column {
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-end;
+          gap: var(--gap-2);
         }
       }
 
