@@ -10,6 +10,12 @@ const props = defineProps({
     type: String,
     default: undefined,
   },
+  readingStatus: {
+    type: String,
+    default: undefined,
+    validator: (value) =>
+      ["want_to_read", "have_read", "dropped"].includes(value),
+  },
 });
 
 const router = useRouter();
@@ -37,7 +43,12 @@ const router = useRouter();
           icon="pi-plus"
           variant="square"
           color="brown"
-          @click="router.push({ name: 'newRead' })"
+          @click="
+            router.push({
+              name: 'newRead',
+              query: { status: props.readingStatus },
+            })
+          "
         />
       </div>
     </div>

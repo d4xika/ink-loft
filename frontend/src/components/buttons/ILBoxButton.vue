@@ -27,7 +27,7 @@ const props = defineProps({
     <p v-if="props.text2" class="text">
       {{ props.text2 }}
     </p>
-    <img v-if="props.image" :src="props.image" class="image" alt="book icon" />
+    <img v-if="props.image" :src="props.image" class="image" alt="read icon" />
     <i v-else-if="props.icon" :class="`pi ${props.icon}`"></i>
   </div>
 </template>

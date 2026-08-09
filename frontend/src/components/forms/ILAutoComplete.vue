@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from "vue";
-import API from "../../helper/api.js";
+import API from "@/helper/api.js";
 
 const props = defineProps({
   suggestions: {
@@ -46,7 +46,7 @@ function search(event) {
       fluid
       @complete="search"
     />
-    <label>Select a book</label>
+    <label>Select a read</label>
   </FloatLabel>
 </template>
 

@@ -10,7 +10,7 @@ class Api::UsersController < Api::ApplicationController
     cookies.signed[:auth_token] = {
       value: auth_key.key,
       httponly: true,
-      expires: 2.weeks.from_now,
+      expires: 1.month.from_now,
       same_site: :lax,
       secure: Rails.env.production?
     }
@@ -52,7 +52,7 @@ class Api::UsersController < Api::ApplicationController
     cookies.signed[:auth_token] = {
       value: auth_key.key,
       httponly: true,
-      expires: 2.weeks.from_now,
+      expires: 1.month.from_now,
       same_site: :lax,
       secure: Rails.env.production?
     }
@@ -89,29 +89,15 @@ class Api::UsersController < Api::ApplicationController
   private
 
   def render_user(user)
-    avatar_url, avatar_small_url = avatar_urls_for(user)
+    base_url = Rails.env.production? ? "https://ink-loft.d4xika.com" : "http://127.0.0.1:3000"
+    avatar_url_small = user.avatar.attached? ? Rails.application.routes.url_helpers.rails_blob_url(user.avatar.variant(:small), host: base_url) : nil
+    avatar_url_medium = user.avatar.attached? ? Rails.application.routes.url_helpers.rails_blob_url(user.avatar.variant(:medium), host: base_url) : nil
+    avatar_url_large = user.avatar.attached? ? Rails.application.routes.url_helpers.rails_blob_url(user.avatar.variant(:large), host: base_url) : nil
 
     return {
       username: user.username,
-      avatar_url: avatar_url,
-      avatar_small_url: avatar_small_url,
+      avatar_url: { small: avatar_url_small, medium: avatar_url_medium, large: avatar_url_large },
       language: user.language
     }
-  end
-
-  def avatar_urls_for(user)
-    return [ nil, nil ] unless user.avatar.attached?
-
-    return [Rails.application.routes.url_helpers.rails_blob_url(user.avatar, host: base_url), small_avatar_url_for(user)]
-  end
-
-  def small_avatar_url_for(user)
-    return Rails.application.routes.url_helpers.rails_blob_url(user.avatar, host: base_url) unless user.avatar.variable?
-
-    return Rails.application.routes.url_helpers.rails_representation_url(user.avatar.variant(:small), host: base_url)
-  end
-
-  def base_url
-    Rails.env.production? ? "https://ink-loft.d4xika.com" : "http://127.0.0.1:3000"
   end
 end

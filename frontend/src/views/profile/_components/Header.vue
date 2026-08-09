@@ -2,8 +2,8 @@
 import { useToast } from "primevue/usetoast";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
-import API from "../../../helper/api.js";
-import { setAuthStatus } from "../../../router/router.js";
+import API from "@/helper/api.js";
+import { setAuthStatus } from "@/router/router.js";
 
 const { t } = useI18n();
 const router = useRouter();

@@ -1,5 +1,4 @@
 <script setup>
-import ILBookCover from "../../../components/ILBookCover.vue";
 import { useI18n } from "vue-i18n";
 
 const props = defineProps({
@@ -26,7 +25,7 @@ const emit = defineEmits(["addQuote", "editRead", "finishRead", "showRead"]);
   <div class="currently-reading-container">
     <div class="content-container">
       <div class="left-container" @click="emit('showRead')">
-        <ILBookCover
+        <ILReadCover
           :cover="props.coverImageUrl ? props.coverImageUrl : undefined"
         />
       </div>
@@ -40,7 +39,7 @@ const emit = defineEmits(["addQuote", "editRead", "finishRead", "showRead"]);
         <div class="btn-container">
           <div class="quote-btn-container">
             <ILIconButton
-              image="/quill.png"
+              image="/images/drawings/quill.png"
               variant="full-width"
               @click="emit('addQuote')"
             />
@@ -90,11 +89,17 @@ const emit = defineEmits(["addQuote", "editRead", "finishRead", "showRead"]);
         .title {
           font-size: var(--font-size-4);
           margin: var(--gap-2) 0;
+          max-width: 45dvw;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
         .author {
           font-size: var(--font-size-2);
           color: var(--text-color-1-light);
           margin: 0;
+          max-width: 50dvw;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
       }
 

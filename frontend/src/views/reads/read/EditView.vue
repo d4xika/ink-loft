@@ -3,7 +3,6 @@ import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
 import ReadForm from "./ReadForm.vue";
-import ILConfirmationDrawer from "@/components/drawer/ILConfirmationDrawer.vue";
 import API from "@/helper/api.js";
 import router from "@/router/router.js";
 import { useToast } from "primevue/usetoast";
@@ -19,7 +18,7 @@ const isLoaded = ref(false);
 const deleteReadDrawer = ref(false);
 
 function getReadData() {
-  API.get(`books/${route.params.id}`).then(
+  API.get(`reads/${route.params.id}`).then(
     (response) => {
       readInitValues.value = response.data;
       isLoaded.value = true;
@@ -46,12 +45,12 @@ function saveRead(data) {
 
   const formData = new FormData();
 
-  const book = {};
+  const read = {};
   Object.keys(data.states).forEach((state) => {
-    book[`${state}`] = data.states[state].value;
+    read[`${state}`] = data.states[state].value;
   });
 
-  formData.append("book", JSON.stringify(book));
+  formData.append("read", JSON.stringify(read));
 
   if (data.coverImage) {
     formData.append("cover", data.coverImage);
@@ -61,7 +60,7 @@ function saveRead(data) {
     formData.append("remove_cover", "true");
   }
 
-  API.put(`books/${route.params.id}`, formData, {
+  API.put(`reads/${route.params.id}`, formData, {
     headers: {
       "Content-Type": "multipart/form-data",
     },
@@ -89,7 +88,7 @@ function openDeleteReadDrawer() {
 }
 
 function deleteRead() {
-  API.delete(`books/${route.params.id}`).then(
+  API.delete(`reads/${route.params.id}`).then(
     (response) => {
       deleteReadDrawer.value = false;
       router.push({ name: "home" });

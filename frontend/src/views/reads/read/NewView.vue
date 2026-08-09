@@ -1,12 +1,14 @@
 <script setup>
 import ReadForm from "./ReadForm.vue";
-import API from "../../../helper/api.js";
-import router from "../../../router/router.js";
+import API from "@/helper/api.js";
+import router from "@/router/router.js";
 import { useToast } from "primevue/usetoast";
 import { useI18n } from "vue-i18n";
+import { useRoute } from "vue-router";
 
 const { t } = useI18n();
 const toast = useToast();
+const route = useRoute();
 
 const initRead = {
   title: null,
@@ -19,6 +21,7 @@ const initRead = {
   pages: null,
   rating: null,
   recommended: null,
+  reading_status: route.query.status || null,
 };
 
 function saveRead(data) {
@@ -33,18 +36,18 @@ function saveRead(data) {
 
   const formData = new FormData();
 
-  const book = {};
+  const read = {};
   Object.keys(data.states).forEach((state) => {
-    book[`${state}`] = data.states[state].value;
+    read[`${state}`] = data.states[state].value;
   });
 
-  formData.append("book", JSON.stringify(book));
+  formData.append("read", JSON.stringify(read));
 
   if (data.coverImage) {
     formData.append("cover", data.coverImage);
   }
 
-  API.post("books", formData, {
+  API.post("reads", formData, {
     headers: {
       "Content-Type": "multipart/form-data",
     },
