@@ -89,14 +89,29 @@ class Api::UsersController < Api::ApplicationController
   private
 
   def render_user(user)
-    base_url = Rails.env.production? ? "https://ink-loft.d4xika.com" : "http://127.0.0.1:3000"
-    avatar_url = user.avatar.attached? ? Rails.application.routes.url_helpers.rails_blob_url(user.avatar, host: base_url) : nil
+    avatar_url, avatar_small_url = avatar_urls_for(user)
 
     return {
       username: user.username,
       avatar_url: avatar_url,
-      avatar_small_url: avatar_url,
+      avatar_small_url: avatar_small_url,
       language: user.language
     }
+  end
+
+  def avatar_urls_for(user)
+    return [ nil, nil ] unless user.avatar.attached?
+
+    return [Rails.application.routes.url_helpers.rails_blob_url(user.avatar, host: base_url), small_avatar_url_for(user)]
+  end
+
+  def small_avatar_url_for(user)
+    return Rails.application.routes.url_helpers.rails_blob_url(user.avatar, host: base_url) unless user.avatar.variable?
+
+    return Rails.application.routes.url_helpers.rails_representation_url(user.avatar.variant(:small), host: base_url)
+  end
+
+  def base_url
+    Rails.env.production? ? "https://ink-loft.d4xika.com" : "http://127.0.0.1:3000"
   end
 end

@@ -59,3 +59,71 @@ h3 {
 .font-fix {
   padding-top: 0.1em;
 }
+
+.avatar-image-filter.p-avatar,
+.avatar-image-filter .custom-upload-box.has-image {
+  background-color: #211710 !important;
+  position: relative;
+  overflow: hidden;
+}
+
+.avatar-image-filter.p-avatar img,
+.avatar-image-filter .custom-upload-box.has-image .image-layer {
+  filter: sepia(0.42) saturate(0.72) brightness(0.72) contrast(1.12)
+    hue-rotate(-14deg);
+}
+
+.avatar-image-filter.p-avatar::after,
+.avatar-image-filter .custom-upload-box.has-image::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(34, 24, 18, 0.18) 0%,
+      rgba(58, 40, 29, 0.28) 52%,
+      rgba(15, 10, 8, 0.52) 100%
+    ),
+    radial-gradient(
+      circle at top,
+      rgba(176, 141, 100, 0.12) 0%,
+      transparent 58%
+    );
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+.avatar-image-filter-oil-painting.p-avatar img,
+.avatar-image-filter-oil-painting .custom-upload-box.has-image .image-layer {
+  filter: saturate(1.12) contrast(1.18) brightness(0.9) sepia(0.16);
+}
+
+.avatar-image-filter-oil-painting.p-avatar::before,
+.avatar-image-filter-oil-painting
+  .custom-upload-box.has-image::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(
+      24deg,
+      rgba(238, 222, 196, 0.07) 0 2px,
+      rgba(68, 47, 31, 0.12) 2px 7px,
+      transparent 7px 11px
+    ),
+    repeating-linear-gradient(
+      118deg,
+      rgba(0, 0, 0, 0.08) 0 3px,
+      rgba(162, 124, 83, 0.1) 3px 8px,
+      transparent 8px 14px
+    ),
+    radial-gradient(
+      circle at 24% 22%,
+      rgba(226, 204, 170, 0.16) 0%,
+      transparent 34%
+    );
+  mix-blend-mode: soft-light;
+  opacity: 0.9;
+  pointer-events: none;
+}
