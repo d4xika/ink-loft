@@ -19,7 +19,7 @@ if (!props.image) {
     :image="props.image"
     :label="user.username?.charAt(0).toUpperCase()"
     size="large"
-    :class="{'no-image': !props.image}"
+    :class="{ 'no-image': !props.image }"
   />
 </template>
 

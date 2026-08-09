@@ -167,8 +167,12 @@ router.beforeEach(async (to, from, next) => {
       API.defaults.headers.common["X-CSRF-Token"] = response.data.csrf_token;
 
       isAuthenticated = response.data.authenticated;
+      if (response.data.user) {
+        localStorage.setItem("user", JSON.stringify(response.data.user));
+      }
     } catch (error) {
       isAuthenticated = false;
+      localStorage.removeItem("user");
     }
     isAuthChecked = true;
   }

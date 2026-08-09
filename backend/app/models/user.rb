@@ -4,7 +4,9 @@ class User < ApplicationRecord
   has_many :books
   has_many :quotes
 
-  has_one_attached :avatar
+  has_one_attached :avatar do |attachable|
+    attachable.variant :small, resize_to_fill: [ 100, 100 ]
+  end
 
   enum :language, [ :en, :de, :noe, :sue ]
 
