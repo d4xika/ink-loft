@@ -2,10 +2,8 @@
 import { useToast } from "primevue/usetoast";
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
-import { languages } from "../../helper/i18n/i18n.js";
 import API from "@/helper/api.js";
 import { languages } from "@/helper/i18n/i18n.js";
-import { useToast } from "primevue/usetoast";
 
 const { locale } = useI18n();
 const { t } = useI18n();
