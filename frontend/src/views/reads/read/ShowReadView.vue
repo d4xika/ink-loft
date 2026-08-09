@@ -3,12 +3,12 @@ import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
 import Header from "./Header.vue";
-import API from "../../../helper/api.js";
-import { READING_STATUSES } from "../../../helper/constants.js";
-import router from "../../../router/router.js";
+import API from "@/helper/api.js";
+import { READING_STATUSES } from "@/helper/constants.js";
+import router from "@/router/router.js";
 import { useToast } from "primevue/usetoast";
 
-const { t } = useI18n();
+const { t, n } = useI18n();
 const route = useRoute();
 const toast = useToast();
 
@@ -16,7 +16,7 @@ const read = ref({});
 const isLoaded = ref(false);
 
 function getReadData() {
-  API.get(`books/${route.params.id}`).then(
+  API.get(`reads/${route.params.id}`).then(
     (response) => {
       read.value = response.data;
       isLoaded.value = true;
@@ -43,7 +43,7 @@ getReadData();
     <div class="main-container" v-if="isLoaded">
       <div class="top-container">
         <div class="cover-container">
-          <ILBookCover :cover="read.cover_url" />
+          <ILReadCover :cover="read.cover_medium_url ?? undefined" />
         </div>
         <div class="below-cover-container">
           <ILRating v-model="read.rating" />
@@ -66,12 +66,12 @@ getReadData();
           <ILTag
             :image="
               read.reading_status === 'want_to_read'
-                ? '/read-list.png'
+                ? '/images/drawings/read-list.png'
                 : read.reading_status === 'have_read'
-                  ? '/have-read.png'
+                  ? '/images/drawings/have-read.png'
                   : read.reading_status === 'dropped'
-                    ? '/gravestone.png'
-                    : '/curr-reading.png'
+                    ? '/images/drawings/gravestone.png'
+                    : '/images/drawings/curr-reading.png'
             "
             :text="
               READING_STATUSES.find(
@@ -91,19 +91,19 @@ getReadData();
             <ILTag
               v-if="read.chapters"
               icon="pi-bookmark"
-              :text="read.chapters"
+              :text="n(read.chapters, 'decimal')"
               color="brown-1"
             />
             <ILTag
               v-if="read.pages"
               icon="pi-file"
-              :text="read.pages"
+              :text="n(read.pages, 'decimal')"
               color="brown-2"
             />
             <ILTag
               v-if="read.words"
               icon="pi-language"
-              :text="read.words"
+              :text="n(read.words, 'decimal')"
               color="brown-3"
             />
             <ILTag
@@ -114,7 +114,10 @@ getReadData();
             />
           </div>
 
-          <div class="bottom-container">
+          <div
+            class="bottom-container"
+            v-if="read.pairing || read.notes || read.link"
+          >
             <p v-if="read.pairing">{{ read.pairing }}</p>
 
             <div class="notes-container" v-if="read.notes">
@@ -145,6 +148,8 @@ getReadData();
               </div>
             </div>
           </div>
+
+          <div v-else class="bottom-spacing"></div>
         </div>
       </div>
     </div>
@@ -192,6 +197,7 @@ getReadData();
 
       .title {
         font-family: "Petit Formal Script", serif !important;
+        word-break: break-word;
       }
 
       .text {
@@ -270,6 +276,10 @@ getReadData();
               color: var(--text-color-1-light);
             }
           }
+        }
+
+        .bottom-spacing {
+          height: var(--gap-2);
         }
       }
     }

@@ -6,11 +6,7 @@ import { useRouter } from "vue-router";
 import { z } from "zod";
 import CurrentlyReading from "./_components/CurrentlyReading.vue";
 import Header from "./_components/Header.vue";
-import ILBoxButton from "../../components/ILBoxButton.vue";
-import ILDrawer from "../../components/primevue/ILDrawer.vue";
-import ILTextArea from "../../components/primevue/ILTextArea.vue";
-import IlQuotes from "../../components/quote/ILQuotes.vue";
-import API from "../../helper/api.js";
+import API from "@/helper/api.js";
 import { useToast } from "primevue/usetoast";
 
 const { t } = useI18n();
@@ -18,15 +14,15 @@ const toast = useToast();
 const router = useRouter();
 const swipeContainer = ref(null);
 const addQuote = ref(false);
-const activeBook = ref(null);
+const activeRead = ref(null);
 const dailyQuote = ref(null);
 const showIndicator = ref(false);
 const showLeftIndicator = ref(false);
-const firstBook = ref(null);
+const firstRead = ref(null);
 const finishRead = ref(false);
 const finishedReadInitialValues = ref({});
 
-const books = ref([]);
+const reads = ref({ loading: true });
 
 function handleScroll() {
   if (!swipeContainer.value) return;
@@ -41,7 +37,7 @@ function saveQuote(form) {
   }
   API.post("quotes", {
     quote: {
-      book_id: activeBook.value,
+      read_id: activeRead.value,
       content: form.values.quote,
     },
   }).then(
@@ -63,12 +59,12 @@ function saveQuote(form) {
   );
 }
 
-function openFinishReadDrawer(book) {
-  activeBook.value = book.id;
+function openFinishReadDrawer(read) {
+  activeRead.value = read.id;
   finishedReadInitialValues.value = {
     reading_status: 2,
-    rating: book.rating,
-    recommended: book.recommended,
+    rating: read.rating,
+    recommended: read.recommended,
   };
   finishRead.value = true;
 }
@@ -78,8 +74,8 @@ function saveFinishedRead(form) {
     return;
   }
 
-  API.put(`books/${activeBook.value}`, {
-    book: {
+  API.put(`reads/${activeRead.value}`, {
+    read: {
       reading_status: form.values.reading_status,
       rating: form.values.rating,
       recommended: form.values.recommended,
@@ -115,12 +111,12 @@ function loadDailyQuote() {
 }
 
 function loadCurrentlyReading() {
-  API.get("books/currently_reading").then(
+  API.get("reads/currently_reading").then(
     (response) => {
-      books.value = response.data;
+      reads.value = response.data;
       nextTick(() => {
-        if (swipeContainer.value && firstBook.value) {
-          firstBook.value.scrollIntoView({
+        if (swipeContainer.value && firstRead.value) {
+          firstRead.value.scrollIntoView({
             behavior: "auto",
             block: "nearest",
             inline: "center",
@@ -155,9 +151,9 @@ loadCurrentlyReading();
     <Header />
     <div class="content-container">
       <div @click="router.push({ name: 'quotes' })">
-        <IlQuotes
+        <ILQuotes
           :quote="dailyQuote?.content"
-          :source="dailyQuote?.book?.author"
+          :source="dailyQuote?.read?.author"
         />
       </div>
       <ILDivider />
@@ -183,34 +179,48 @@ loadCurrentlyReading();
               />
             </div>
 
-            <div v-if="books.length <= 0" class="no-books-image-container">
-              <img src="/kitty_on_shelf.png" alt="Kitty on shelf" />
+            <div v-if="reads.length <= 0" class="no-reads-image-container">
+              <img
+                src="/images/drawings/kitty_on_shelf.png"
+                alt="Kitty on shelf"
+              />
+            </div>
+
+            <div v-if="reads.loading">
+              <div class="skeleton-container">
+                <Skeleton width="100px" height="150px" />
+                <div class="skeleton-column">
+                  <Skeleton width="120px" height="2rem" />
+                  <Skeleton width="120px" height="3rem" />
+                </div>
+              </div>
             </div>
 
             <div
-              v-for="(book, index) in books"
-              :key="book.id"
+              v-else
+              v-for="(read, index) in reads"
+              :key="read.id"
               :ref="
                 (el) => {
-                  if (index === 0) firstBook = el;
+                  if (index === 0) firstRead = el;
                 }
               "
               class="swipe-main"
             >
               <CurrentlyReading
-                :title="book.title"
-                :author="book.author"
-                :coverImageUrl="book.cover_url"
+                :title="read.title"
+                :author="read.author"
+                :coverImageUrl="read.cover_small_url"
                 @addQuote="
-                  activeBook = book.id;
+                  activeRead = read.id;
                   addQuote = true;
                 "
                 @editRead="
-                  router.push({ name: 'editRead', params: { id: book.id } })
+                  router.push({ name: 'editRead', params: { id: read.id } })
                 "
-                @finishRead="openFinishReadDrawer(book)"
+                @finishRead="openFinishReadDrawer(read)"
                 @showRead="
-                  router.push({ name: 'showRead', params: { id: book.id } })
+                  router.push({ name: 'showRead', params: { id: read.id } })
                 "
               />
             </div>
@@ -226,18 +236,18 @@ loadCurrentlyReading();
         <div class="box-buttons-container">
           <ILBoxButton
             :text="t('home.want_to_read')"
-            image="/read-list.png"
+            image="/images/drawings/read-list.png"
             @click="router.push({ name: 'wantToRead' })"
           />
           <ILBoxButton
             :text="t('home.have_read')"
-            image="/have-read.png"
+            image="/images/drawings/have-read.png"
             @click="router.push({ name: 'haveRead' })"
           />
         </div>
         <ILBoxButton
           :text="t('home.graveyard')"
-          image="/gravestone.png"
+          image="/images/drawings/gravestone.png"
           @click="router.push({ name: 'dropped' })"
         />
       </div>
@@ -369,11 +379,23 @@ loadCurrentlyReading();
         margin-right: calc(-1.7 * var(--gap-5));
       }
 
-      .no-books-image-container {
+      .no-reads-image-container {
         height: var(--read-cover-height);
 
         img {
           height: 70%;
+        }
+      }
+
+      .skeleton-container {
+        display: flex;
+        gap: var(--gap-2);
+
+        .skeleton-column {
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-end;
+          gap: var(--gap-2);
         }
       }
 

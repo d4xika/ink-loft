@@ -4,9 +4,9 @@ import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import { z } from "zod";
-import API from "../helper/api.js";
-import { REGEX } from "../helper/regex.js";
-import { setAuthStatus } from "../router/router.js";
+import API from "@/helper/api.js";
+import { REGEX } from "@/helper/regex.js";
+import { setAuthStatus } from "@/router/router.js";
 import { useToast } from "primevue/usetoast";
 
 const { t } = useI18n();

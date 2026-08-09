@@ -8,10 +8,10 @@ import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
 const toast = useToast();
-const reads = ref({});
+const reads = ref({ loading: true });
 
 function getReads() {
-  API.get("books", { params: { reading_status: "have_read" } }).then(
+  API.get("reads", { params: { reading_status: "have_read" } }).then(
     (response) => {
       reads.value = response.data;
     },
@@ -30,7 +30,11 @@ getReads();
 
 <template>
   <div>
-    <Header title="Have read" image="/dragon-moon.png" />
+    <Header
+      title="Have read"
+      image="/images/drawings/dragon-moon.png"
+      readingStatus="have_read"
+    />
     <ReadsList :reads="reads" />
   </div>
 </template>

@@ -1,11 +1,11 @@
 class Api::QuotesController < Api::ApplicationController
   before_action :authenticate_user!
   def index
-    @quotes = current_user.quotes.includes(:book)
+    @quotes = current_user.quotes.includes(:read)
 
     return render json: @quotes.as_json(
       include: {
-        book: {
+        read: {
           only: [ :id, :title, :author ]
         }
       },
@@ -23,13 +23,13 @@ class Api::QuotesController < Api::ApplicationController
 
     rng = Random.new((Date.today.to_time.to_i + current_user.daily_quote_seed).to_i)
     @quote = current_user.quotes.order(created_at: :desc)[rng.rand(current_user.quotes.count)]
-    @book = current_user.books.find(@quote.book_id)
+    @read = current_user.reads.find(@quote.read_id)
 
     return render json: @quote.as_json.merge(
-        book: {
-          id: @book.id,
-          title: @book.title,
-          author: @book.author
+        read: {
+          id: @read.id,
+          title: @read.title,
+          author: @read.author
         }
       ), status: :ok
   end
@@ -61,6 +61,6 @@ class Api::QuotesController < Api::ApplicationController
   private
 
   def quote_params
-    params.require(:quote).permit(:content, :book_id)
+    params.require(:quote).permit(:content, :read_id)
   end
 end

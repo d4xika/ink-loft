@@ -3,19 +3,25 @@ const props = defineProps({
   cover: {
     type: String,
     required: true,
-    default: "/default_cover.png",
+    default: "/images/drawings/default_cover.png",
+  },
+  loading: {
+    type: Boolean,
+    default: false,
   },
 });
 </script>
 
 <template>
-  <div class="book-cover-container">
-    <img :src="props.cover" alt="Book cover" />
+  <div>
+    <div class="read-cover-container">
+      <img :src="props.cover" alt="Read cover" />
+    </div>
   </div>
 </template>
 
 <style scoped>
-.book-cover-container {
+.read-cover-container {
   width: 100%;
   max-width: 200px;
   aspect-ratio: 2 / 2.8;

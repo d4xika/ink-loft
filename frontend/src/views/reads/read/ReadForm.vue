@@ -57,7 +57,7 @@ function onFileRemoved() {
     <div class="content-container">
       <div class="main-content-container">
         <div class="title-author-container">
-          <img src="/divider_book.png" alt="divider" />
+          <img src="/images/drawings/divider_book.png" alt="divider" />
           <ILTextInput :label="t('read.title')" name="title" />
           <ILTextInput :label="t('read.author')" name="author" />
         </div>
@@ -66,7 +66,7 @@ function onFileRemoved() {
             variant="rectangle"
             :title="t('read.cover')"
             name="cover"
-            :imageSrc="props.initialValues.cover_url"
+            :imageSrc="props.initialValues.cover_small_url"
             @file-selected="onFileSelected"
             @file-removed="onFileRemoved"
           />
