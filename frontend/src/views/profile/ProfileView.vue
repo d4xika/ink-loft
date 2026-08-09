@@ -2,6 +2,7 @@
 import { useToast } from "primevue/usetoast";
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
+import Header from "./_components/Header.vue";
 import API from "@/helper/api.js";
 import { languages } from "@/helper/i18n/i18n.js";
 
@@ -106,7 +107,7 @@ function updateLanguage(event) {
     <Form>
       <div class="profile-view-content">
         <ILImageUploader
-          :class="{ 'avatar-image-filter': avatarUrl }"
+          class="avatar-image-filter"
           :imageSrc="avatarUrl"
           :loading="avatarLoading"
           @file-selected="(file) => updateProfilePicture(file)"
