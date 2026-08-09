@@ -40,12 +40,15 @@ getReadData();
       editButtonEnabled
       @edit="router.push({ name: 'editRead', params: { id: read.id } })"
     />
-    <div class="main-container" v-if="isLoaded">
+    <div class="main-container">
       <div class="top-container">
         <div class="cover-container">
-          <ILReadCover :cover="read.cover_medium_url ?? undefined" />
+          <ILReadCover
+            :cover="read.cover_medium_url ?? undefined"
+            :loading="!isLoaded"
+          />
         </div>
-        <div class="below-cover-container">
+        <div v-if="isLoaded" class="below-cover-container">
           <ILRating v-model="read.rating" />
           <ILTag
             :icon="read.recommended ? 'pi-check' : 'pi-times'"
@@ -58,7 +61,7 @@ getReadData();
           />
         </div>
       </div>
-      <div class="content-container">
+      <div v-if="isLoaded" class="content-container">
         <h1 class="title">{{ read.title }}</h1>
         <p class="text">{{ read.author }}</p>
 
