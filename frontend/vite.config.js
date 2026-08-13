@@ -20,6 +20,7 @@ export default defineConfig(({ mode }) => {
       }),
       VitePWA({
         registerType: "autoUpdate",
+        includeAssets: ["open-book.png", "icons/app-icon.png"],
         manifest: {
           name: "Ink Loft",
           short_name: "Ink Loft",
@@ -29,17 +30,17 @@ export default defineConfig(({ mode }) => {
           display: "standalone",
           icons: [
             {
-              src: "app-icon.png",
+              src: "icons/app-icon.png",
               sizes: "192x192",
               type: "image/png",
             },
             {
-              src: "app-icon.png",
+              src: "icons/app-icon.png",
               sizes: "512x512",
               type: "image/png",
             },
             {
-              src: "app-icon.png",
+              src: "icons/app-icon.png",
               sizes: "512x512",
               type: "image/png",
               purpose: "any maskable",

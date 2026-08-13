@@ -32,4 +32,6 @@ app.use(PrimeVue, {
 });
 app.use(ToastService);
 app.use(i18n);
-app.mount("#app");
+setTimeout(() => {
+  app.mount("#app");
+}, 1000);
