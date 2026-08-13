@@ -4,13 +4,33 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/jpg" href="/icons/app-icon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Ink Loft">
+    <meta name="theme-color" content="#1c1917">
+    <link rel="apple-touch-icon" href="/icons/app-icon.png">
     <title>Ink Loft</title>
+    <style>
+      body {
+        background-color: #1c1917;
+        color: #dad9d9;
+        margin: 0;
+        font-family: sans-serif;
+      }
+      #splash-screen {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+    </style>
   </head>
   <body>
     <div id="app">
-        <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh;">
+        <div id="splash-screen">
             <img src="/open-book.png" alt="open book" style="width: 150px; height: 150px;" >
-            <h1>Ink Loft</h1>
+            <h1 style="margin: 0; font-family: serif; font-weight: normal;">Ink Loft</h1>
         </div>
     </div>
     <script type="module" src="/src/main.js"></script>
