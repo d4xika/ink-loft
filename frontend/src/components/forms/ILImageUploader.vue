@@ -92,11 +92,13 @@ function removeFile(event) {
         @select="onFileSelect"
       >
         <template #chooseicon>
-          <div
-            class="custom-upload-box"
-            :class="{ 'has-image': src }"
-            :style="src ? { backgroundImage: `url(${src})` } : {}"
-          >
+          <div class="custom-upload-box" :class="{ 'has-image': src }">
+            <div
+              v-if="src"
+              class="image-layer"
+              :style="{ backgroundImage: `url(${src})` }"
+            ></div>
+
             <div v-if="!src" class="placeholder-content">
               <i class="pi pi-plus"></i>
               <span>{{ props.title }}</span>
@@ -182,14 +184,23 @@ function removeFile(event) {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  overflow: hidden;
   position: relative;
   transition: background-color 0.3s ease;
 
   &.has-image {
     border: none;
+  }
+
+  .image-layer {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    transform: scale(1.02);
+    transition: transform 0.3s ease, filter 0.3s ease;
+    z-index: 0;
   }
 
   &:hover {
@@ -202,6 +213,8 @@ function removeFile(event) {
     align-items: center;
     gap: var(--gap-3);
     color: var(--text-color-1);
+    position: relative;
+    z-index: 2;
 
     i {
       font-size: var(--font-size-6);
@@ -224,6 +237,7 @@ function removeFile(event) {
     color: white;
     transition: opacity 0.2s;
     border-radius: var(--border-radius-1);
+    z-index: 2;
   }
 
   .loading-overlay {
@@ -234,7 +248,7 @@ function removeFile(event) {
     align-items: center;
     justify-content: center;
     border-radius: var(--border-radius-1);
-    z-index: 2;
+    z-index: 3;
   }
 
   .spinner {

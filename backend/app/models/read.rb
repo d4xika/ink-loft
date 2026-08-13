@@ -3,8 +3,8 @@ class Read < ApplicationRecord
 
   has_many :quotes
   has_one_attached :cover do |attachable|
-    attachable.variant :small, resize_to_fill: [ 200, 360 ]
-    attachable.variant :medium, resize_to_fill: [ 500, 900 ]
+    attachable.variant :small, resize_to_fill: [ 200, 280 ]
+    attachable.variant :medium, resize_to_fill: [ 500, 700 ]
   end
 
   enum :reading_status, { want_to_read: 0, currently_reading: 1, have_read: 2, dropped: 3 }
