@@ -1,4 +1,6 @@
 <script setup>
+import { computed } from "vue";
+
 const props = defineProps({
   quote: {
     type: String,
@@ -19,6 +21,10 @@ const props = defineProps({
 });
 
 const emit = defineEmits(["edit", "refresh"]);
+
+const escapedQuote = computed(() => {
+  return `<div>"${props.quote.replaceAll("\n", "</br>")}"</div>`;
+});
 </script>
 
 <template>
@@ -35,7 +41,7 @@ const emit = defineEmits(["edit", "refresh"]);
         @click="emit('refresh')"
       ></i>
     </div>
-    <h2 class="quote">"{{ props.quote }}"</h2>
+    <h2 class="quote" v-dompurify-html="escapedQuote"></h2>
     <h3 class="source">~ {{ props.source }}</h3>
   </div>
 </template>

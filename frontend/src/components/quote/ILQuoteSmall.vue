@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 
 const props = defineProps({
   quote: {
@@ -21,6 +21,10 @@ onMounted(() => {
 });
 
 const emit = defineEmits(["edit", "delete"]);
+
+const escapedQuote = computed(() => {
+  return `<div>"${props.quote.replaceAll("\n", "</br>")}"</div>`;
+});
 </script>
 
 <template>
@@ -32,7 +36,7 @@ const emit = defineEmits(["edit", "delete"]);
             <i class="pi pi-pen-to-square"></i>
           </div>
           <div>
-            <h2 class="quote">"{{ props.quote }}"</h2>
+            <h2 class="quote" v-dompurify-html="escapedQuote"></h2>
             <h3 class="source">
               {{ props.source }}
             </h3>
