@@ -1,12 +1,13 @@
 <script setup>
-import { ref } from "vue";
+import { useToast } from "primevue/usetoast";
+import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
 import Header from "./Header.vue";
 import API from "@/helper/api.js";
 import { READING_STATUSES } from "@/helper/constants.js";
+import { externalSongUrl, spotifyEmbedUrl } from "@/helper/song.js";
 import router from "@/router/router.js";
-import { useToast } from "primevue/usetoast";
 
 const { t, n } = useI18n();
 const route = useRoute();
@@ -14,6 +15,8 @@ const toast = useToast();
 
 const read = ref({});
 const isLoaded = ref(false);
+const spotifyPlayerUrl = computed(() => spotifyEmbedUrl(read.value.song));
+const songLinkUrl = computed(() => externalSongUrl(read.value.song));
 
 function getReadData() {
   API.get(`reads/${route.params.id}`).then(
@@ -119,13 +122,52 @@ getReadData();
 
           <div
             class="bottom-container"
-            v-if="read.pairing || read.notes || read.link"
+            v-if="read.pairing || read.notes || read.song || read.link"
           >
-            <p v-if="read.pairing">{{ read.pairing }}</p>
+            <ILTag
+              v-if="read.pairing"
+              :text="read.pairing"
+              icon="pi-heart"
+              color="red"
+            />
 
             <div class="notes-container" v-if="read.notes">
               <p>{{ read.notes }}</p>
             </div>
+
+            <iframe
+              v-if="spotifyPlayerUrl"
+              class="spotify-player"
+              :src="spotifyPlayerUrl"
+              :title="t('read.song')"
+              width="100%"
+              height="152"
+              allow="
+                autoplay;
+                clipboard-write;
+                encrypted-media;
+                fullscreen;
+                picture-in-picture;
+              "
+              loading="lazy"
+            ></iframe>
+
+            <a
+              v-else-if="songLinkUrl"
+              class="song-link"
+              :href="songLinkUrl"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <ILTag :text="read.song" icon="pi-headphones" color="white" />
+            </a>
+
+            <ILTag
+              v-else-if="read.song"
+              :text="read.song"
+              icon="pi-headphones"
+              color="white"
+            />
 
             <ILTag
               v-if="read.link"
@@ -246,6 +288,17 @@ getReadData();
             border: solid 1px var(--text-color-1-light);
             padding: var(--gap-3);
             border-radius: var(--border-radius-2);
+          }
+
+          .spotify-player {
+            border: 0;
+            border-radius: var(--border-radius-2);
+          }
+
+          .song-link {
+            align-self: flex-start;
+            color: inherit;
+            text-decoration: none;
           }
 
           p {

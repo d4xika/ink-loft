@@ -112,7 +112,7 @@ getReadData();
 </script>
 
 <template>
-  <div>
+  <div class="edit-view-container">
     <div class="read-edit-view">
       <ReadForm
         v-if="isLoaded"
@@ -141,10 +141,14 @@ getReadData();
 </template>
 
 <style scoped>
-.read-edit-view {
-  display: flex;
-  flex-direction: column;
-  gap: var(--gap-3);
-  padding: var(--gap-3);
+.edit-view-container {
+  padding-bottom: var(--gap-2);
+
+  .read-edit-view {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-3);
+    padding: var(--gap-3);
+  }
 }
 </style>

@@ -64,6 +64,7 @@ export const de = {
     total: "Gesamt",
     current: "Aktuell",
     pairing: "Paarung",
+    song: "Lied (Spotify Verlinkung)",
     notes: "Notizen",
     link: "Verlinkung",
     delete: "Lektüre löschen",

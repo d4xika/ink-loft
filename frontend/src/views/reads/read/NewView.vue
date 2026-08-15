@@ -16,6 +16,7 @@ const initRead = {
   cover: null,
   platform: null,
   pairing: null,
+  song: null,
   chapters: null,
   words: null,
   pages: null,

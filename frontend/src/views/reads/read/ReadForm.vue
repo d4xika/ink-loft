@@ -22,6 +22,7 @@ const resolver = zodResolver(
     author: z.string().nullable(),
     platform: z.string().nullable(),
     pairing: z.string().nullable(),
+    song: z.string().nullable(),
     chapters: z.coerce.number().nullable(),
     words: z.coerce.number().nullable(),
     pages: z.coerce.number().nullable(),
@@ -103,6 +104,7 @@ function onFileRemoved() {
       <ILNumberInput :label="t('read.words')" name="words" />
       <ILNumberInput :label="t('read.pages')" name="pages" />
       <ILTextInput :label="t('read.pairing')" name="pairing" />
+      <ILTextInput :label="t('read.song')" name="song" />
       <ILTextArea :label="t('read.notes')" name="notes" />
       <ILTextInput :label="t('read.link')" name="link" />
     </div>
