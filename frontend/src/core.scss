@@ -100,8 +100,7 @@ h3 {
 }
 
 .avatar-image-filter-oil-painting.p-avatar::before,
-.avatar-image-filter-oil-painting
-  .custom-upload-box.has-image::before {
+.avatar-image-filter-oil-painting .custom-upload-box.has-image::before {
   content: "";
   position: absolute;
   inset: 0;
@@ -126,4 +125,24 @@ h3 {
   mix-blend-mode: soft-light;
   opacity: 0.9;
   pointer-events: none;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.gap-1 {
+  gap: var(--gap-1);
+}
+
+.gap-2 {
+  gap: var(--gap-2);
+}
+
+.gap-3 {
+  gap: var(--gap-3);
 }

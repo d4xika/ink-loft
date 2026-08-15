@@ -42,6 +42,7 @@ export const en = {
     save: "Save Quote",
     add: "Add Quote",
     edit: "Edit Quote",
+    no_quotes: "No quotes added yet.",
     save_success: "Quote saved successfully.",
     delete_success: "Quote deleted successfully.",
     load_error: "Could not load quotes.",

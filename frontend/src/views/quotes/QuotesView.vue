@@ -188,7 +188,11 @@ loadDailyQuote();
     </div>
     <ILDrawer v-model="addQuoteDrawer" :title="t('quotes.add')">
       <template #body>
-        <Form :resolver="resolver" class="form-container" @submit="saveQuote">
+        <Form
+          :resolver="resolver"
+          @submit="saveQuote"
+          class="flex flex-col gap-2"
+        >
           <ILAutoComplete
             name="read"
             optionLabel="title"
@@ -204,8 +208,8 @@ loadDailyQuote();
         <Form
           :initialValues="addInitialValues"
           :resolver="resolver"
-          class="form-container"
           @submit="editQuote"
+          class="flex flex-col gap-2"
         >
           <ILAutoComplete
             v-model="addInitialValues.read"
@@ -240,12 +244,6 @@ loadDailyQuote();
       flex-direction: column;
       gap: var(--gap-3);
     }
-  }
-
-  .form-container {
-    display: flex;
-    flex-direction: column;
-    gap: var(--gap-3);
   }
 }
 </style>
