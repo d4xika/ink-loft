@@ -1,24 +1,40 @@
 <script setup>
+import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 
 const props = defineProps({
-  coverImageUrl: {
-    type: String,
-    default: undefined,
-  },
-  title: {
-    type: String,
-    default: undefined,
-  },
-  author: {
-    type: String,
-    default: undefined,
+  read: {
+    type: Object,
+    required: true,
   },
 });
 
 const { t } = useI18n();
 
-const emit = defineEmits(["addQuote", "editRead", "finishRead", "showRead"]);
+const emit = defineEmits([
+  "addQuote",
+  "editRead",
+  "trackRead",
+  "finishRead",
+  "showRead",
+]);
+
+const progress = computed(() => {
+  if (!props.read.progress_type || !props.read.current_progress) {
+    return false;
+  }
+
+  if (props.read.progress_type === "percentage") {
+    return props.read.current_progress;
+  }
+
+  const total =
+    props.read.progress_type === "chapters"
+      ? props.read.chapters
+      : props.read.pages;
+
+  return (props.read.current_progress / total) * 100;
+});
 </script>
 
 <template>
@@ -26,29 +42,30 @@ const emit = defineEmits(["addQuote", "editRead", "finishRead", "showRead"]);
     <div class="content-container">
       <div class="left-container" @click="emit('showRead')">
         <ILReadCover
-          :cover="props.coverImageUrl ? props.coverImageUrl : undefined"
+          :cover="
+            props.read.coverImageUrl ? props.read.coverImageUrl : undefined
+          "
         />
       </div>
       <div class="right-container">
         <div class="title-author-container" @click="emit('showRead')">
           <p class="title">
-            {{ props.title }}
+            {{ props.read.title }}
           </p>
-          <p class="author">~ {{ props.author }}</p>
+          <p class="author">~ {{ props.read.author }}</p>
+        </div>
+        <div>
+          <ILProgressBar :value="progress" v-if="progress" />
         </div>
         <div class="btn-container">
           <div class="quote-btn-container">
             <ILIconButton
               image="/images/drawings/quill.png"
-              variant="full-width"
               @click="emit('addQuote')"
             />
           </div>
-          <div class="edit-finish-btn-container">
-            <ILTextButton
-              :text="t('home.edit_read')"
-              @click="emit('editRead')"
-            />
+          <div class="track-finish-btn-container">
+            <ILTextButton :text="t('home.track')" @click="emit('trackRead')" />
             <ILTextButton
               :text="t('home.finish_read')"
               @click="emit('finishRead')"
@@ -70,25 +87,27 @@ const emit = defineEmits(["addQuote", "editRead", "finishRead", "showRead"]);
 
     .left-container {
       display: flex;
+      flex-shrink: 0;
       align-content: center;
       padding-right: var(--gap-2);
+      width: var(--read-cover-width);
     }
 
     .right-container {
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      padding: var(--gap-2) 0;
+      padding-top: var(--gap-2);
+      gap: var(--gap-2);
       width: 100%;
 
       .title-author-container {
         display: flex;
         flex-direction: column;
-        padding-bottom: var(--gap-2);
 
         .title {
           font-size: var(--font-size-4);
-          margin: var(--gap-2) 0;
+          margin: 0;
           max-width: 45dvw;
           overflow: hidden;
           text-overflow: ellipsis;
@@ -112,10 +131,11 @@ const emit = defineEmits(["addQuote", "editRead", "finishRead", "showRead"]);
           width: 55%;
         }
 
-        .edit-finish-btn-container {
+        .track-finish-btn-container {
           display: flex;
           flex-direction: column;
           gap: var(--gap-2);
+          width: 100%;
         }
       }
     }

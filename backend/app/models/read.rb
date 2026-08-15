@@ -8,10 +8,16 @@ class Read < ApplicationRecord
   end
 
   enum :reading_status, { want_to_read: 0, currently_reading: 1, have_read: 2, dropped: 3 }
+  enum :progress_type, { chapters: 0, pages: 1, percentage: 2 }
+
+  validates :current_progress,
+            numericality: { only_integer: true, greater_than_or_equal_to: 0 },
+            allow_nil: true
 
   def as_json(options = {})
     json = super(options)
     json[:reading_status] = reading_status
+    json[:progress_type] = progress_type
 
     if cover.attached?
       base_url = Rails.env.production? ? "https://ink-loft.d4xika.com" : "http://127.0.0.1:3000"

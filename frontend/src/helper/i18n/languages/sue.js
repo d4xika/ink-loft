@@ -7,6 +7,7 @@ export const sue = {
     validation_error: "Validierungsfehler",
     validation_error_detail: "Bitte überprüf deine Eingobn.",
     generic_error: "Etwas isch schiafglaufn.",
+    invalid_number: "Gib bitte a gschidi Zahl i.",
   },
   authentication: {
     title: "Servus Leser!",
@@ -31,7 +32,9 @@ export const sue = {
     have_read: "Glesen",
     graveyard: "Friedhof",
     finish_read: "beendn",
-    edit_read: "beorbetn",
+    track: "fortschritt",
+    track_read: "Lesefortschritt",
+    track_progress: "Fortschritt speichern",
   },
   quotes: {
     quotes: "Zitate",
@@ -57,6 +60,9 @@ export const sue = {
     chapters: "Kapitl",
     words: "Werter",
     pages: "Seitn",
+    percentage: "Prozent",
+    total: "Gsamt",
+    current: "Aktuell",
     pairing: "Poorung",
     notes: "Notizn",
     link: "Vorlinkung",

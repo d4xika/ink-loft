@@ -34,7 +34,7 @@ const props = defineProps({
 .p-button {
   border: 1px solid transparent !important;
   color: var(--text-color-1);
-  padding: 9px 10px 6px 10px;
+  padding: 8px 10px 5px 10px;
   white-space: nowrap;
   font-size: var(--font-size-3);
 

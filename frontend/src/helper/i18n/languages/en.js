@@ -7,6 +7,7 @@ export const en = {
     validation_error: "Validation Error",
     validation_error_detail: "Please check your input.",
     generic_error: "Something went wrong.",
+    invalid_number: "Please enter a valid number.",
   },
   authentication: {
     title: "Welcome Reader!",
@@ -31,7 +32,9 @@ export const en = {
     have_read: "Have read",
     graveyard: "Graveyard",
     finish_read: "Finish",
-    edit_read: "Edit Read",
+    track: "Track",
+    track_read: "Track read",
+    track_progress: "Track progress",
   },
   quotes: {
     quotes: "Quotes",
@@ -57,6 +60,9 @@ export const en = {
     chapters: "Chapters",
     words: "Words",
     pages: "Pages",
+    percentage: "Percentage",
+    total: "Total",
+    current: "Current",
     pairing: "Pairing",
     notes: "Notes",
     link: "Link",
