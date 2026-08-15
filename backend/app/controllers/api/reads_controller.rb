@@ -12,6 +12,12 @@ class Api::ReadsController < Api::ApplicationController
     else
       @reads = current_user.reads
     end
+
+    if params[:search].present?
+      search = ActiveRecord::Base.sanitize_sql_like(params[:search].to_s.strip)
+      @reads = @reads.where("title ILIKE :search OR author ILIKE :search", search: "%#{search}%")
+    end
+
     return render json: @reads, status: :ok
   end
 

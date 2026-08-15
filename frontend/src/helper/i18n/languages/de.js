@@ -48,6 +48,7 @@ export const de = {
   },
   read: {
     title: "Titel",
+    title_or_author: "Titel oder AutorIn",
     author: "AutorIn",
     cover: "Cover",
     rating: "Bewertung",

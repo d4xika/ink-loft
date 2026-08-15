@@ -16,21 +16,25 @@ const router = useRouter();
     <img src="/images/drawings/kitty_on_shelf.png" alt="Kitty on shelf" />
   </div>
 
-  <div class="reads-list" v-if="props.reads">
-    <div v-if="props.reads.loading" v-for="read in 6" :key="read.id">
-      <Skeleton width="130px" height="170px" />
-    </div>
-
-    <div v-else v-for="read in props.reads" :key="read.id">
-      <div class="read-container">
-        <ILReadCover
-          :loading="props.reads.loading"
-          :cover="read.cover_small_url ?? undefined"
-          @click="router.push({ name: 'showRead', params: { id: read.id } })"
-        />
-        <p>{{ read.title }}</p>
+  <div v-if="props.reads" class="reads-list">
+    <template v-if="props.reads.loading">
+      <div v-for="read in 6" :key="read">
+        <Skeleton width="130px" height="170px" />
       </div>
-    </div>
+    </template>
+
+    <template v-else>
+      <div v-for="read in props.reads" :key="read.id">
+        <div class="read-container">
+          <ILReadCover
+            :loading="props.reads.loading"
+            :cover="read.cover_small_url ?? undefined"
+            @click="router.push({ name: 'showRead', params: { id: read.id } })"
+          />
+          <p>{{ read.title }}</p>
+        </div>
+      </div>
+    </template>
   </div>
 </template>
 
@@ -67,4 +71,5 @@ const router = useRouter();
     }
   }
 }
+
 </style>

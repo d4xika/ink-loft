@@ -1,4 +1,6 @@
 <script setup>
+import { onBeforeUnmount, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
 const props = defineProps({
@@ -16,9 +18,35 @@ const props = defineProps({
     validator: (value) =>
       ["want_to_read", "have_read", "dropped"].includes(value),
   },
+  searchOpen: {
+    type: Boolean,
+    default: false,
+  },
 });
+const emit = defineEmits(["toggle-search", "search"]);
 
 const router = useRouter();
+const { t } = useI18n();
+const searchTerm = ref("");
+let searchTimeout;
+
+watch(searchTerm, () => {
+  clearTimeout(searchTimeout);
+  if (!props.searchOpen) return;
+
+  searchTimeout = setTimeout(() => {
+    emit("search", { search: searchTerm.value.trim() });
+  }, 350);
+});
+
+watch(
+  () => props.searchOpen,
+  (searchOpen) => {
+    if (!searchOpen) searchTerm.value = "";
+  },
+);
+
+onBeforeUnmount(() => clearTimeout(searchTimeout));
 </script>
 
 <template>
@@ -39,17 +67,33 @@ const router = useRouter();
 
       <div class="title-plus-container">
         <h1>{{ props.title }}</h1>
-        <ILIconButton
-          icon="pi-plus"
-          variant="square"
-          color="brown"
-          @click="
-            router.push({
-              name: 'newRead',
-              query: { status: props.readingStatus },
-            })
-          "
-        />
+        <div class="action-buttons">
+          <ILIconButton
+            icon="pi-plus"
+            variant="square"
+            color="brown"
+            @click="
+              router.push({
+                name: 'newRead',
+                query: { status: props.readingStatus },
+              })
+            "
+          />
+          <div class="search-action">
+            <ILIconButton
+              :icon="props.searchOpen ? 'pi-times' : 'pi-search'"
+              variant="square"
+              @click="emit('toggle-search')"
+            />
+            <div v-if="props.searchOpen" class="search-form">
+              <ILTextInput
+                v-model="searchTerm"
+                :label="t('read.title_or_author')"
+                name="search"
+              />
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -77,6 +121,18 @@ const router = useRouter();
       flex: 1;
     }
 
+    .action-buttons {
+      display: flex;
+      align-items: center;
+      gap: var(--gap-2);
+    }
+
+    .search-action {
+      display: flex;
+      align-items: center;
+      gap: var(--gap-1);
+    }
+
     .header-image {
       height: 100px;
       object-fit: contain;
@@ -85,6 +141,16 @@ const router = useRouter();
 
   h1 {
     margin: 0;
+  }
+
+  .search-form {
+    width: min(220px, 45vw);
+  }
+}
+
+@media (max-width: 600px) {
+  .header-container .search-form {
+    width: min(180px, 42vw);
   }
 }
 </style>
