@@ -48,6 +48,7 @@ export const sue = {
   },
   read: {
     title: "Titl",
+    title_or_author: "Titl oder AutorIn",
     author: "AutorIn",
     cover: "Cover",
     rating: "Bewertung",

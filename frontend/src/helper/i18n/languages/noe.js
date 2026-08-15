@@ -48,6 +48,7 @@ export const noe = {
   },
   read: {
     title: "Titl",
+    title_or_author: "Titl oda AutorIn",
     author: "AutorIn",
     cover: "Büd",
     rating: "Bewertung",

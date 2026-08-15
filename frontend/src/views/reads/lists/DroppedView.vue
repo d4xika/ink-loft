@@ -1,21 +1,25 @@
 <script setup>
+import { useToast } from "primevue/usetoast";
+import { ref } from "vue";
+import { useI18n } from "vue-i18n";
 import Header from "./_components/Header.vue";
 import ReadsList from "./_components/ReadsList.vue";
-import { ref } from "vue";
 import API from "@/helper/api.js";
-import { useToast } from "primevue/usetoast";
-import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
 const toast = useToast();
 const reads = ref({ loading: true });
+const showSearch = ref(false);
 
-function getReads() {
-  API.get("reads", { params: { reading_status: "dropped" } }).then(
+function getReads(filters = {}) {
+  reads.value = { loading: true };
+  API.get("reads", {
+    params: { reading_status: "dropped", ...filters },
+  }).then(
     (response) => {
       reads.value = response.data;
     },
-    (error) => {
+    () => {
       toast.add({
         severity: "error",
         message: t("read.load_error"),
@@ -23,6 +27,11 @@ function getReads() {
       });
     },
   );
+}
+
+function toggleSearch() {
+  showSearch.value = !showSearch.value;
+  if (!showSearch.value) getReads();
 }
 
 getReads();
@@ -34,6 +43,9 @@ getReads();
       title="Dropped"
       image="/images/drawings/cat-books.png"
       readingStatus="dropped"
+      :searchOpen="showSearch"
+      @toggle-search="toggleSearch"
+      @search="getReads"
     />
     <ReadsList :reads="reads" />
   </div>
