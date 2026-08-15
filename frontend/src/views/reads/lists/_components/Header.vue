@@ -22,12 +22,20 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  sortBy: {
+    type: String,
+    default: "date",
+    validator: (value) =>
+      ["title", "author", "pairing", "date"].includes(value),
+  },
 });
-const emit = defineEmits(["toggle-search", "search"]);
+const emit = defineEmits(["toggle-search", "search", "sort"]);
 
 const router = useRouter();
 const { t } = useI18n();
 const searchTerm = ref("");
+const sortOpen = ref(false);
+const selectedSort = ref(props.sortBy);
 let searchTimeout;
 
 watch(searchTerm, () => {
@@ -47,6 +55,12 @@ watch(
 );
 
 onBeforeUnmount(() => clearTimeout(searchTimeout));
+
+function selectSort(value) {
+  selectedSort.value = value;
+  emit("sort", value);
+  sortOpen.value = false;
+}
 </script>
 
 <template>
@@ -79,6 +93,13 @@ onBeforeUnmount(() => clearTimeout(searchTimeout));
               })
             "
           />
+          <div class="sort-action">
+            <ILIconButton
+              :icon="sortOpen ? 'pi-times' : 'pi-sort-amount-down'"
+              variant="square"
+              @click="sortOpen = !sortOpen"
+            />
+          </div>
           <div class="search-action">
             <ILIconButton
               :icon="props.searchOpen ? 'pi-times' : 'pi-search'"
@@ -93,6 +114,32 @@ onBeforeUnmount(() => clearTimeout(searchTimeout));
               />
             </div>
           </div>
+        </div>
+        <div v-if="sortOpen" class="sort-menu">
+          <ILTextButton
+            :text="t('read.title')"
+            variant="fit-content"
+            :color="selectedSort === 'title' ? 'primary' : 'transparent'"
+            @click="selectSort('title')"
+          />
+          <ILTextButton
+            :text="t('read.author')"
+            variant="fit-content"
+            :color="selectedSort === 'author' ? 'primary' : 'transparent'"
+            @click="selectSort('author')"
+          />
+          <ILTextButton
+            :text="t('read.pairing')"
+            variant="fit-content"
+            :color="selectedSort === 'pairing' ? 'primary' : 'transparent'"
+            @click="selectSort('pairing')"
+          />
+          <ILTextButton
+            :text="t('read.start_date')"
+            variant="fit-content"
+            :color="selectedSort === 'date' ? 'primary' : 'transparent'"
+            @click="selectSort('date')"
+          />
         </div>
       </div>
     </div>
@@ -110,7 +157,7 @@ onBeforeUnmount(() => clearTimeout(searchTimeout));
 
   .content-image-container {
     display: flex;
-    align-items: flex-end;
+    align-items: flex-start;
     gap: var(--gap-3);
 
     .title-plus-container {
@@ -133,7 +180,12 @@ onBeforeUnmount(() => clearTimeout(searchTimeout));
       gap: var(--gap-1);
     }
 
+    .sort-action {
+      display: flex;
+    }
+
     .header-image {
+      align-self: flex-start;
       height: 100px;
       object-fit: contain;
     }
@@ -145,6 +197,13 @@ onBeforeUnmount(() => clearTimeout(searchTimeout));
 
   .search-form {
     width: min(220px, 45vw);
+  }
+
+  .sort-menu {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--gap-1);
+    padding-top: var(--gap-1);
   }
 }
 

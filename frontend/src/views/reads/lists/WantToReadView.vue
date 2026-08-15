@@ -10,6 +10,7 @@ const { t } = useI18n();
 const toast = useToast();
 const reads = ref({ loading: true });
 const showSearch = ref(false);
+const sortBy = ref("date");
 
 function getReads(filters = {}) {
   reads.value = { loading: true };
@@ -44,10 +45,12 @@ getReads();
       image="/images/drawings/dragon.png"
       readingStatus="want_to_read"
       :searchOpen="showSearch"
+      :sortBy="sortBy"
       @toggle-search="toggleSearch"
       @search="getReads"
+      @sort="sortBy = $event"
     />
-    <ReadsList :reads="reads" />
+    <ReadsList :reads="reads" :sortBy="sortBy" />
   </div>
 </template>
 
