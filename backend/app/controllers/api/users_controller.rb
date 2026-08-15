@@ -1,4 +1,6 @@
 class Api::UsersController < Api::ApplicationController
+  skip_forgery_protection only: [ :login, :register ]
+
   def login
     user = User.find_by(username: params[:username])
     if !user || !user.authenticate(params[:password])
@@ -14,7 +16,7 @@ class Api::UsersController < Api::ApplicationController
       same_site: :lax,
       secure: Rails.env.production?
     }
-    return render json: render_user(user), status: :ok
+    return render json: render_user(user).merge(csrf_token: form_authenticity_token), status: :ok
   end
 
   def is_logged_in
@@ -57,7 +59,7 @@ class Api::UsersController < Api::ApplicationController
       secure: Rails.env.production?
     }
 
-    return render json: render_user(user), status: :created
+    return render json: render_user(user).merge(csrf_token: form_authenticity_token), status: :created
   end
 
   def update_profile

@@ -63,68 +63,55 @@ async function submit(data) {
     return;
   }
 
-  API.get("/csrf").then((response) => {
-    API.defaults.headers.common["X-CSRF-Token"] = response.data.csrf_token;
+  try {
+    const response =
+      tab.value === "LOGIN"
+        ? await API.post("users/login", {
+            username: data.values.username,
+            password: data.values.password,
+          })
+        : await API.post("users/register", {
+            username: data.values.username,
+            password: data.values.password,
+            email: data.values.email,
+          });
 
+    const { csrf_token, ...user } = response.data;
+    API.defaults.headers.common["X-CSRF-Token"] = csrf_token;
+    localStorage.setItem("user", JSON.stringify(user));
+    locale.value = user.language;
+    setAuthStatus(true);
+    await router.push({ name: "home" });
+    toast.add({
+      severity: "success",
+      message: t(
+        tab.value === "LOGIN"
+          ? "authentication.login_success_detail"
+          : "authentication.register_success_detail",
+      ),
+      life: 3000,
+    });
+  } catch (error) {
     if (tab.value === "LOGIN") {
-      API.post("users/login", {
-        username: data.values.username,
-        password: data.values.password,
-      }).then(
-        (response) => {
-          localStorage.setItem("user", JSON.stringify(response.data));
-          locale.value = response.data.language;
-          setAuthStatus(true);
-          router.push({ name: "home" });
-          toast.add({
-            severity: "success",
-            message: t("authentication.login_success_detail"),
-            life: 3000,
-          });
-        },
-        (error) => {
-          toast.add({
-            severity: "error",
-            message: t("authentication.login_error_detail"),
-            life: 3000,
-          });
-        },
-      );
+      toast.add({
+        severity: "error",
+        message: t("authentication.login_error_detail"),
+        life: 3000,
+      });
+    } else if (error.response?.status === 409) {
+      toast.add({
+        severity: "error",
+        message: t("authentication.register_error_conflict"),
+        life: 3000,
+      });
+    } else {
+      toast.add({
+        severity: "error",
+        message: t("general.generic_error"),
+        life: 3000,
+      });
     }
-    if (tab.value === "REGISTER") {
-      API.post("users/register", {
-        username: data.values.username,
-        password: data.values.password,
-        email: data.values.email,
-      }).then(
-        (response) => {
-          localStorage.setItem("user", JSON.stringify(response.data));
-          setAuthStatus(true);
-          router.push({ name: "home" });
-          toast.add({
-            severity: "success",
-            message: t("authentication.register_success_detail"),
-            life: 3000,
-          });
-        },
-        (error) => {
-          if (error.status === 409) {
-            toast.add({
-              severity: "error",
-              message: t("authentication.register_error_conflict"),
-              life: 3000,
-            });
-          } else {
-            toast.add({
-              severity: "error",
-              message: t("general.generic_error"),
-              life: 3000,
-            });
-          }
-        },
-      );
-    }
-  });
+  }
 }
 </script>
 
