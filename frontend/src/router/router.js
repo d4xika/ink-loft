@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import API from "@/helper/api.js";
+import { setLocale } from "@/helper/i18n/i18n.js";
 
 const AuthenticationView = () => import("../views/AuthenticationView.vue");
 
@@ -168,6 +169,9 @@ router.beforeEach(async (to, from, next) => {
       isAuthenticated = response.data.authenticated;
       if (response.data.user) {
         localStorage.setItem("user", JSON.stringify(response.data.user));
+        setLocale(response.data.user.language);
+      } else {
+        localStorage.removeItem("user");
       }
     } catch (error) {
       isAuthenticated = false;

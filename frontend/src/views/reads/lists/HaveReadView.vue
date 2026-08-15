@@ -41,7 +41,7 @@ getReads();
 <template>
   <div>
     <Header
-      title="Have read"
+      :title="t('home.have_read')"
       image="/images/drawings/dragon-moon.png"
       readingStatus="have_read"
       :searchOpen="showSearch"
