@@ -64,6 +64,7 @@ export const noe = {
     total: "Gsamt",
     current: "Aktuell",
     pairing: "Paal",
+    song: "Liad (Spotify Valinkung)",
     notes: "Notizn",
     link: "Valinkung",
     delete: "Lektüre löschn",

@@ -51,6 +51,7 @@ const router = useRouter();
   justify-content: center;
   flex-wrap: wrap;
   gap: var(--gap-3);
+  padding-bottom: var(--gap-2);
 
   .read-container {
     width: 120px;

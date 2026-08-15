@@ -64,6 +64,7 @@ export const sue = {
     total: "Gsamt",
     current: "Aktuell",
     pairing: "Poorung",
+    song: "Liad (Spotify Vorlinkung)",
     notes: "Notizn",
     link: "Vorlinkung",
     delete: "Lektüre löschen",

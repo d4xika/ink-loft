@@ -43,7 +43,7 @@ const progress = computed(() => {
       <div class="left-container" @click="emit('showRead')">
         <ILReadCover
           :cover="
-            props.read.coverImageUrl ? props.read.coverImageUrl : undefined
+            props.read.cover_small_url ? props.read.cover_small_url : undefined
           "
         />
       </div>

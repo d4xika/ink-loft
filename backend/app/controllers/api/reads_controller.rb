@@ -72,11 +72,11 @@ class Api::ReadsController < Api::ApplicationController
       params_to_permit = ActionController::Parameters.new(read: read_params)
       params_to_permit.require(:read).permit(:title, :author, :platform, :pairing, :cover, :chapters,
                                              :words, :pages, :start_date, :end_date, :rating, :recommended,
-                                             :notes, :link, :reading_status, :current_progress, :progress_type)
+                                             :notes, :link, :song, :reading_status, :current_progress, :progress_type)
     else
       params.require(:read).permit(:title, :author, :platform, :pairing, :cover, :chapters,
                                    :words, :pages, :start_date, :end_date, :rating, :recommended,
-                                   :notes, :link, :reading_status, :current_progress, :progress_type)
+                                   :notes, :link, :song, :reading_status, :current_progress, :progress_type)
     end
   end
 end

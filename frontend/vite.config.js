@@ -20,7 +20,7 @@ export default defineConfig(({ mode }) => {
       }),
       VitePWA({
         registerType: "autoUpdate",
-        includeAssets: ["open-book.png", "icons/app-icon.png"],
+        includeAssets: ["images/drawings/open-book.png", "icons/app-icon.png"],
         manifest: {
           name: "Ink Loft",
           short_name: "Ink Loft",

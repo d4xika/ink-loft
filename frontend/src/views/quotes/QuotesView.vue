@@ -156,7 +156,7 @@ loadDailyQuote();
 </script>
 
 <template>
-  <div>
+  <div class="quotes-view-container">
     <Header />
     <div class="quotes-view">
       <ILQuotes
@@ -172,7 +172,7 @@ loadDailyQuote();
       <div class="more-quotes">
         <ILAddItem :text="t('quotes.add')" @click="addQuoteDrawer = true" />
 
-        <div v-if="quotes.loading" v-for="quote in 3" :key="quote.id">
+        <div v-if="quotes.loading" v-for="index in 3" :key="index">
           <Skeleton height="80px" />
         </div>
 
@@ -226,22 +226,26 @@ loadDailyQuote();
 </template>
 
 <style scoped>
-.quotes-view {
-  display: flex;
-  flex-direction: column;
-  padding: var(--gap-3);
-  gap: var(--gap-4);
+.quotes-view-container {
+  padding-bottom: var(--gap-2);
 
-  .more-quotes {
+  .quotes-view {
+    display: flex;
+    flex-direction: column;
+    padding: var(--gap-3);
+    gap: var(--gap-4);
+
+    .more-quotes {
+      display: flex;
+      flex-direction: column;
+      gap: var(--gap-3);
+    }
+  }
+
+  .form-container {
     display: flex;
     flex-direction: column;
     gap: var(--gap-3);
   }
-}
-
-.form-container {
-  display: flex;
-  flex-direction: column;
-  gap: var(--gap-3);
 }
 </style>
