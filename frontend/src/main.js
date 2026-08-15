@@ -8,6 +8,7 @@ import router from "./router/router.js";
 import "./core.scss";
 import "primeicons/primeicons.css";
 import { definePreset, palette } from "@primevue/themes";
+import VueDOMPurifyHTML from "vue-dompurify-html";
 
 const primary = palette("#464832");
 
@@ -32,6 +33,7 @@ app.use(PrimeVue, {
 });
 app.use(ToastService);
 app.use(i18n);
+app.use(VueDOMPurifyHTML);
 setTimeout(() => {
   app.mount("#app");
 }, 1000);
