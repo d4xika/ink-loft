@@ -28,7 +28,7 @@ const props = defineProps({
   <Button
     :icon="props.image ? undefined : `pi ${props.icon}`"
     class="icon-button"
-    :class="`variant-${props.variant} color-${props.color}`"
+    :class="`variant-${props.variant} color-${props.color} ${props.image ? 'has-image' : ''}`"
   >
     <img
       v-if="props.image"
@@ -44,7 +44,10 @@ const props = defineProps({
   background-color: var(--color-3);
   border: 1px solid transparent;
   color: var(--text-color-1);
-  padding: 10px;
+
+  &:not(.has-image) {
+    padding: 10px;
+  }
 
   &.variant-full-width {
     width: 100%;
@@ -64,7 +67,7 @@ const props = defineProps({
   }
 
   .button-image {
-    height: 60px;
+    height: 55px;
     object-fit: contain;
   }
 }

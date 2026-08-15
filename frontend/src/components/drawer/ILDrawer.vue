@@ -15,8 +15,11 @@ const model = defineModel({ type: Boolean, default: false });
     position="bottom"
     style="height: fit-content"
   >
-    <slot name="body">
-    </slot>
+    <div class="divider-1">
+      <ILDivider :width="100" />
+      <div style="width: 3.75rem"></div>
+    </div>
+    <slot name="body"> </slot>
   </Drawer>
 </template>
 
@@ -28,8 +31,15 @@ const model = defineModel({ type: Boolean, default: false });
   margin: 0 var(--gap-2) !important;
   background-color: var(--color-0) !important;
 
+  .divider-1 {
+    display: flex;
+    margin-bottom: var(--gap-4);
+    margin-top: calc(var(--gap-2) * -1);
+  }
+
   .p-drawer-header {
     padding-bottom: var(--gap-1);
+    padding-top: var(--gap-3);
   }
 
   .p-drawer-content {

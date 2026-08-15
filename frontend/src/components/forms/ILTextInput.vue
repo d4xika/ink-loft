@@ -29,7 +29,12 @@ const model = defineModel({
       toggleMask
       :feedback="false"
     />
-    <InputText v-else v-model="model" :name="props.name" />
+    <InputText
+      v-else
+      v-model="model"
+      :name="props.name"
+      :type="props.type"
+    />
     <label>{{ props.label }}</label>
   </FloatLabel>
 </template>

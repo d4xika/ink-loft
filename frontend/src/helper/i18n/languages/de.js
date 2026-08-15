@@ -7,6 +7,7 @@ export const de = {
     validation_error: "Validierungsfehler",
     validation_error_detail: "Bitte überprüfe deine Eingaben.",
     generic_error: "Etwas ist schiefgelaufen.",
+    invalid_number: "Bitte gib eine gültige Zahl ein.",
   },
   authentication: {
     title: "Willkommen Leser!",
@@ -31,7 +32,9 @@ export const de = {
     have_read: "Gelesen",
     graveyard: "Friedhof",
     finish_read: "beenden",
-    edit_read: "bearbeiten",
+    track: "Fortschritt",
+    track_read: "Lesefortschritt",
+    track_progress: "Fortschritt speichern",
   },
   quotes: {
     quotes: "Zitate",
@@ -57,6 +60,9 @@ export const de = {
     chapters: "Kapitel",
     words: "Wörter",
     pages: "Seiten",
+    percentage: "Prozent",
+    total: "Gesamt",
+    current: "Aktuell",
     pairing: "Paarung",
     notes: "Notizen",
     link: "Verlinkung",

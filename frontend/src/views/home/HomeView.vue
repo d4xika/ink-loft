@@ -1,5 +1,6 @@
 <script setup>
 import { zodResolver } from "@primevue/forms/resolvers/zod";
+import { useToast } from "primevue/usetoast";
 import { ref, onMounted, nextTick } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
@@ -7,13 +8,13 @@ import { z } from "zod";
 import CurrentlyReading from "./_components/CurrentlyReading.vue";
 import Header from "./_components/Header.vue";
 import API from "@/helper/api.js";
-import { useToast } from "primevue/usetoast";
 
 const { t } = useI18n();
 const toast = useToast();
 const router = useRouter();
 const swipeContainer = ref(null);
 const addQuote = ref(false);
+const trackRead = ref(false);
 const activeRead = ref(null);
 const dailyQuote = ref(null);
 const showIndicator = ref(false);
@@ -21,8 +22,17 @@ const showLeftIndicator = ref(false);
 const firstRead = ref(null);
 const finishRead = ref(false);
 const finishedReadInitialValues = ref({});
+const trackReadInitialValues = ref({});
+const trackForm = ref(null);
 
 const reads = ref({ loading: true });
+
+function progressTotal(read, type) {
+  if (type === "percentage") return 100;
+  if (type === "chapters") return read.chapters ?? "";
+  if (type === "pages") return read.pages ?? "";
+  return "";
+}
 
 function handleScroll() {
   if (!swipeContainer.value) return;
@@ -69,6 +79,28 @@ function openFinishReadDrawer(read) {
   finishRead.value = true;
 }
 
+function openTrackReadDrawer(read) {
+  activeRead.value = read.id;
+  const inferredType =
+    (read.current_progress !== null && read.current_progress !== undefined
+      ? read.progress_type
+      : null) ||
+    (read.chapters ? "chapters" : read.pages ? "pages" : "percentage");
+  trackReadInitialValues.value = {
+    type: inferredType,
+    max: progressTotal(read, inferredType),
+    current: read.current_progress ?? "",
+  };
+  trackRead.value = true;
+}
+
+function updateProgressType(type) {
+  const read = reads.value.find((item) => item.id === activeRead.value);
+  if (!read) return;
+
+  trackForm.value?.setFieldValue("max", progressTotal(read, type));
+}
+
 function saveFinishedRead(form) {
   if (!form.valid) {
     return;
@@ -91,7 +123,61 @@ function saveFinishedRead(form) {
         life: 3000,
       });
     },
-    (error) => {
+    () => {
+      toast.add({
+        severity: "error",
+        message: t("general.generic_error"),
+        life: 3000,
+      });
+    },
+  );
+}
+
+function saveTrackRead(form) {
+  if (!form.valid) {
+    return;
+  }
+  const read = reads.value.find((r) => r.id === activeRead.value);
+  if (!read) return;
+
+  const current = Number(form.values.current);
+  const max = Number(form.values.max);
+
+  if (
+    !Number.isInteger(current) ||
+    (form.values.type !== "percentage" && !Number.isInteger(max))
+  ) {
+    toast.add({
+      severity: "error",
+      message: t("general.invalid_number"),
+      life: 3000,
+    });
+    return;
+  }
+
+  const updateData = {
+    progress_type: form.values.type,
+    current_progress: current,
+  };
+  if (form.values.type === "chapters") {
+    updateData.chapters = max;
+  } else if (form.values.type === "pages") {
+    updateData.pages = max;
+  }
+
+  API.put(`reads/${activeRead.value}`, {
+    read: updateData,
+  }).then(
+    () => {
+      trackRead.value = false;
+      loadCurrentlyReading();
+      toast.add({
+        severity: "success",
+        message: t("read.save_success"),
+        life: 3000,
+      });
+    },
+    () => {
       toast.add({
         severity: "error",
         message: t("general.generic_error"),
@@ -129,10 +215,32 @@ function loadCurrentlyReading() {
   );
 }
 
-const resolver = zodResolver(
+const quoteResolver = zodResolver(
   z.object({
     quote: z.string().min(1, "Quote is required."),
   }),
+);
+
+const progressInteger = z.preprocess(
+  (value) =>
+    value === null || (typeof value === "string" && value.trim() === "")
+      ? undefined
+      : value,
+  z.coerce.number().int().nonnegative(),
+);
+
+const trackResolver = zodResolver(
+  z
+    .object({
+      type: z.enum(["chapters", "pages", "percentage"]),
+      max: progressInteger,
+      current: progressInteger,
+    })
+    .refine(
+      ({ type, max, current }) =>
+        current <= (type === "percentage" ? 100 : max),
+      { path: ["current"] },
+    ),
 );
 
 onMounted(() => {
@@ -208,16 +316,12 @@ loadCurrentlyReading();
               class="swipe-main"
             >
               <CurrentlyReading
-                :title="read.title"
-                :author="read.author"
-                :coverImageUrl="read.cover_small_url"
+                :read="read"
                 @addQuote="
                   activeRead = read.id;
                   addQuote = true;
                 "
-                @editRead="
-                  router.push({ name: 'editRead', params: { id: read.id } })
-                "
+                @trackRead="openTrackReadDrawer(read)"
                 @finishRead="openFinishReadDrawer(read)"
                 @showRead="
                   router.push({ name: 'showRead', params: { id: read.id } })
@@ -256,12 +360,54 @@ loadCurrentlyReading();
     <ILDrawer v-model="addQuote" :title="t('quotes.add')">
       <template #body>
         <Form
-          :resolver="resolver"
+          :resolver="quoteResolver"
           class="quote-drawer-form"
           @submit="saveQuote"
         >
           <ILTextArea name="quote" :label="t('quotes.quote')" />
           <ILTextButton :text="t('quotes.save')" type="submit" />
+        </Form>
+      </template>
+    </ILDrawer>
+
+    <ILDrawer v-model="trackRead" :title="t('home.track_read')">
+      <template #body>
+        <Form
+          ref="trackForm"
+          :resolver="trackResolver"
+          class="track-drawer-form"
+          v-slot="$form"
+          @submit="saveTrackRead"
+          :initialValues="trackReadInitialValues"
+        >
+          <div class="select-type">
+            <ILSelectButton
+              name="type"
+              :options="[
+                { id: 'chapters', label: t('read.chapters') },
+                { id: 'pages', label: t('read.pages') },
+                { id: 'percentage', label: t('read.percentage') },
+              ]"
+              optionLabel="label"
+              optionValue="id"
+              @update:model-value="updateProgressType"
+            />
+          </div>
+
+          <ILTextInput
+            v-show="$form.type?.value !== 'percentage'"
+            name="max"
+            :label="t('read.total')"
+            type="number"
+          />
+
+          <ILTextInput
+            name="current"
+            :label="t('read.current')"
+            type="number"
+          />
+
+          <ILTextButton :text="t('home.track_progress')" type="submit" />
         </Form>
       </template>
     </ILDrawer>
@@ -419,10 +565,16 @@ loadCurrentlyReading();
   }
 }
 
-.quote-drawer-form {
+.quote-drawer-form,
+.track-drawer-form {
   display: flex;
   flex-direction: column;
   gap: var(--gap-3);
+
+  .select-type {
+    display: flex;
+    justify-content: center;
+  }
 }
 
 .finish-read-form {

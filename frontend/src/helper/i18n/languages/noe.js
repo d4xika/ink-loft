@@ -7,6 +7,7 @@ export const noe = {
     validation_error: "Validierungsfehla",
     validation_error_detail: "Schau da deine Eingabn nuamoi au.",
     generic_error: "Irgendwos is schief gonga.",
+    invalid_number: "Gib bitte a gscheide Zoih ei.",
   },
   authentication: {
     title: "Grias di Lesa!",
@@ -31,7 +32,9 @@ export const noe = {
     have_read: "Glesn",
     graveyard: "Friedhof",
     finish_read: "beendn",
-    edit_read: "beoaweitn",
+    track: "foatschrid",
+    track_read: "Lesefoatschrid",
+    track_progress: "Foatschrid speichan",
   },
   quotes: {
     quotes: "Zitate",
@@ -57,6 +60,9 @@ export const noe = {
     chapters: "Kapitl",
     words: "Wöater",
     pages: "Seitn",
+    percentage: "Prozent",
+    total: "Gsamt",
+    current: "Aktuell",
     pairing: "Paal",
     notes: "Notizn",
     link: "Valinkung",
