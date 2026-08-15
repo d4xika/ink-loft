@@ -4,16 +4,27 @@ import { en } from "./languages/en.js";
 import { noe } from "./languages/noe.js";
 import { sue } from "./languages/sue.js";
 
+const messages = {
+  en: en,
+  de: de,
+  noe: noe,
+  sue: sue,
+};
+
+function storedLocale() {
+  try {
+    const language = JSON.parse(localStorage.getItem("user"))?.language;
+    return Object.hasOwn(messages, language) ? language : "en";
+  } catch {
+    return "en";
+  }
+}
+
 export const i18n = createI18n({
   legacy: false,
-  locale: "en",
+  locale: storedLocale(),
   fallbackLocale: "en",
-  messages: {
-    en: en,
-    de: de,
-    noe: noe,
-    sue: sue,
-  },
+  messages,
   numberFormats: {
     en: {
       decimal: {
@@ -49,6 +60,12 @@ export const i18n = createI18n({
     },
   },
 });
+
+export function setLocale(language) {
+  if (Object.hasOwn(messages, language)) {
+    i18n.global.locale.value = language;
+  }
+}
 
 export const languages = [
   {
