@@ -2,6 +2,7 @@
 import { zodResolver } from "@primevue/forms/resolvers/zod";
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
+import { useRoute } from "vue-router";
 import { z } from "zod";
 import Header from "./_components/Header.vue";
 import API from "@/helper/api.js";
@@ -9,6 +10,9 @@ import { useToast } from "primevue/usetoast";
 
 const { t } = useI18n();
 const toast = useToast();
+const route = useRoute();
+const friendUsername = route.params.username || null;
+const readonly = Boolean(friendUsername);
 const addQuoteDrawer = ref(false);
 const editQuoteDrawer = ref(false);
 const quotes = ref({ loading: true });
@@ -53,7 +57,9 @@ function saveQuote(event) {
 }
 
 function loadQuotes() {
-  API.get("quotes").then(
+  API.get("quotes", {
+    params: { username: friendUsername || undefined },
+  }).then(
     (response) => {
       quotes.value = response.data;
     },
@@ -68,10 +74,11 @@ function loadQuotes() {
 }
 
 function loadDailyQuote(refresh = false) {
-  let params = {};
+  let params = { username: friendUsername || undefined };
   if (refresh) {
     params = {
       refresh: true,
+      username: friendUsername || undefined,
     };
   }
   API.get("quotes/daily_quote", { params: params }).then(
@@ -157,20 +164,24 @@ loadDailyQuote();
 
 <template>
   <div class="quotes-view-container">
-    <Header />
+    <Header :friendUsername="friendUsername" />
     <div class="quotes-view">
       <ILQuotes
         :quote="dailyQuote?.content"
         :source="`${dailyQuote?.read?.title || 'Ink Loft'}${dailyQuote?.read?.author ? `, ${dailyQuote?.read?.author}` : ''}`"
-        :editEnabled="!!dailyQuote?.content"
-        :refreshEnabled="!!dailyQuote?.content"
+        :editEnabled="!readonly && !!dailyQuote?.content"
+        :refreshEnabled="!readonly && !!dailyQuote?.content"
         @edit="openEditQuote(dailyQuote)"
         @refresh="loadDailyQuote(true)"
       />
 
       <ILDivider />
       <div class="more-quotes">
-        <ILAddItem :text="t('quotes.add')" @click="addQuoteDrawer = true" />
+        <ILAddItem
+          v-if="!readonly"
+          :text="t('quotes.add')"
+          @click="addQuoteDrawer = true"
+        />
 
         <div v-if="quotes.loading" v-for="index in 3" :key="index">
           <Skeleton height="80px" />
@@ -180,13 +191,18 @@ loadDailyQuote();
           <ILQuoteSmall
             :quote="quote.content"
             :source="`${quote.read.title}, ${quote.read.author}`"
+            :readonly="readonly"
             @delete="deleteQuote(quote)"
             @edit="openEditQuote(quote)"
           />
         </div>
       </div>
     </div>
-    <ILDrawer v-model="addQuoteDrawer" :title="t('quotes.add')">
+    <ILDrawer
+      v-if="!readonly"
+      v-model="addQuoteDrawer"
+      :title="t('quotes.add')"
+    >
       <template #body>
         <Form
           :resolver="resolver"
@@ -203,7 +219,11 @@ loadDailyQuote();
         </Form>
       </template>
     </ILDrawer>
-    <ILDrawer v-model="editQuoteDrawer" :title="t('quotes.edit')">
+    <ILDrawer
+      v-if="!readonly"
+      v-model="editQuoteDrawer"
+      :title="t('quotes.edit')"
+    >
       <template #body>
         <Form
           :initialValues="addInitialValues"

@@ -12,6 +12,7 @@ import router from "@/router/router.js";
 const { t, n } = useI18n();
 const route = useRoute();
 const toast = useToast();
+const friendUsername = route.query.friend || null;
 
 const read = ref({});
 const isLoaded = ref(false);
@@ -19,7 +20,9 @@ const spotifyPlayerUrl = computed(() => spotifyEmbedUrl(read.value.song));
 const songLinkUrl = computed(() => externalSongUrl(read.value.song));
 
 function getReadData() {
-  API.get(`reads/${route.params.id}`).then(
+  API.get(`reads/${route.params.id}`, {
+    params: { username: friendUsername || undefined },
+  }).then(
     (response) => {
       read.value = response.data;
       isLoaded.value = true;
@@ -40,7 +43,7 @@ getReadData();
 <template>
   <div class="read-show-view">
     <Header
-      editButtonEnabled
+      :editButtonEnabled="!friendUsername"
       @edit="router.push({ name: 'editRead', params: { id: read.id } })"
     />
     <div class="main-container">

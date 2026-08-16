@@ -7,6 +7,10 @@ const props = defineProps({
     type: Object,
     required: true,
   },
+  readonly: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const { t } = useI18n();
@@ -57,7 +61,7 @@ const progress = computed(() => {
         <div>
           <ILProgressBar :value="progress" v-if="progress" />
         </div>
-        <div class="btn-container">
+        <div v-if="!props.readonly" class="btn-container">
           <div class="quote-btn-container">
             <ILIconButton
               image="/images/drawings/quill.png"

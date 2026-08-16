@@ -17,6 +17,14 @@ class Api::ApplicationController < ActionController::Base
     render json: { error: "Not authorized" }, status: :unauthorized unless current_user
   end
 
+  def readable_user(username)
+    return current_user if username.blank?
+
+    user = User.find_by(username: username)
+    friendship = Friendship.between(current_user, user) if user
+    user if friendship&.accepted?
+  end
+
   def csrf_token
     render json: { csrf_token: form_authenticity_token }
   end

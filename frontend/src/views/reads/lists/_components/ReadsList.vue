@@ -10,7 +10,12 @@ const props = defineProps({
   sortBy: {
     type: String,
     default: "date",
-    validator: (value) => ["title", "author", "pairing", "date"].includes(value),
+    validator: (value) =>
+      ["title", "author", "pairing", "date"].includes(value),
+  },
+  friendUsername: {
+    type: String,
+    default: null,
   },
 });
 
@@ -20,8 +25,12 @@ const sortedReads = computed(() => {
 
   return [...props.reads].sort((left, right) => {
     if (props.sortBy === "date") {
-      const leftDate = new Date(left.start_date || left.created_at || 0).getTime();
-      const rightDate = new Date(right.start_date || right.created_at || 0).getTime();
+      const leftDate = new Date(
+        left.start_date || left.created_at || 0,
+      ).getTime();
+      const rightDate = new Date(
+        right.start_date || right.created_at || 0,
+      ).getTime();
       return rightDate - leftDate;
     }
 
@@ -52,7 +61,15 @@ const sortedReads = computed(() => {
           <ILReadCover
             :loading="props.reads.loading"
             :cover="read.cover_small_url ?? undefined"
-            @click="router.push({ name: 'showRead', params: { id: read.id } })"
+            @click="
+              router.push({
+                name: 'showRead',
+                params: { id: read.id },
+                query: props.friendUsername
+                  ? { friend: props.friendUsername }
+                  : {},
+              })
+            "
           />
           <p>{{ read.title }}</p>
         </div>
@@ -94,5 +111,4 @@ const sortedReads = computed(() => {
     }
   }
 }
-
 </style>

@@ -18,6 +18,10 @@ const props = defineProps({
     default: "primary",
     validator: (value) => ["primary", "red", "transparent"].includes(value),
   },
+  disabled: {
+    type: Boolean,
+    default: false,
+  },
 });
 </script>
 
@@ -25,6 +29,7 @@ const props = defineProps({
   <Button
     :class="`variant-${props.variant} color-${props.color}`"
     :type="props.type"
+    :disabled="props.disabled"
   >
     {{ props.text }}
   </Button>
