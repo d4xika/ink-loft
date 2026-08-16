@@ -28,6 +28,14 @@ const props = defineProps({
     validator: (value) =>
       ["title", "author", "pairing", "date"].includes(value),
   },
+  readonly: {
+    type: Boolean,
+    default: false,
+  },
+  friendUsername: {
+    type: String,
+    default: null,
+  },
 });
 const emit = defineEmits(["toggle-search", "search", "sort"]);
 
@@ -68,7 +76,16 @@ function selectSort(value) {
     <ILIconButton
       icon="pi-chevron-left"
       variant="square"
-      @click="router.push({ name: 'home' })"
+      @click="
+        router.push(
+          props.friendUsername
+            ? {
+                name: 'friendHome',
+                params: { username: props.friendUsername },
+              }
+            : { name: 'home' },
+        )
+      "
     />
 
     <div class="content-image-container">
@@ -83,6 +100,7 @@ function selectSort(value) {
         <h1>{{ props.title }}</h1>
         <div class="action-buttons">
           <ILIconButton
+            v-if="!props.readonly"
             icon="pi-plus"
             variant="square"
             color="brown"

@@ -1,16 +1,18 @@
 class Api::ReadsController < Api::ApplicationController
   before_action :authenticate_user!
+  before_action :set_read_user, only: [ :index, :show, :currently_reading ]
+
   def show
-    @read = current_user.reads.find(params[:id])
+    @read = @read_user.reads.find(params[:id])
     @quotes = @read.quotes.order(created_at: :desc).select(:id, :content)
     return render json: @read.as_json.merge(quotes: @quotes), status: :ok
   end
 
   def index
     if params[:reading_status] && Read.reading_statuses.keys.include?(params[:reading_status])
-      @reads = current_user.reads.where(reading_status: params[:reading_status]).order(start_date: :desc, updated_at: :desc)
+      @reads = @read_user.reads.where(reading_status: params[:reading_status]).order(start_date: :desc, updated_at: :desc)
     else
-      @reads = current_user.reads
+      @reads = @read_user.reads
     end
 
     if params[:search].present?
@@ -57,12 +59,17 @@ class Api::ReadsController < Api::ApplicationController
   end
 
   def currently_reading
-    @reads = current_user.reads.where(reading_status: :currently_reading).order(updated_at: :desc)
+    @reads = @read_user.reads.where(reading_status: :currently_reading).order(updated_at: :desc)
 
     return render json: @reads, status: :ok
   end
 
   private
+
+  def set_read_user
+    @read_user = readable_user(params[:username])
+    render json: { error: "User not found or not a friend" }, status: :not_found unless @read_user
+  end
 
   def read_params
     read_params = params[:read]

@@ -26,5 +26,11 @@ Rails.application.routes.draw do
         get :daily_quote
         end
     end
+
+    resources :friendships, only: [ :index, :create, :destroy ] do
+      member do
+        put :accept
+      end
+    end
   end
 end

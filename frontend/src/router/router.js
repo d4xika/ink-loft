@@ -16,6 +16,16 @@ const routes = [
     component: () => import("@/views/home/HomeView.vue"),
   },
   {
+    path: "/friends/:username",
+    name: "friendHome",
+    component: () => import("@/views/home/HomeView.vue"),
+  },
+  {
+    path: "/friends/:username/quotes",
+    name: "friendQuotes",
+    component: () => import("@/views/quotes/QuotesView.vue"),
+  },
+  {
     path: "/reads",
     children: [
       {

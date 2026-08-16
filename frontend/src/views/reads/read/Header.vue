@@ -25,6 +25,7 @@ const emit = defineEmits(["edit"]);
       @click="router.go(-1)"
     />
     <ILIconButton
+      v-if="props.saveButtonEnabled || props.editButtonEnabled"
       :icon="props.saveButtonEnabled ? 'pi-save' : 'pi-pen-to-square'"
       variant="square"
       :type="props.saveButtonEnabled ? 'submit' : 'button'"

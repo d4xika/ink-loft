@@ -1,9 +1,9 @@
 <script setup>
 import { zodResolver } from "@primevue/forms/resolvers/zod";
 import { useToast } from "primevue/usetoast";
-import { ref, onMounted, nextTick } from "vue";
+import { computed, ref, onMounted, nextTick } from "vue";
 import { useI18n } from "vue-i18n";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { z } from "zod";
 import CurrentlyReading from "./_components/CurrentlyReading.vue";
 import Header from "./_components/Header.vue";
@@ -12,6 +12,12 @@ import API from "@/helper/api.js";
 const { t } = useI18n();
 const toast = useToast();
 const router = useRouter();
+const route = useRoute();
+const friendUsername = computed(() => route.params.username || null);
+const isFriendView = computed(() => Boolean(friendUsername.value));
+const friendQuery = computed(() =>
+  isFriendView.value ? { friend: friendUsername.value } : {},
+);
 const swipeContainer = ref(null);
 const addQuote = ref(false);
 const trackRead = ref(false);
@@ -188,7 +194,9 @@ function saveTrackRead(form) {
 }
 
 function loadDailyQuote() {
-  API.get("quotes/daily_quote").then(
+  API.get("quotes/daily_quote", {
+    params: { username: friendUsername.value || undefined },
+  }).then(
     (response) => {
       dailyQuote.value = response.data;
     },
@@ -197,8 +205,20 @@ function loadDailyQuote() {
 }
 
 function loadCurrentlyReading() {
-  API.get("reads/currently_reading").then(
+  API.get("reads/currently_reading", {
+    params: { username: friendUsername.value || undefined },
+  }).then(
     (response) => {
+      if (!Array.isArray(response.data)) {
+        reads.value = [];
+        toast.add({
+          severity: "error",
+          message: t("read.load_error"),
+          life: 3000,
+        });
+        return;
+      }
+
       reads.value = response.data;
       nextTick(() => {
         if (swipeContainer.value && firstRead.value) {
@@ -256,9 +276,21 @@ loadCurrentlyReading();
 
 <template>
   <div class="home-view-container">
-    <Header />
+    <Header :friend-username="friendUsername" />
     <div class="content-container">
-      <div @click="router.push({ name: 'quotes' })">
+      <div
+        class="clickable-quote"
+        @click="
+          router.push(
+            isFriendView
+              ? {
+                  name: 'friendQuotes',
+                  params: { username: friendUsername },
+                }
+              : { name: 'quotes' },
+          )
+        "
+      >
         <ILQuotes
           :quote="dailyQuote?.content"
           :source="dailyQuote?.read?.author"
@@ -279,7 +311,7 @@ loadCurrentlyReading();
             class="swipe-wrapper"
             @scroll="handleScroll"
           >
-            <div class="swipe-actions">
+            <div v-if="!isFriendView" class="swipe-actions">
               <ILAddItem
                 text="Add New Read"
                 variant="vertical"
@@ -317,6 +349,7 @@ loadCurrentlyReading();
             >
               <CurrentlyReading
                 :read="read"
+                :readonly="isFriendView"
                 @addQuote="
                   activeRead = read.id;
                   addQuote = true;
@@ -324,7 +357,11 @@ loadCurrentlyReading();
                 @trackRead="openTrackReadDrawer(read)"
                 @finishRead="openFinishReadDrawer(read)"
                 @showRead="
-                  router.push({ name: 'showRead', params: { id: read.id } })
+                  router.push({
+                    name: 'showRead',
+                    params: { id: read.id },
+                    query: friendQuery,
+                  })
                 "
               />
             </div>
@@ -341,23 +378,23 @@ loadCurrentlyReading();
           <ILBoxButton
             :text="t('home.want_to_read')"
             image="/images/drawings/read-list.png"
-            @click="router.push({ name: 'wantToRead' })"
+            @click="router.push({ name: 'wantToRead', query: friendQuery })"
           />
           <ILBoxButton
             :text="t('home.have_read')"
             image="/images/drawings/have-read.png"
-            @click="router.push({ name: 'haveRead' })"
+            @click="router.push({ name: 'haveRead', query: friendQuery })"
           />
         </div>
         <ILBoxButton
           :text="t('home.graveyard')"
           image="/images/drawings/gravestone.png"
-          @click="router.push({ name: 'dropped' })"
+          @click="router.push({ name: 'dropped', query: friendQuery })"
         />
       </div>
     </div>
 
-    <ILDrawer v-model="addQuote" :title="t('quotes.add')">
+    <ILDrawer v-if="!isFriendView" v-model="addQuote" :title="t('quotes.add')">
       <template #body>
         <Form
           :resolver="quoteResolver"
@@ -370,7 +407,11 @@ loadCurrentlyReading();
       </template>
     </ILDrawer>
 
-    <ILDrawer v-model="trackRead" :title="t('home.track_read')">
+    <ILDrawer
+      v-if="!isFriendView"
+      v-model="trackRead"
+      :title="t('home.track_read')"
+    >
       <template #body>
         <Form
           ref="trackForm"
@@ -412,7 +453,11 @@ loadCurrentlyReading();
       </template>
     </ILDrawer>
 
-    <ILDrawer v-model="finishRead" :title="t('home.finish_read')">
+    <ILDrawer
+      v-if="!isFriendView"
+      v-model="finishRead"
+      :title="t('home.finish_read')"
+    >
       <template #body>
         <Form
           class="finish-read-form"

@@ -1,7 +1,9 @@
 class Api::QuotesController < Api::ApplicationController
   before_action :authenticate_user!
+  before_action :set_quote_user, only: [ :index, :daily_quote ]
+
   def index
-    @quotes = current_user.quotes.includes(:read)
+    @quotes = @quote_user.quotes.includes(:read)
 
     return render json: @quotes.as_json(
       include: {
@@ -13,17 +15,17 @@ class Api::QuotesController < Api::ApplicationController
   end
 
   def daily_quote
-    if current_user.quotes.empty?
+    if @quote_user.quotes.empty?
       return render json: { message: "No quotes found" }, status: :ok
     end
 
-    if params[:refresh]
+    if params[:refresh] && @quote_user == current_user
       current_user.update_column(:daily_quote_seed, current_user.daily_quote_seed + 1)
     end
 
-    rng = Random.new((Date.today.to_time.to_i + current_user.daily_quote_seed).to_i)
-    @quote = current_user.quotes.order(created_at: :desc)[rng.rand(current_user.quotes.count)]
-    @read = current_user.reads.find(@quote.read_id)
+    rng = Random.new((Date.today.to_time.to_i + @quote_user.daily_quote_seed).to_i)
+    @quote = @quote_user.quotes.order(created_at: :desc)[rng.rand(@quote_user.quotes.count)]
+    @read = @quote_user.reads.find(@quote.read_id)
 
     return render json: @quote.as_json.merge(
         read: {
@@ -59,6 +61,11 @@ class Api::QuotesController < Api::ApplicationController
   end
 
   private
+
+  def set_quote_user
+    @quote_user = readable_user(params[:username])
+    render json: { error: "User not found or not a friend" }, status: :not_found unless @quote_user
+  end
 
   def quote_params
     params.require(:quote).permit(:content, :read_id)

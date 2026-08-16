@@ -10,6 +10,10 @@ const props = defineProps({
     type: String,
     default: "Your Mom",
   },
+  readonly: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const swipeContainer = ref(null);
@@ -43,10 +47,10 @@ const escapedQuote = computed(() => {
           </div>
         </div>
       </div>
-      <i class="pi pi-angle-right swipe-indicator"></i>
+      <i v-if="!props.readonly" class="pi pi-angle-right swipe-indicator"></i>
     </div>
 
-    <div class="swipe-actions">
+    <div v-if="!props.readonly" class="swipe-actions">
       <ILIconButton
         icon="pi-pencil"
         class="edit-button"
