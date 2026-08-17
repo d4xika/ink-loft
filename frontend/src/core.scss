@@ -54,6 +54,11 @@ body {
   height: 100% !important;
 }
 
+.lottie-overlay--ghost {
+  transform: scale(0.5);
+  transform-origin: center;
+}
+
 h1 {
   font-family: "IM Fell English", serif !important;
   font-weight: normal;
