@@ -1,5 +1,5 @@
 <script setup>
-import { onBeforeUnmount, ref, useId } from "vue";
+import { onBeforeUnmount, onMounted, ref, useId } from "vue";
 
 const props = defineProps({
   color: {
@@ -39,31 +39,35 @@ const props = defineProps({
   },
 });
 
-const tooltipId = `il-tag-tooltip-${useId()}`;
 const tooltipVisible = ref(false);
-let tooltipTimeout;
+const tagWrapper = ref(null);
 
 function showTooltip() {
   if (!props.tooltip) {
     return;
   }
 
-  clearTimeout(tooltipTimeout);
   tooltipVisible.value = true;
-  tooltipTimeout = setTimeout(() => {
+}
+
+function handleDocumentClick(event) {
+  if (!tagWrapper.value?.contains(event.target)) {
     tooltipVisible.value = false;
-  }, 2000);
+  }
 }
 
 function toggleTooltip() {
   showTooltip();
 }
 
-onBeforeUnmount(() => clearTimeout(tooltipTimeout));
+onMounted(() => document.addEventListener("click", handleDocumentClick));
+onBeforeUnmount(() =>
+  document.removeEventListener("click", handleDocumentClick),
+);
 </script>
 
 <template>
-  <div class="tag-wrapper">
+  <div ref="tagWrapper" class="tag-wrapper">
     <div
       :class="`color-${props.color} size-${props.size}`"
       class="tag"
@@ -198,11 +202,11 @@ onBeforeUnmount(() => clearTimeout(tooltipTimeout));
     bottom: calc(100% + var(--gap-2));
     left: 50%;
     padding: var(--gap-2) var(--gap-3);
-    border-radius: var(--border-radius-2);
+    border-radius: var(--border-radius-2) var(--border-radius-2)
+      var(--border-radius-2) 0;
     background-color: var(--color-2);
     color: var(--text-color-1-light);
     font-size: var(--font-size-2);
-    transform: translateX(-50%);
     transition: 400ms ease-in-out;
     visibility: hidden;
     opacity: 0;
