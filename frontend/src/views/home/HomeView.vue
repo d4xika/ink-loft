@@ -36,6 +36,7 @@ const {
   isPlaying: showAnimation,
   play: playAnimation,
 } = useLottieAnimation();
+const animationType = ref(null);
 
 const reads = ref({ loading: true });
 
@@ -130,8 +131,10 @@ function saveFinishedRead(form) {
       finishRead.value = false;
       loadCurrentlyReading();
       if (form.values.reading_status === 2) {
+        animationType.value = "confetti";
         playAnimation("/animations/Confetti.json");
       } else if (form.values.reading_status === 3) {
+        animationType.value = "ghost";
         playAnimation("/animations/Ghost.json");
       }
       toast.add({
@@ -290,7 +293,10 @@ loadCurrentlyReading();
     <div
       v-if="showAnimation"
       ref="animationContainer"
-      class="lottie-overlay"
+      :class="[
+        'lottie-overlay',
+        { 'lottie-overlay--ghost': animationType === 'ghost' },
+      ]"
     ></div>
     <Header :friend-username="friendUsername" />
     <div class="content-container">
