@@ -102,24 +102,28 @@ getReadData();
               icon="pi-bookmark"
               :text="n(read.chapters, 'decimal')"
               color="brown-1"
+              :tooltip="t('read.chapters')"
             />
             <ILTag
               v-if="read.pages"
               icon="pi-file"
               :text="n(read.pages, 'decimal')"
               color="brown-2"
+              :tooltip="t('read.pages')"
             />
             <ILTag
               v-if="read.words"
               icon="pi-language"
               :text="n(read.words, 'decimal')"
               color="brown-3"
+              :tooltip="t('read.words')"
             />
             <ILTag
               v-if="read.platform"
               icon="pi-bookmark-fill"
               :text="read.platform"
               color="brown-4"
+              :tooltip="t('read.platform')"
             />
           </div>
 
@@ -132,6 +136,7 @@ getReadData();
               :text="read.pairing"
               icon="pi-heart"
               color="red"
+              :tooltip="t('read.pairing')"
             />
 
             <div class="notes-container" v-if="read.notes">

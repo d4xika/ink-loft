@@ -1,4 +1,6 @@
 <script setup>
+import { onBeforeUnmount, ref, useId } from "vue";
+
 const props = defineProps({
   color: {
     type: String,
@@ -31,116 +33,179 @@ const props = defineProps({
     default: "small",
     validator: (value) => ["small", "big"].includes(value),
   },
+  tooltip: {
+    type: String,
+    default: undefined,
+  },
 });
+
+const tooltipId = `il-tag-tooltip-${useId()}`;
+const tooltipVisible = ref(false);
+let tooltipTimeout;
+
+function showTooltip() {
+  if (!props.tooltip) {
+    return;
+  }
+
+  clearTimeout(tooltipTimeout);
+  tooltipVisible.value = true;
+  tooltipTimeout = setTimeout(() => {
+    tooltipVisible.value = false;
+  }, 2000);
+}
+
+function toggleTooltip() {
+  showTooltip();
+}
+
+onBeforeUnmount(() => clearTimeout(tooltipTimeout));
 </script>
 
 <template>
-  <div :class="`color-${props.color} size-${props.size}`" class="tag">
-    <div v-if="props.image || props.icon" class="icon-container">
-      <img
-        v-if="props.image"
-        :src="props.image"
-        class="tag-image"
-        alt="tag icon"
-      />
-      <i v-else-if="props.icon" :class="`pi ${props.icon}`" class="icon"></i>
+  <div class="tag-wrapper">
+    <div
+      :class="`color-${props.color} size-${props.size}`"
+      class="tag"
+      @click="toggleTooltip"
+    >
+      <div v-if="props.image || props.icon" class="icon-container">
+        <img
+          v-if="props.image"
+          :src="props.image"
+          class="tag-image"
+          alt="tag icon"
+        />
+        <i v-else-if="props.icon" :class="`pi ${props.icon}`" class="icon"></i>
+      </div>
+      <p class="text">{{ props.text }}</p>
     </div>
-    <p class="text">{{ props.text }}</p>
+    <div
+      v-if="props.tooltip"
+      class="tooltip"
+      :class="{ visible: tooltipVisible }"
+    >
+      {{ props.tooltip }}
+    </div>
   </div>
 </template>
 
 <style scoped>
-.tag {
-  display: flex;
-  align-items: center;
-  overflow: hidden;
-  word-break: break-word;
-  color: var(--text-color);
+.tag-wrapper {
+  position: relative;
 
-  &.color-green {
-    background-color: var(--color-3);
-  }
+  .tag {
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    word-break: break-word;
+    color: var(--text-color);
 
-  &.color-red {
-    background-color: var(--color-1);
-  }
+    & + .tooltip.visible {
+      visibility: visible;
+      opacity: 0.9;
+    }
 
-  &.color-white {
-    background-color: var(--text-color-1-light);
-    color: var(--color-0);
-  }
+    &.color-green {
+      background-color: var(--color-3);
+    }
 
-  &.color-brown-1 {
-    background-color: var(--color-7);
-  }
+    &.color-red {
+      background-color: var(--color-1);
+    }
 
-  &.color-brown-2 {
-    background-color: var(--color-4);
-  }
+    &.color-white {
+      background-color: var(--text-color-1-light);
+      color: var(--color-0);
+    }
 
-  &.color-brown-3 {
-    background-color: var(--color-5);
-  }
+    &.color-brown-1 {
+      background-color: var(--color-7);
+    }
 
-  &.color-brown-4 {
-    background-color: var(--color-6);
-  }
+    &.color-brown-2 {
+      background-color: var(--color-4);
+    }
 
-  &.size-small {
-    gap: var(--gap-2);
-    padding: var(--gap-1) calc(var(--gap-1) + var(--gap-2));
-    border-radius: var(--border-radius-2);
+    &.color-brown-3 {
+      background-color: var(--color-5);
+    }
 
-    .icon-container {
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    &.color-brown-4 {
+      background-color: var(--color-6);
+    }
 
-      .icon {
+    &.size-small {
+      gap: var(--gap-2);
+      padding: var(--gap-1) calc(var(--gap-1) + var(--gap-2));
+      border-radius: var(--border-radius-2);
+
+      .icon-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .icon {
+          font-size: var(--font-size-2);
+          margin-top: 1px;
+        }
+
+        .tag-image {
+          height: 20px;
+        }
+      }
+
+      .text {
+        margin: 0;
+        padding-top: 1px;
         font-size: var(--font-size-2);
-        margin-top: 1px;
-      }
-
-      .tag-image {
-        height: 20px;
       }
     }
 
-    .text {
-      margin: 0;
-      padding-top: 1px;
-      font-size: var(--font-size-2);
-    }
-  }
-
-  &.size-big {
-    gap: var(--gap-3);
-    padding: var(--gap-1) calc(var(--gap-1));
-    width: 100%;
-    border-radius: var(--border-radius-1);
-
-    .icon-container {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background-color: color-mix(in srgb, black 45%, var(--color-3));
-      padding: var(--gap-2);
+    &.size-big {
+      gap: var(--gap-3);
+      padding: var(--gap-1) calc(var(--gap-1));
+      width: 100%;
       border-radius: var(--border-radius-1);
 
-      .icon {
-        font-size: var(--font-size-3);
+      .icon-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: color-mix(in srgb, black 45%, var(--color-3));
+        padding: var(--gap-2);
+        border-radius: var(--border-radius-1);
+
+        .icon {
+          font-size: var(--font-size-3);
+        }
+
+        .tag-image {
+          height: 30px;
+        }
       }
 
-      .tag-image {
-        height: 30px;
+      .text {
+        margin: 0;
+        padding-top: 3px;
+        font-size: var(--font-size-4);
       }
     }
+  }
 
-    .text {
-      margin: 0;
-      padding-top: 3px;
-      font-size: var(--font-size-4);
-    }
+  .tooltip {
+    position: absolute;
+    z-index: 1;
+    bottom: calc(100% + var(--gap-2));
+    left: 50%;
+    padding: var(--gap-2) var(--gap-3);
+    border-radius: var(--border-radius-2);
+    background-color: var(--color-2);
+    color: var(--text-color-1-light);
+    font-size: var(--font-size-2);
+    transform: translateX(-50%);
+    visibility: hidden;
+    opacity: 0;
   }
 }
 </style>
