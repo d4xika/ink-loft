@@ -12,6 +12,10 @@ const props = defineProps({
     type: String,
     default: "text",
   },
+  autocomplete: {
+    type: String,
+    default: undefined,
+  },
 });
 
 const model = defineModel({
@@ -26,6 +30,7 @@ const model = defineModel({
       v-if="props.type === 'password'"
       v-model="model"
       :name="props.name"
+      :autocomplete="props.autocomplete"
       toggleMask
       :feedback="false"
     />
@@ -34,6 +39,7 @@ const model = defineModel({
       v-model="model"
       :name="props.name"
       :type="props.type"
+      :autocomplete="props.autocomplete"
     />
     <label>{{ props.label }}</label>
   </FloatLabel>
