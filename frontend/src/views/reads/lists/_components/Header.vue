@@ -28,6 +28,11 @@ const props = defineProps({
     validator: (value) =>
       ["title", "author", "pairing", "date"].includes(value),
   },
+  sortDirection: {
+    type: String,
+    default: "desc",
+    validator: (value) => ["asc", "desc"].includes(value),
+  },
   readonly: {
     type: Boolean,
     default: false,
@@ -44,6 +49,7 @@ const { t } = useI18n();
 const searchTerm = ref("");
 const sortOpen = ref(false);
 const selectedSort = ref(props.sortBy);
+const selectedSortDirection = ref(props.sortDirection);
 let searchTimeout;
 
 watch(searchTerm, () => {
@@ -65,9 +71,24 @@ watch(
 onBeforeUnmount(() => clearTimeout(searchTimeout));
 
 function selectSort(value) {
-  selectedSort.value = value;
-  emit("sort", value);
-  sortOpen.value = false;
+  if (selectedSort.value === value) {
+    selectedSortDirection.value =
+      selectedSortDirection.value === "asc" ? "desc" : "asc";
+  } else {
+    selectedSort.value = value;
+    selectedSortDirection.value = "asc";
+  }
+
+  emit("sort", {
+    sortBy: selectedSort.value,
+    sortDirection: selectedSortDirection.value,
+  });
+}
+
+function sortButtonText(value, label) {
+  if (selectedSort.value !== value) return label;
+
+  return `${label} ${selectedSortDirection.value === "asc" ? "↑" : "↓"}`;
 }
 </script>
 
@@ -124,36 +145,36 @@ function selectSort(value) {
               variant="square"
               @click="emit('toggle-search')"
             />
-            <div v-if="props.searchOpen" class="search-form">
-              <ILTextInput
-                v-model="searchTerm"
-                :label="t('read.title_or_author')"
-                name="search"
-              />
-            </div>
           </div>
+        </div>
+        <div v-if="props.searchOpen" class="search-form">
+          <ILTextInput
+            v-model="searchTerm"
+            :label="t('read.title_or_author')"
+            name="search"
+          />
         </div>
         <div v-if="sortOpen" class="sort-menu">
           <ILTextButton
-            :text="t('read.title')"
+            :text="sortButtonText('title', t('read.title'))"
             variant="fit-content"
             :color="selectedSort === 'title' ? 'primary' : 'transparent'"
             @click="selectSort('title')"
           />
           <ILTextButton
-            :text="t('read.author')"
+            :text="sortButtonText('author', t('read.author'))"
             variant="fit-content"
             :color="selectedSort === 'author' ? 'primary' : 'transparent'"
             @click="selectSort('author')"
           />
           <ILTextButton
-            :text="t('read.pairing')"
+            :text="sortButtonText('pairing', t('read.pairing'))"
             variant="fit-content"
             :color="selectedSort === 'pairing' ? 'primary' : 'transparent'"
             @click="selectSort('pairing')"
           />
           <ILTextButton
-            :text="t('read.start_date')"
+            :text="sortButtonText('date', t('read.start_date'))"
             variant="fit-content"
             :color="selectedSort === 'date' ? 'primary' : 'transparent'"
             @click="selectSort('date')"
@@ -214,20 +235,13 @@ function selectSort(value) {
   }
 
   .search-form {
-    width: min(220px, 45vw);
+    width: 90%;
   }
 
   .sort-menu {
     display: flex;
     flex-wrap: wrap;
     gap: var(--gap-1);
-    padding-top: var(--gap-1);
-  }
-}
-
-@media (max-width: 600px) {
-  .header-container .search-form {
-    width: min(180px, 42vw);
   }
 }
 </style>

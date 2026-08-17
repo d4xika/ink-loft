@@ -13,6 +13,11 @@ const props = defineProps({
     validator: (value) =>
       ["title", "author", "pairing", "date"].includes(value),
   },
+  sortDirection: {
+    type: String,
+    default: "desc",
+    validator: (value) => ["asc", "desc"].includes(value),
+  },
   friendUsername: {
     type: String,
     default: null,
@@ -23,6 +28,8 @@ const router = useRouter();
 const sortedReads = computed(() => {
   if (!Array.isArray(props.reads)) return [];
 
+  const direction = props.sortDirection === "asc" ? 1 : -1;
+
   return [...props.reads].sort((left, right) => {
     if (props.sortBy === "date") {
       const leftDate = new Date(
@@ -31,10 +38,10 @@ const sortedReads = computed(() => {
       const rightDate = new Date(
         right.start_date || right.created_at || 0,
       ).getTime();
-      return rightDate - leftDate;
+      return (leftDate - rightDate) * direction;
     }
 
-    return String(left[props.sortBy] || "").localeCompare(
+    return direction * String(left[props.sortBy] || "").localeCompare(
       String(right[props.sortBy] || ""),
       undefined,
       { sensitivity: "base" },

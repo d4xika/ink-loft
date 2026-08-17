@@ -14,6 +14,12 @@ const friendUsername = route.query.friend || null;
 const reads = ref({ loading: true });
 const showSearch = ref(false);
 const sortBy = ref("date");
+const sortDirection = ref("desc");
+
+function updateSort({ sortBy: nextSortBy, sortDirection: nextDirection }) {
+  sortBy.value = nextSortBy;
+  sortDirection.value = nextDirection;
+}
 
 function getReads(filters = {}) {
   reads.value = { loading: true };
@@ -53,15 +59,17 @@ getReads();
       readingStatus="dropped"
       :searchOpen="showSearch"
       :sortBy="sortBy"
+      :sortDirection="sortDirection"
       :readonly="Boolean(friendUsername)"
       :friendUsername="friendUsername"
       @toggle-search="toggleSearch"
       @search="getReads"
-      @sort="sortBy = $event"
+      @sort="updateSort"
     />
     <ReadsList
       :reads="reads"
       :sortBy="sortBy"
+      :sortDirection="sortDirection"
       :friendUsername="friendUsername"
     />
   </div>
