@@ -168,7 +168,7 @@ loadDailyQuote();
     <div class="quotes-view">
       <ILQuotes
         :quote="dailyQuote?.content"
-        :source="`${dailyQuote?.read?.title || 'Ink Loft'}${dailyQuote?.read?.author ? `, ${dailyQuote?.read?.author}` : ''}`"
+        :source="`${dailyQuote?.read?.title || 'Your Mom'}${dailyQuote?.read?.author ? `, ${dailyQuote?.read?.author}` : ''}`"
         :editEnabled="!readonly && !!dailyQuote?.content"
         :refreshEnabled="!readonly && !!dailyQuote?.content"
         @edit="openEditQuote(dailyQuote)"
