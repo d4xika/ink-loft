@@ -85,6 +85,16 @@ export const sue = {
     },
   },
   profile: {
+    account: "Konto",
+    account_security_note: "Für Änderungen bruchsch dis aktuells Passwort.",
+    current_password: "Aktuells Passwort",
+    new_password: "Neus Passwort",
+    save_account: "Konto speichere",
+    account_required_fields:
+      "Benutzernome, E-Mail und aktuells Passwort sind nötig.",
+    password_mismatch: "Die neuen Passwörter stimmet net überein.",
+    current_password_error: "Des aktuells Passwort isch falsch.",
+    account_update_success: "Kontodate erfolgreich aktualisiert.",
     language: "Sproch",
     update_success: "Profil erfolgreich aktualisiert.",
     update_error: "Profil hot net aktualisiert werdn kennen.",

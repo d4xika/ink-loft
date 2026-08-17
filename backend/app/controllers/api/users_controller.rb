@@ -65,6 +65,16 @@ class Api::UsersController < Api::ApplicationController
   def update_profile
     user = current_user
 
+    if account_update_params.present?
+      unless params[:current_password].present? && user.authenticate(params[:current_password])
+        return render json: { error: "Current password is incorrect" }, status: :forbidden
+      end
+
+      account_params = account_update_params
+
+      user.assign_attributes(account_params)
+    end
+
     if params[:delete_avatar] == "true"
       user.avatar.purge
     elsif params[:avatar].present?
@@ -80,15 +90,37 @@ class Api::UsersController < Api::ApplicationController
     end
 
     if user.save
+      if account_update_params["password"].present?
+        user.auth_keys.destroy_all
+        auth_key = user.generate_auth_key
+        cookies.signed[:auth_token] = {
+          value: auth_key.key,
+          httponly: true,
+          expires: 1.month.from_now,
+          same_site: :lax,
+          secure: Rails.env.production?
+        }
+      end
+
       return render json: {
-        user: render_user(user)
+        user: render_user(user),
+        csrf_token: form_authenticity_token
       }, status: :ok
     else
       return render json: { errors: user.errors.full_messages }, status: :unprocessable_entity
     end
+  rescue ActiveRecord::RecordNotUnique
+    render json: { error: "Username or email already exists" }, status: :conflict
   end
 
   private
+
+  def account_update_params
+    params.permit(:username, :email, :password)
+         .to_h
+         .compact
+         .reject { |key, value| key == "password" && value.blank? }
+  end
 
   def render_user(user)
     base_url = Rails.env.production? ? "https://ink-loft.d4xika.com" : "http://127.0.0.1:3000"
@@ -98,6 +130,7 @@ class Api::UsersController < Api::ApplicationController
 
     return {
       username: user.username,
+      email: user.email,
       avatar_url: { small: avatar_url_small, medium: avatar_url_medium, large: avatar_url_large },
       language: user.language
     }
