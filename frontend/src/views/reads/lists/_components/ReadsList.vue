@@ -1,22 +1,10 @@
 <script setup>
-import { computed } from "vue";
 import { useRouter } from "vue-router";
 
 const props = defineProps({
   reads: {
     type: Object,
     required: true,
-  },
-  sortBy: {
-    type: String,
-    default: "date",
-    validator: (value) =>
-      ["title", "author", "pairing", "date"].includes(value),
-  },
-  sortDirection: {
-    type: String,
-    default: "desc",
-    validator: (value) => ["asc", "desc"].includes(value),
   },
   friendUsername: {
     type: String,
@@ -25,29 +13,6 @@ const props = defineProps({
 });
 
 const router = useRouter();
-const sortedReads = computed(() => {
-  if (!Array.isArray(props.reads)) return [];
-
-  const direction = props.sortDirection === "asc" ? 1 : -1;
-
-  return [...props.reads].sort((left, right) => {
-    if (props.sortBy === "date") {
-      const leftDate = new Date(
-        left.start_date || left.created_at || 0,
-      ).getTime();
-      const rightDate = new Date(
-        right.start_date || right.created_at || 0,
-      ).getTime();
-      return (leftDate - rightDate) * direction;
-    }
-
-    return direction * String(left[props.sortBy] || "").localeCompare(
-      String(right[props.sortBy] || ""),
-      undefined,
-      { sensitivity: "base" },
-    );
-  });
-});
 </script>
 
 <template>
@@ -63,7 +28,7 @@ const sortedReads = computed(() => {
     </template>
 
     <template v-else>
-      <div v-for="read in sortedReads" :key="read.id">
+      <div v-for="read in props.reads" :key="read.id">
         <div class="read-container">
           <ILReadCover
             :loading="props.reads.loading"

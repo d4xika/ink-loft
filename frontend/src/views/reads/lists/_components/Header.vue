@@ -82,6 +82,7 @@ function selectSort(value) {
   emit("sort", {
     sortBy: selectedSort.value,
     sortDirection: selectedSortDirection.value,
+    search: searchTerm.value.trim(),
   });
 }
 
