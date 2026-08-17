@@ -37,6 +37,7 @@ const {
   play: playAnimation,
 } = useLottieAnimation();
 const animationType = ref(null);
+const FINISH_READ_REMOVAL_DELAY = 600;
 
 const reads = ref({ loading: true });
 
@@ -129,7 +130,6 @@ function saveFinishedRead(form) {
   }).then(
     () => {
       finishRead.value = false;
-      loadCurrentlyReading();
       if (form.values.reading_status === 2) {
         animationType.value = "confetti";
         playAnimation("/animations/Confetti.json");
@@ -137,6 +137,7 @@ function saveFinishedRead(form) {
         animationType.value = "ghost";
         playAnimation("/animations/Ghost.json");
       }
+      setTimeout(loadCurrentlyReading, FINISH_READ_REMOVAL_DELAY);
       toast.add({
         severity: "success",
         message: t("read.save_success"),
