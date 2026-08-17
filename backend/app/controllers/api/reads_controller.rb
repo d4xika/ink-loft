@@ -10,7 +10,7 @@ class Api::ReadsController < Api::ApplicationController
 
   def index
     if params[:reading_status] && Read.reading_statuses.keys.include?(params[:reading_status])
-      @reads = @read_user.reads.where(reading_status: params[:reading_status]).order(start_date: :desc, updated_at: :desc)
+      @reads = @read_user.reads.where(reading_status: params[:reading_status])
     else
       @reads = @read_user.reads
     end
@@ -19,6 +19,8 @@ class Api::ReadsController < Api::ApplicationController
       search = ActiveRecord::Base.sanitize_sql_like(params[:search].to_s.strip)
       @reads = @reads.where("title ILIKE :search OR author ILIKE :search", search: "%#{search}%")
     end
+
+    @reads = apply_sort(@reads)
 
     return render json: @reads, status: :ok
   end
@@ -91,5 +93,24 @@ class Api::ReadsController < Api::ApplicationController
                                    :words, :pages, :start_date, :end_date, :rating, :recommended,
                                    :notes, :link, :song, :reading_status, :current_progress, :progress_type)
     end
+  end
+
+  def apply_sort(reads)
+    sort_by = params[:sort_by].presence_in(%w[title author pairing date]) || "date"
+    direction = params[:sort_direction].to_s.in?(%w[asc desc]) ? params[:sort_direction] : "desc"
+    column = sort_by == "date" ? "start_date" : sort_by
+
+    missing_value = if sort_by == "date"
+                      "#{column} IS NULL"
+                    else
+                      "NULLIF(TRIM(#{column}), '') IS NULL"
+                    end
+    sorted_value = sort_by == "date" ? column : "LOWER(#{column})"
+
+    reads.order(
+      Arel.sql("CASE WHEN #{missing_value} THEN 1 ELSE 0 END ASC"),
+      Arel.sql("#{sorted_value} #{direction.upcase} NULLS LAST"),
+      Arel.sql("LOWER(title) ASC"),
+    )
   end
 end

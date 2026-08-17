@@ -16,9 +16,10 @@ const showSearch = ref(false);
 const sortBy = ref("date");
 const sortDirection = ref("desc");
 
-function updateSort({ sortBy: nextSortBy, sortDirection: nextDirection }) {
+function updateSort({ sortBy: nextSortBy, sortDirection: nextDirection, search }) {
   sortBy.value = nextSortBy;
   sortDirection.value = nextDirection;
+  getReads({ search });
 }
 
 function getReads(filters = {}) {
@@ -27,6 +28,8 @@ function getReads(filters = {}) {
     params: {
       reading_status: "want_to_read",
       username: friendUsername || undefined,
+      sort_by: sortBy.value,
+      sort_direction: sortDirection.value,
       ...filters,
     },
   }).then(
@@ -68,8 +71,6 @@ getReads();
     />
     <ReadsList
       :reads="reads"
-      :sortBy="sortBy"
-      :sortDirection="sortDirection"
       :friendUsername="friendUsername"
     />
   </div>
