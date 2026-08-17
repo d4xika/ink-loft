@@ -78,14 +78,14 @@ onBeforeUnmount(() => clearTimeout(tooltipTimeout));
         />
         <i v-else-if="props.icon" :class="`pi ${props.icon}`" class="icon"></i>
       </div>
-      <p class="text">{{ props.text }}</p>
+      <p class="text font-fix">{{ props.text }}</p>
     </div>
     <div
       v-if="props.tooltip"
       class="tooltip"
       :class="{ visible: tooltipVisible }"
     >
-      {{ props.tooltip }}
+      <p class="font-fix">{{ props.tooltip }}</p>
     </div>
   </div>
 </template>
@@ -157,7 +157,6 @@ onBeforeUnmount(() => clearTimeout(tooltipTimeout));
 
       .text {
         margin: 0;
-        padding-top: 1px;
         font-size: var(--font-size-2);
       }
     }
