@@ -8,6 +8,7 @@ import { z } from "zod";
 import CurrentlyReading from "./_components/CurrentlyReading.vue";
 import Header from "./_components/Header.vue";
 import API from "@/helper/api.js";
+import { useLottieAnimation } from "@/composables/useLottieAnimation.js";
 
 const { t } = useI18n();
 const toast = useToast();
@@ -30,6 +31,11 @@ const finishRead = ref(false);
 const finishedReadInitialValues = ref({});
 const trackReadInitialValues = ref({});
 const trackForm = ref(null);
+const {
+  container: animationContainer,
+  isPlaying: showAnimation,
+  play: playAnimation,
+} = useLottieAnimation();
 
 const reads = ref({ loading: true });
 
@@ -123,6 +129,11 @@ function saveFinishedRead(form) {
     () => {
       finishRead.value = false;
       loadCurrentlyReading();
+      if (form.values.reading_status === 2) {
+        playAnimation("/animations/Confetti.json");
+      } else if (form.values.reading_status === 3) {
+        playAnimation("/animations/Ghost.json");
+      }
       toast.add({
         severity: "success",
         message: t("read.save_success"),
@@ -276,6 +287,11 @@ loadCurrentlyReading();
 
 <template>
   <div class="home-view-container">
+    <div
+      v-if="showAnimation"
+      ref="animationContainer"
+      class="lottie-overlay"
+    ></div>
     <Header :friend-username="friendUsername" />
     <div class="content-container">
       <div

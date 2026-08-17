@@ -42,6 +42,18 @@ body {
   margin: 0;
 }
 
+.lottie-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  pointer-events: none;
+}
+
+.lottie-overlay canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
 h1 {
   font-family: "IM Fell English", serif !important;
   font-weight: normal;
