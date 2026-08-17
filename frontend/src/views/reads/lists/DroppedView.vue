@@ -5,6 +5,7 @@ import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
 import Header from "./_components/Header.vue";
 import ReadsList from "./_components/ReadsList.vue";
+import { getSavedReadSort, saveReadSort } from "./readSort.js";
 import API from "@/helper/api.js";
 
 const { t } = useI18n();
@@ -13,12 +14,14 @@ const route = useRoute();
 const friendUsername = route.query.friend || null;
 const reads = ref({ loading: true });
 const showSearch = ref(false);
-const sortBy = ref("date");
-const sortDirection = ref("desc");
+const savedSort = getSavedReadSort("dropped");
+const sortBy = ref(savedSort.sortBy);
+const sortDirection = ref(savedSort.sortDirection);
 
 function updateSort({ sortBy: nextSortBy, sortDirection: nextDirection, search }) {
   sortBy.value = nextSortBy;
   sortDirection.value = nextDirection;
+  saveReadSort("dropped", nextSortBy, nextDirection);
   getReads({ search });
 }
 
