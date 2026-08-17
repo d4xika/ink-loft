@@ -204,6 +204,7 @@ onBeforeUnmount(() => clearTimeout(tooltipTimeout));
     color: var(--text-color-1-light);
     font-size: var(--font-size-2);
     transform: translateX(-50%);
+    transition: 400ms ease-in-out;
     visibility: hidden;
     opacity: 0;
   }

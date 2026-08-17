@@ -59,7 +59,11 @@ const progress = computed(() => {
           <p class="author">~ {{ props.read.author }}</p>
         </div>
         <div>
-          <ILProgressBar :value="progress" v-if="progress" />
+          <ILProgressBar
+            v-if="progress"
+            class="tracking-progress-bar"
+            :value="progress"
+          />
         </div>
         <div v-if="!props.readonly" class="btn-container">
           <div class="quote-btn-container">
@@ -84,6 +88,10 @@ const progress = computed(() => {
 <style scoped>
 .currently-reading-container {
   gap: var(--gap-3);
+
+  :deep(.tracking-progress-bar .p-progressbar-value) {
+    transition: width 700ms ease-in-out;
+  }
 
   .content-container {
     display: flex;
