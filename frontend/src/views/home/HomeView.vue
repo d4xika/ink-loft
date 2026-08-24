@@ -7,8 +7,8 @@ import { useRoute, useRouter } from "vue-router";
 import { z } from "zod";
 import CurrentlyReading from "./_components/CurrentlyReading.vue";
 import Header from "./_components/Header.vue";
-import API from "@/helper/api.js";
 import { useLottieAnimation } from "@/composables/useLottieAnimation.js";
+import API from "@/helper/api.js";
 
 const { t } = useI18n();
 const toast = useToast();
@@ -106,6 +106,11 @@ function openTrackReadDrawer(read) {
     current: read.current_progress ?? "",
   };
   trackRead.value = true;
+}
+
+function showConfetti() {
+  animationType.value = "confetti";
+  playAnimation("/animations/Confetti.json");
 }
 
 function updateProgressType(type) {
@@ -299,17 +304,14 @@ loadCurrentlyReading();
         { 'lottie-overlay--ghost': animationType === 'ghost' },
       ]"
     ></div>
-    <Header :friend-username="friendUsername" />
+    <Header :friendUsername="friendUsername" @confetti="showConfetti" />
     <div class="content-container">
       <div
         class="clickable-quote"
         @click="
           router.push(
             isFriendView
-              ? {
-                  name: 'friendQuotes',
-                  params: { username: friendUsername },
-                }
+              ? { name: 'friendQuotes', params: { username: friendUsername } }
               : { name: 'quotes' },
           )
         "
@@ -360,8 +362,8 @@ loadCurrentlyReading();
             </div>
 
             <div
-              v-else
               v-for="(read, index) in reads"
+              v-else
               :key="read.id"
               :ref="
                 (el) => {
@@ -373,13 +375,13 @@ loadCurrentlyReading();
               <CurrentlyReading
                 :read="read"
                 :readonly="isFriendView"
-                @addQuote="
+                @add-quote="
                   activeRead = read.id;
                   addQuote = true;
                 "
-                @trackRead="openTrackReadDrawer(read)"
-                @finishRead="openFinishReadDrawer(read)"
-                @showRead="
+                @track-read="openTrackReadDrawer(read)"
+                @finish-read="openFinishReadDrawer(read)"
+                @show-read="
                   router.push({
                     name: 'showRead',
                     params: { id: read.id },
@@ -438,11 +440,11 @@ loadCurrentlyReading();
       <template #body>
         <Form
           ref="trackForm"
+          v-slot="$form"
           :resolver="trackResolver"
           class="track-drawer-form"
-          v-slot="$form"
-          @submit="saveTrackRead"
           :initialValues="trackReadInitialValues"
+          @submit="saveTrackRead"
         >
           <div class="select-type">
             <ILSelectButton
@@ -484,8 +486,8 @@ loadCurrentlyReading();
       <template #body>
         <Form
           class="finish-read-form"
-          @submit="saveFinishedRead"
           :initialValues="finishedReadInitialValues"
+          @submit="saveFinishedRead"
         >
           <ILSelectButton
             name="reading_status"
@@ -497,14 +499,14 @@ loadCurrentlyReading();
             optionValue="id"
           />
           <ILRating
-            name="rating"
             v-model="finishedReadInitialValues.rating"
+            name="rating"
             :editEnabled="true"
           />
           <ILToggleSwitch
+            v-model="finishedReadInitialValues.recommended"
             name="recommended"
             :label="t('read.would_recommend')"
-            v-model="finishedReadInitialValues.recommended"
             class="toggle-switch"
           />
           <ILTextButton text="Submit" type="submit" />

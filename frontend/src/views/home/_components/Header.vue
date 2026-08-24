@@ -1,4 +1,5 @@
 <script setup>
+import { onBeforeUnmount } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
@@ -8,31 +9,56 @@ const props = defineProps({
     default: null,
   },
 });
+const emit = defineEmits(["confetti"]);
 
 const router = useRouter();
 const { t } = useI18n();
 
 const user = JSON.parse(localStorage.getItem("user"));
+let usernameClickCount = 0;
+let usernameClickTimer;
+
+function handleUsernameClick() {
+  usernameClickCount += 1;
+  clearTimeout(usernameClickTimer);
+
+  if (usernameClickCount === 3) {
+    usernameClickCount = 0;
+    emit("confetti");
+    return;
+  }
+
+  usernameClickTimer = setTimeout(() => {
+    usernameClickCount = 0;
+  }, 1000);
+}
+
+onBeforeUnmount(() => clearTimeout(usernameClickTimer));
 </script>
 
 <template>
   <div class="header-container">
-    <ILIconButton
-      v-if="props.friendUsername"
-      icon="pi-chevron-left"
-      variant="square"
-      @click="router.push({ name: 'profile' })"
-    />
-    <ILAvatar
-      v-else
-      :image="user.avatar_url.small"
-      class="avatar-image-filter"
-      @click="router.push({ name: 'profile' })"
-    />
-    <h1 v-if="props.friendUsername">
+    <div v-if="props.friendUsername">
+      <ILIconButton
+        icon="pi-chevron-left"
+        variant="square"
+        @click="router.push({ name: 'profile' })"
+      />
       {{ t("home.readings_of", { username: props.friendUsername }) }}
-    </h1>
-    <h1 v-else>Cozy day, {{ user.username }}!</h1>
+    </div>
+    <div v-else class="left-container">
+      <ILAvatar
+        :image="user.avatar_url.small"
+        class="avatar-image-filter"
+        @click="router.push({ name: 'profile' })"
+      />
+      <div class="text-container">
+        <h4 class="welcome">Cozy day,</h4>
+        <button class="username" type="button" @click="handleUsernameClick">
+          {{ user.username }}
+        </button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -41,5 +67,36 @@ const user = JSON.parse(localStorage.getItem("user"));
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  .left-container {
+    display: flex;
+    gap: var(--gap-2);
+
+    .text-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+
+      .welcome {
+        margin: 0;
+        color: var(--text-color-1-light);
+        font-size: var(--font-size-2);
+        font-weight: lighter;
+      }
+
+      .username {
+        margin: 0;
+        padding: 0;
+        border: 0;
+        background: none;
+        color: inherit;
+        cursor: pointer;
+        font-family: inherit;
+        font-size: var(--font-size-6);
+        font-weight: bold;
+        text-align: left;
+      }
+    }
+  }
 }
 </style>
