@@ -17,6 +17,7 @@ const router = useRouter();
 const user = ref(JSON.parse(localStorage.getItem("user")));
 const avatarUrl = ref(user.value?.avatar_url.medium || null);
 const avatarLoading = ref(false);
+const addFriendDrawer = ref(false);
 const friendUsername = ref("");
 const friends = ref([]);
 const incomingRequests = ref([]);
@@ -220,6 +221,7 @@ async function addFriend() {
   try {
     await API.post("/friendships", { username });
     friendUsername.value = "";
+    addFriendDrawer.value = false;
     await loadFriendships();
     toast.add({
       severity: "success",
@@ -329,21 +331,15 @@ onMounted(loadFriendships);
     </Form>
 
     <section class="friends-section">
-      <h2>{{ t("profile.friends") }}</h2>
-
-      <form class="add-friend-form" @submit.prevent="addFriend">
-        <ILTextInput
-          v-model="friendUsername"
-          name="friend_username"
-          :label="t('profile.friend_username')"
+      <div class="friends-section-header">
+        <h2>{{ t("profile.friends") }}</h2>
+        <ILIconButton
+          icon="pi-user-plus"
+          variant="square"
+          :aria-label="t('profile.add_friend')"
+          @click="addFriendDrawer = true"
         />
-        <ILTextButton
-          :text="t('profile.add_friend')"
-          type="submit"
-          variant="fit-content"
-          :disabled="requestLoading"
-        />
-      </form>
+      </div>
 
       <div v-if="incomingRequests.length" class="friend-list-container">
         <h3>{{ t("profile.friend_requests") }}</h3>
@@ -474,6 +470,24 @@ onMounted(loadFriendships);
         />
       </Form>
     </section>
+
+    <ILDrawer v-model="addFriendDrawer" :title="t('profile.add_friend')">
+      <template #body>
+        <form class="add-friend-form" @submit.prevent="addFriend">
+          <ILTextInput
+            v-model="friendUsername"
+            name="friend_username"
+            :label="t('profile.friend_username')"
+          />
+          <ILTextButton
+            :text="t('profile.add_friend')"
+            type="submit"
+            variant="fit-content"
+            :disabled="requestLoading || !friendUsername.trim()"
+          />
+        </form>
+      </template>
+    </ILDrawer>
   </div>
 </template>
 
@@ -510,10 +524,14 @@ onMounted(loadFriendships);
     color: var(--text-color-1-light);
   }
 
-  .add-friend-form {
+  .friends-section-header {
     display: flex;
     align-items: center;
-    gap: var(--gap-2);
+    justify-content: space-between;
+
+    h2 {
+      margin: 0;
+    }
   }
 
   .friend-list-container,
@@ -546,12 +564,18 @@ onMounted(loadFriendships);
   .accept-button {
     margin-left: auto;
   }
+}
 
-  @media (max-width: 480px) {
-    .add-friend-form {
-      align-items: stretch;
-      flex-direction: column;
-    }
+.add-friend-form {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-2);
+}
+
+@media (max-width: 480px) {
+  .add-friend-form {
+    align-items: stretch;
+    flex-direction: column;
   }
 }
 </style>
