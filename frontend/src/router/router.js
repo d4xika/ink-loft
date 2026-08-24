@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
+import { nextTick } from "vue";
 import API from "@/helper/api.js";
 import { setLocale } from "@/helper/i18n/i18n.js";
 
@@ -77,7 +78,7 @@ const router = createRouter({
   routes,
   scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {
-      return savedPosition;
+      return nextTick().then(() => savedPosition);
     } else {
       return { top: 0 };
     }

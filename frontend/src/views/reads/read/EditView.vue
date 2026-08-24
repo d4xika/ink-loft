@@ -77,7 +77,7 @@ function saveRead(data) {
     },
   }).then(
     (response) => {
-      router.push({ name: "home" });
+      router.go(-1);
       toast.add({
         severity: "success",
         message: t("read.save_success"),

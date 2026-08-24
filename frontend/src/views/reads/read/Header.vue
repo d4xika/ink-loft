@@ -22,7 +22,7 @@ const emit = defineEmits(["edit"]);
     <ILIconButton
       icon="pi-chevron-left"
       variant="square"
-      @click="router.go(-1)"
+      @click="router.back()"
     />
     <ILIconButton
       v-if="props.saveButtonEnabled || props.editButtonEnabled"
