@@ -1,11 +1,14 @@
 <script setup>
+import { zodResolver } from "@primevue/forms/resolvers/zod";
 import { useToast } from "primevue/usetoast";
 import { onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
+import { z } from "zod";
 import Header from "./_components/Header.vue";
 import API from "@/helper/api.js";
 import { languages } from "@/helper/i18n/i18n.js";
+import { REGEX } from "@/helper/regex.js";
 
 const { locale } = useI18n();
 const { t } = useI18n();
@@ -24,14 +27,37 @@ const accountLoading = ref(false);
 const accountForm = ref({
   username: user.value?.username || "",
   email: user.value?.email || "",
-  currentPassword: "",
-  newPassword: "",
-  confirmPassword: "",
+  current_password: "",
+  new_password: "",
+  confirm_new_password: "",
 });
 
 const selectedLanguage = ref(
   languages.find((language) => language.value === user.value?.language) ||
     languages[0],
+);
+
+const accountResolver = zodResolver(
+  z
+    .object({
+      username: z.string().trim().min(1, "Username is required."),
+      email: z
+        .string()
+        .trim()
+        .min(1, "Email is required.")
+        .regex(REGEX.email, "Invalid email format."),
+      current_password: z.string().min(1, "Current password is required."),
+      new_password: z.string(),
+      confirm_new_password: z.string(),
+    })
+    .refine(
+      (data) =>
+        !data.new_password || data.new_password === data.confirm_new_password,
+      {
+        message: "The new passwords do not match.",
+        path: ["confirm_new_password"],
+      },
+    ),
 );
 
 async function updateProfilePicture(file) {
@@ -116,21 +142,11 @@ function updateLanguage(event) {
   );
 }
 
-async function updateAccount() {
-  const form = accountForm.value;
-  if (!form.username.trim() || !form.email.trim() || !form.currentPassword) {
+async function updateAccount(data) {
+  if (!data.valid) {
     toast.add({
       severity: "error",
-      message: t("profile.account_required_fields"),
-      life: 3000,
-    });
-    return;
-  }
-
-  if (form.newPassword && form.newPassword !== form.confirmPassword) {
-    toast.add({
-      severity: "error",
-      message: t("profile.password_mismatch"),
+      message: t("general.validation_error_detail"),
       life: 3000,
     });
     return;
@@ -139,10 +155,10 @@ async function updateAccount() {
   accountLoading.value = true;
   try {
     const response = await API.put("/users/update_profile", {
-      username: form.username.trim(),
-      email: form.email.trim(),
-      current_password: form.currentPassword,
-      ...(form.newPassword ? { password: form.newPassword } : {}),
+      username: data.values.username,
+      email: data.values.email,
+      current_password: data.values.current_password,
+      password: data.values.new_password,
     });
 
     user.value = response.data.user;
@@ -150,9 +166,12 @@ async function updateAccount() {
     if (response.data.csrf_token) {
       API.defaults.headers.common["X-CSRF-Token"] = response.data.csrf_token;
     }
-    form.currentPassword = "";
-    form.newPassword = "";
-    form.confirmPassword = "";
+    accountForm.value.username = response.data.user.username;
+    accountForm.value.email = response.data.user.email;
+    accountForm.value.current_password = "";
+    accountForm.value.new_password = "";
+    accountForm.value.confirm_new_password = "";
+    data.reset();
     toast.add({
       severity: "success",
       message: t("profile.account_update_success"),
@@ -413,36 +432,36 @@ onMounted(loadFriendships);
     <section class="account-section">
       <h2>{{ t("profile.account") }}</h2>
       <p class="security-note">{{ t("profile.account_security_note") }}</p>
-      <form class="account-form" @submit.prevent="updateAccount">
+      <Form
+        :initialValues="accountForm"
+        :resolver="accountResolver"
+        class="account-form"
+        @submit="updateAccount"
+      >
         <ILTextInput
-          v-model="accountForm.username"
-          name="account_username"
+          name="username"
           :label="t('authentication.username')"
           autocomplete="username"
         />
         <ILTextInput
-          v-model="accountForm.email"
-          name="account_email"
+          name="email"
           :label="t('authentication.email')"
           type="email"
           autocomplete="email"
         />
         <ILTextInput
-          v-model="accountForm.currentPassword"
           name="current_password"
           :label="t('profile.current_password')"
           type="password"
           autocomplete="current-password"
         />
         <ILTextInput
-          v-model="accountForm.newPassword"
           name="new_password"
           :label="t('profile.new_password')"
           type="password"
           autocomplete="new-password"
         />
         <ILTextInput
-          v-model="accountForm.confirmPassword"
           name="confirm_new_password"
           :label="t('authentication.confirm_password')"
           type="password"
@@ -453,7 +472,7 @@ onMounted(loadFriendships);
           type="submit"
           :disabled="accountLoading"
         />
-      </form>
+      </Form>
     </section>
   </div>
 </template>
