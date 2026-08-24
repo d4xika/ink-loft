@@ -36,6 +36,9 @@ export const en = {
     track: "Track",
     track_read: "Track read",
     track_progress: "Track progress",
+    updates: "Updates",
+    read_updates: "Read",
+    close_updates: "Close",
   },
   quotes: {
     quotes: "Quotes",

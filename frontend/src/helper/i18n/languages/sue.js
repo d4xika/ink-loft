@@ -36,6 +36,9 @@ export const sue = {
     track: "fortschritt",
     track_read: "Lesefortschritt",
     track_progress: "Fortschritt speichern",
+    updates: "Neuigkeitn",
+    read_updates: "Glesen",
+    close_updates: "Schliaßn",
   },
   quotes: {
     quotes: "Zitate",

@@ -36,6 +36,9 @@ export const noe = {
     track: "foatschrid",
     track_read: "Lesefoatschrid",
     track_progress: "Foatschrid speichan",
+    updates: "Neichkeitn",
+    read_updates: "Glesn",
+    close_updates: "Schliaßn",
   },
   quotes: {
     quotes: "Zitate",

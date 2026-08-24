@@ -7,6 +7,7 @@ import { useRoute, useRouter } from "vue-router";
 import { z } from "zod";
 import CurrentlyReading from "./_components/CurrentlyReading.vue";
 import Header from "./_components/Header.vue";
+import Updates, { UPDATE_VERSION } from "./_components/Updates.vue";
 import { useLottieAnimation } from "@/composables/useLottieAnimation.js";
 import API from "@/helper/api.js";
 
@@ -19,6 +20,12 @@ const isFriendView = computed(() => Boolean(friendUsername.value));
 const friendQuery = computed(() =>
   isFriendView.value ? { friend: friendUsername.value } : {},
 );
+const currentUser = JSON.parse(localStorage.getItem("user"));
+const updateStorageKey = `ink-loft:updates-read:${currentUser?.username || "anonymous"}`;
+const showUpdateButton = ref(
+  localStorage.getItem(updateStorageKey) !== UPDATE_VERSION,
+);
+const updatesDrawer = ref(false);
 const swipeContainer = ref(null);
 const addQuote = ref(false);
 const trackRead = ref(false);
@@ -111,6 +118,12 @@ function openTrackReadDrawer(read) {
 function showConfetti() {
   animationType.value = "confetti";
   playAnimation("/animations/Confetti.json");
+}
+
+function markUpdatesRead() {
+  localStorage.setItem(updateStorageKey, UPDATE_VERSION);
+  showUpdateButton.value = false;
+  updatesDrawer.value = false;
 }
 
 function updateProgressType(type) {
@@ -304,7 +317,12 @@ loadCurrentlyReading();
         { 'lottie-overlay--ghost': animationType === 'ghost' },
       ]"
     ></div>
-    <Header :friendUsername="friendUsername" @confetti="showConfetti" />
+    <Header
+      :friendUsername="friendUsername"
+      :showUpdates="showUpdateButton"
+      @confetti="showConfetti"
+      @open-updates="updatesDrawer = true"
+    />
     <div class="content-container">
       <div
         class="clickable-quote"
@@ -513,6 +531,25 @@ loadCurrentlyReading();
         </Form>
       </template>
     </ILDrawer>
+
+    <ILDrawer v-model="updatesDrawer" :title="t('home.updates')">
+      <template #body>
+        <Updates />
+        <div class="updates-actions">
+          <ILTextButton
+            :text="t('home.read_updates')"
+            variant="fit-content"
+            @click="markUpdatesRead"
+          />
+          <ILTextButton
+            :text="t('home.close_updates')"
+            variant="fit-content"
+            color="transparent"
+            @click="updatesDrawer = false"
+          />
+        </div>
+      </template>
+    </ILDrawer>
   </div>
 </template>
 
@@ -656,5 +693,12 @@ loadCurrentlyReading();
   .toggle-switch {
     width: 100%;
   }
+}
+
+.updates-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--gap-2);
+  margin-top: var(--gap-3);
 }
 </style>

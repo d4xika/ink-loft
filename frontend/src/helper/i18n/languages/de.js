@@ -36,6 +36,9 @@ export const de = {
     track: "Fortschritt",
     track_read: "Lesefortschritt",
     track_progress: "Fortschritt speichern",
+    updates: "Neuigkeiten",
+    read_updates: "Gelesen",
+    close_updates: "Schließen",
   },
   quotes: {
     quotes: "Zitate",
