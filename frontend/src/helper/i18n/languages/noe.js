@@ -85,6 +85,16 @@ export const noe = {
     },
   },
   profile: {
+    account: "Konto",
+    account_security_note: "Für Änderungen brauchst dei aktuelles Passwoat.",
+    current_password: "Aktuelles Passwoat",
+    new_password: "Neies Passwoat",
+    save_account: "Konto speichan",
+    account_required_fields:
+      "Benutzernaum, Mail und aktuelles Passwoat san nötig.",
+    password_mismatch: "De neien Passwörter passn ned zamm.",
+    current_password_error: "Des aktuelle Passwoat is foisch.",
+    account_update_success: "Kontodaten erfoigreich aktualisiert.",
     language: "Sproch",
     update_success: "Profil erfoigreich aktualisiert.",
     update_error: "Profil hot ned aktualisiert weadn kina.",

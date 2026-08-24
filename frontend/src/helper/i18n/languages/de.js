@@ -85,6 +85,17 @@ export const de = {
     },
   },
   profile: {
+    account: "Konto",
+    account_security_note:
+      "Für Änderungen an den Kontodaten ist dein aktuelles Passwort erforderlich.",
+    current_password: "Aktuelles Passwort",
+    new_password: "Neues Passwort",
+    save_account: "Konto speichern",
+    account_required_fields:
+      "Benutzername, E-Mail und aktuelles Passwort sind erforderlich.",
+    password_mismatch: "Die neuen Passwörter stimmen nicht überein.",
+    current_password_error: "Das aktuelle Passwort ist falsch.",
+    account_update_success: "Kontodaten erfolgreich aktualisiert.",
     language: "Sprache",
     update_success: "Profil erfolgreich aktualisiert.",
     update_error: "Profil konnte nicht aktualisiert werden.",
