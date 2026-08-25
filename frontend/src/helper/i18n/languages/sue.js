@@ -77,6 +77,8 @@ export const sue = {
     delete_confirmation:
       "Bisch du dor sicher, dass du de Lektüre löschen willsch? Olle Zitate de dorzuaghearn werdn glöscht.",
     save_success: "Lektüre erfolgreich gspeichert.",
+    cover_upload_warning:
+      "S'Coverbild hot net hochglade werdn kennen. De Lektüre is trotzdem hinzugefügt wordn.",
     delete_success: "Lektüre erfolgreich glöscht.",
     load_error: "Dotn hobn net glodn werdn kennen.",
     reading_status: {

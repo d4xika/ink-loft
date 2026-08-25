@@ -21,6 +21,7 @@ class Read < ApplicationRecord
 
     if cover.attached?
       base_url = Rails.env.production? ? "https://ink-loft.d4xika.com" : "http://127.0.0.1:3000"
+      json[:cover_signed_id] = cover.blob.signed_id
       json[:cover_url] = Rails.application.routes.url_helpers.rails_blob_url(cover, host: base_url)
       json[:cover_small_url] = Rails.application.routes.url_helpers.rails_representation_url(cover.variant(:small), host: base_url)
       json[:cover_medium_url] = Rails.application.routes.url_helpers.rails_representation_url(cover.variant(:medium), host: base_url)

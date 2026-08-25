@@ -77,6 +77,8 @@ export const noe = {
     delete_confirmation:
       "Bist da sicha, dass du de Lektüre löschn wüst? Olle Zitate dazua wean glöscht.",
     save_success: "Lektüre erfoigreich gspeichat.",
+    cover_upload_warning:
+      "S'Coverbüd hot net hochglade weadn kina. De Lektüre is trotzdem hinzuagfügt worn.",
     delete_success: "Lektüre erfoigreich glöscht.",
     load_error: "Daten hom ned gladn weadn kina.",
     reading_status: {

@@ -78,6 +78,8 @@ export const en = {
     delete_confirmation:
       "Are you sure you want to delete this read? All quotes will be lost.",
     save_success: "Read saved successfully.",
+    cover_upload_warning:
+      "The cover image could not be uploaded. The read was still added.",
     delete_success: "Read deleted successfully.",
     load_error: "Could not load data.",
     reading_status: {

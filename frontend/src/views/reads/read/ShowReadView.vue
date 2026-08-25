@@ -19,6 +19,41 @@ const isLoaded = ref(false);
 const spotifyPlayerUrl = computed(() => spotifyEmbedUrl(read.value.song));
 const songLinkUrl = computed(() => externalSongUrl(read.value.song));
 
+function addToWantToRead() {
+  if (!friendUsername || !read.value.id) return;
+
+  const readData = {
+    ...read.value,
+    reading_status: "want_to_read",
+    cover: read.value.cover_signed_id,
+  };
+  ["start_date", "end_date", "rating", "recommended", "notes"].forEach(
+    (attribute) => delete readData[attribute],
+  );
+
+  const formData = new FormData();
+  formData.append("read", JSON.stringify(readData));
+
+  API.post("reads", formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  }).then(
+    () => {
+      toast.add({
+        severity: "success",
+        message: t("read.save_success"),
+        life: 3000,
+      });
+    },
+    () => {
+      toast.add({
+        severity: "error",
+        message: t("general.generic_error"),
+        life: 3000,
+      });
+    },
+  );
+}
+
 function getReadData() {
   API.get(`reads/${route.params.id}`, {
     params: { username: friendUsername || undefined },
@@ -43,8 +78,10 @@ getReadData();
 <template>
   <div class="read-show-view">
     <Header
+      :addButtonEnabled="friendUsername != null"
       :editButtonEnabled="!friendUsername"
       @edit="router.push({ name: 'editRead', params: { id: read.id } })"
+      @add="addToWantToRead"
     />
     <div class="main-container">
       <div class="top-container">

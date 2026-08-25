@@ -77,6 +77,8 @@ export const de = {
     delete_confirmation:
       "Bist du dir sicher, dass du diese Lektüre löschen möchtest? Alle dazugehörigen Zitate werden gelöscht.",
     save_success: "Lektüre erfolgreich gespeichert.",
+    cover_upload_warning:
+      "Das Coverbild konnte nicht hochgeladen werden. Die Lektüre wurde trotzdem hinzugefügt.",
     delete_success: "Lektüre erfolgreich gelöscht.",
     load_error: "Daten konnten nicht geladen werden.",
     reading_status: {

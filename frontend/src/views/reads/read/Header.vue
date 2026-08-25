@@ -10,11 +10,15 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  addButtonEnabled: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const router = useRouter();
 
-const emit = defineEmits(["edit"]);
+const emit = defineEmits(["edit", "add"]);
 </script>
 
 <template>
@@ -23,6 +27,12 @@ const emit = defineEmits(["edit"]);
       icon="pi-chevron-left"
       variant="square"
       @click="router.back()"
+    />
+    <ILIconButton
+      v-if="props.addButtonEnabled"
+      icon="pi-plus"
+      variant="square"
+      @click="emit('add')"
     />
     <ILIconButton
       v-if="props.saveButtonEnabled || props.editButtonEnabled"

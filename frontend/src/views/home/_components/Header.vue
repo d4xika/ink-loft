@@ -70,7 +70,7 @@ onBeforeUnmount(() => clearTimeout(usernameClickTimer));
       :aria-label="t('home.updates')"
       @click="emit('open-updates')"
     >
-      <i class="pi pi-sparkles" aria-hidden="true"></i>
+      <i class="pi pi-bell" aria-hidden="true"></i>
       <span>{{ t("home.updates") }}</span>
     </Button>
   </div>
@@ -97,6 +97,7 @@ onBeforeUnmount(() => clearTimeout(usernameClickTimer));
         color: var(--text-color-1-light);
         font-size: var(--font-size-2);
         font-weight: lighter;
+        padding-top: var(--gap-1);
       }
 
       .username {
