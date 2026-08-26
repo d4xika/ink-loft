@@ -48,7 +48,6 @@ onBeforeUnmount(() => clearTimeout(usernameClickTimer));
         variant="square"
         @click="router.push({ name: 'profile' })"
       />
-      {{ t("home.readings_of", { username: props.friendUsername }) }}
     </div>
     <div v-else class="left-container">
       <ILAvatar

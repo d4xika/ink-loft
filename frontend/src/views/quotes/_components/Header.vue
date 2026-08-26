@@ -1,5 +1,4 @@
 <script setup>
-import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
 const props = defineProps({
@@ -10,7 +9,6 @@ const props = defineProps({
 });
 
 const router = useRouter();
-const { t } = useI18n();
 </script>
 
 <template>
@@ -29,9 +27,6 @@ const { t } = useI18n();
         )
       "
     />
-    <h1 v-if="props.friendUsername">
-      {{ t("quotes.quotes_of", { username: props.friendUsername }) }}
-    </h1>
   </div>
 </template>
 

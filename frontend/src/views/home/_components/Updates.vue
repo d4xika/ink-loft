@@ -1,5 +1,5 @@
 <script>
-export const UPDATE_VERSION = "2";
+export const UPDATE_VERSION = "3";
 </script>
 
 <template>
