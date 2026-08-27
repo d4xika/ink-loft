@@ -96,6 +96,7 @@ function openFinishReadDrawer(read) {
     reading_status: 2,
     rating: read.rating,
     recommended: read.recommended,
+    notes: read.notes,
   };
   finishRead.value = true;
 }
@@ -143,6 +144,7 @@ function saveFinishedRead(form) {
       reading_status: form.values.reading_status,
       rating: form.values.rating,
       recommended: form.values.recommended,
+      notes: form.values.notes,
       end_date: new Date().toJSON(),
     },
   }).then(
@@ -336,7 +338,7 @@ loadCurrentlyReading();
       >
         <ILQuotes
           :quote="dailyQuote?.content"
-          :source="dailyQuote?.read?.author"
+          :source="`${dailyQuote?.read?.title || 'Your Mom'}${dailyQuote?.read?.author ? `, ${dailyQuote?.read?.author}` : ''}`"
         />
       </div>
       <ILDivider />
@@ -526,6 +528,11 @@ loadCurrentlyReading();
             name="recommended"
             :label="t('read.would_recommend')"
             class="toggle-switch"
+          />
+          <ILTextArea
+            v-model="finishedReadInitialValues.notes"
+            name="notes"
+            :label="t('read.notes')"
           />
           <ILTextButton text="Submit" type="submit" />
         </Form>

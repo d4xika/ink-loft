@@ -18,7 +18,11 @@ const savedSort = getSavedReadSort("dropped");
 const sortBy = ref(savedSort.sortBy);
 const sortDirection = ref(savedSort.sortDirection);
 
-function updateSort({ sortBy: nextSortBy, sortDirection: nextDirection, search }) {
+function updateSort({
+  sortBy: nextSortBy,
+  sortDirection: nextDirection,
+  search,
+}) {
   sortBy.value = nextSortBy;
   sortDirection.value = nextDirection;
   saveReadSort("dropped", nextSortBy, nextDirection);
@@ -61,6 +65,7 @@ getReads();
   <div>
     <Header
       :title="t('read.reading_status.dropped')"
+      :amount="reads.length"
       image="/images/drawings/cat-books.png"
       readingStatus="dropped"
       :searchOpen="showSearch"
@@ -72,10 +77,7 @@ getReads();
       @search="getReads"
       @sort="updateSort"
     />
-    <ReadsList
-      :reads="reads"
-      :friendUsername="friendUsername"
-    />
+    <ReadsList :reads="reads" :friendUsername="friendUsername" />
   </div>
 </template>
 

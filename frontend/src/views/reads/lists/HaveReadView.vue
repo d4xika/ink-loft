@@ -18,7 +18,11 @@ const savedSort = getSavedReadSort("have-read");
 const sortBy = ref(savedSort.sortBy);
 const sortDirection = ref(savedSort.sortDirection);
 
-function updateSort({ sortBy: nextSortBy, sortDirection: nextDirection, search }) {
+function updateSort({
+  sortBy: nextSortBy,
+  sortDirection: nextDirection,
+  search,
+}) {
   sortBy.value = nextSortBy;
   sortDirection.value = nextDirection;
   saveReadSort("have-read", nextSortBy, nextDirection);
@@ -61,6 +65,7 @@ getReads();
   <div>
     <Header
       :title="t('home.have_read')"
+      :amount="reads.length"
       image="/images/drawings/dragon-moon.png"
       readingStatus="have_read"
       :searchOpen="showSearch"
@@ -72,10 +77,7 @@ getReads();
       @search="getReads"
       @sort="updateSort"
     />
-    <ReadsList
-      :reads="reads"
-      :friendUsername="friendUsername"
-    />
+    <ReadsList :reads="reads" :friendUsername="friendUsername" />
   </div>
 </template>
 

@@ -3,7 +3,7 @@ class Api::QuotesController < Api::ApplicationController
   before_action :set_quote_user, only: [ :index, :daily_quote ]
 
   def index
-    @quotes = @quote_user.quotes.includes(:read)
+    @quotes = @quote_user.quotes.includes(:read).order(created_at: :desc)
 
     return render json: @quotes.as_json(
       include: {

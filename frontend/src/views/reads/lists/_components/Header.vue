@@ -8,6 +8,10 @@ const props = defineProps({
     type: String,
     required: true,
   },
+  amount: {
+    type: Number,
+    required: true,
+  },
   image: {
     type: String,
     default: undefined,
@@ -119,7 +123,10 @@ function sortButtonText(value, label) {
       />
 
       <div class="title-plus-container">
-        <h1>{{ props.title }}</h1>
+        <div class="title-amount">
+          <h1>{{ props.title }}</h1>
+          <p class="font-fix">[{{ props.amount }}]</p>
+        </div>
         <div class="action-buttons">
           <ILIconButton
             v-if="!props.readonly"
@@ -206,6 +213,13 @@ function sortButtonText(value, label) {
       gap: var(--gap-2);
       align-items: flex-start;
       flex: 1;
+
+      .title-amount {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: var(--gap-2);
+      }
     }
 
     .action-buttons {
