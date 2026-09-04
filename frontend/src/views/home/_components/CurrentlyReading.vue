@@ -7,21 +7,11 @@ const props = defineProps({
     type: Object,
     required: true,
   },
-  readonly: {
-    type: Boolean,
-    default: false,
-  },
 });
 
 const { t } = useI18n();
 
-const emit = defineEmits([
-  "addQuote",
-  "editRead",
-  "trackRead",
-  "finishRead",
-  "showRead",
-]);
+const emit = defineEmits(["addQuote", "trackRead", "finishRead", "showRead"]);
 
 const progress = computed(() => {
   if (!props.read.progress_type || !props.read.current_progress) {
@@ -65,7 +55,7 @@ const progress = computed(() => {
             :value="progress"
           />
         </div>
-        <div v-if="!props.readonly" class="btn-container">
+        <div class="btn-container">
           <div class="quote-btn-container">
             <ILIconButton
               image="/images/drawings/quill.png"

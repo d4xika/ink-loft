@@ -28,6 +28,8 @@ export const noe = {
     register_error_conflict: "Benutzernaum oda Mail gibts scho.",
   },
   home: {
+    read_library: "Lesebibliothek",
+    quote_library: "Zitatbibliothek",
     readings_of: "Lektürn vo {username}",
     want_to_read: "Leselistn",
     have_read: "Glesn",
@@ -42,6 +44,7 @@ export const noe = {
   },
   quotes: {
     quotes: "Zitate",
+    no_quotes: "No kane Zitate hinzuagfügt.",
     quotes_of: "Zitate vo {username}",
     quote: "Zitat",
     save: "Zitat speichan",

@@ -28,6 +28,8 @@ export const sue = {
     register_error_conflict: "Benutzernome oder E-Mail gibts schun.",
   },
   home: {
+    read_library: "Lesebibliothek",
+    quote_library: "Zitatbibliothek",
     readings_of: "Lektüren von {username}",
     want_to_read: "Leseliste",
     have_read: "Glesen",
@@ -42,6 +44,7 @@ export const sue = {
   },
   quotes: {
     quotes: "Zitate",
+    no_quotes: "No koi Zitate hinzugefügt.",
     quotes_of: "Zitate von {username}",
     quote: "Zitat",
     save: "Zitat speichern",

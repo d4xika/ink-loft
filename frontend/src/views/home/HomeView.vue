@@ -17,9 +17,7 @@ const router = useRouter();
 const route = useRoute();
 const friendUsername = computed(() => route.params.username || null);
 const isFriendView = computed(() => Boolean(friendUsername.value));
-const friendQuery = computed(() =>
-  isFriendView.value ? { friend: friendUsername.value } : {},
-);
+const friendQuery = computed(() => ({ friend: friendUsername.value }));
 const currentUser = JSON.parse(localStorage.getItem("user"));
 const updateStorageKey = `ink-loft:updates-read:${currentUser?.username || "anonymous"}`;
 const showUpdateButton = ref(
@@ -31,6 +29,12 @@ const addQuote = ref(false);
 const trackRead = ref(false);
 const activeRead = ref(null);
 const dailyQuote = ref(null);
+const dailyQuoteSource = computed(
+  () =>
+    `${dailyQuote.value?.read?.title || "Your Mom"}${
+      dailyQuote.value?.read?.author ? `, ${dailyQuote.value.read.author}` : ""
+    }`,
+);
 const showIndicator = ref(false);
 const showLeftIndicator = ref(false);
 const firstRead = ref(null);
@@ -46,13 +50,28 @@ const {
 const animationType = ref(null);
 const FINISH_READ_REMOVAL_DELAY = 600;
 
-const reads = ref({ loading: true });
+const reads = ref([]);
+const readsLoading = ref(true);
 
 function progressTotal(read, type) {
   if (type === "percentage") return 100;
   if (type === "chapters") return read.chapters ?? "";
   if (type === "pages") return read.pages ?? "";
   return "";
+}
+
+function progressPercentage(read) {
+  if (
+    !read.progress_type ||
+    read.current_progress === null ||
+    read.current_progress === undefined
+  ) {
+    return null;
+  }
+
+  const total = progressTotal(read, read.progress_type);
+
+  return total ? (read.current_progress / total) * 100 : null;
 }
 
 function handleScroll() {
@@ -246,6 +265,7 @@ function loadCurrentlyReading() {
     (response) => {
       if (!Array.isArray(response.data)) {
         reads.value = [];
+        readsLoading.value = false;
         toast.add({
           severity: "error",
           message: t("read.load_error"),
@@ -255,6 +275,7 @@ function loadCurrentlyReading() {
       }
 
       reads.value = response.data;
+      readsLoading.value = false;
       nextTick(() => {
         if (swipeContainer.value && firstRead.value) {
           firstRead.value.scrollIntoView({
@@ -266,7 +287,9 @@ function loadCurrentlyReading() {
         }
       });
     },
-    () => {},
+    () => {
+      readsLoading.value = false;
+    },
   );
 }
 
@@ -321,25 +344,106 @@ loadCurrentlyReading();
     ></div>
     <Header
       :friendUsername="friendUsername"
-      :showUpdates="showUpdateButton"
+      :showUpdates="!isFriendView && showUpdateButton"
       @confetti="showConfetti"
       @open-updates="updatesDrawer = true"
     />
-    <div class="content-container">
-      <div
-        class="clickable-quote"
-        @click="
-          router.push(
-            isFriendView
-              ? { name: 'friendQuotes', params: { username: friendUsername } }
-              : { name: 'quotes' },
-          )
-        "
-      >
-        <ILQuotes
-          :quote="dailyQuote?.content"
-          :source="`${dailyQuote?.read?.title || 'Your Mom'}${dailyQuote?.read?.author ? `, ${dailyQuote?.read?.author}` : ''}`"
-        />
+    <div v-if="isFriendView" class="friend-content-container">
+      <section class="friend-section">
+        <h2 class="section-title">
+          {{ t("read.reading_status.currently_reading") }}
+        </h2>
+
+        <div v-if="readsLoading" class="friend-currently-reading">
+          <div v-for="index in 2" :key="index" class="friend-read-card">
+            <Skeleton width="100%" height="180px" />
+            <Skeleton width="80%" height="1rem" />
+          </div>
+        </div>
+
+        <div v-else-if="reads.length" class="friend-currently-reading">
+          <button
+            v-for="read in reads"
+            :key="read.id"
+            class="friend-read-card"
+            type="button"
+            @click="
+              router.push({
+                name: 'showRead',
+                params: { id: read.id },
+                query: friendQuery,
+              })
+            "
+          >
+            <ILReadCover
+              :cover="read.cover_small_url ? read.cover_small_url : undefined"
+            />
+            <span class="friend-read-title">{{ read.title }}</span>
+            <ILProgressBar
+              v-if="progressPercentage(read) !== null"
+              class="friend-progress-bar"
+              :value="progressPercentage(read)"
+            />
+          </button>
+        </div>
+
+        <div v-else class="friend-empty-state">
+          <img src="/images/drawings/kitty_on_shelf.png" alt="Kitty on shelf" />
+        </div>
+      </section>
+
+      <section class="friend-section">
+        <h2 class="section-title">
+          {{ t("home.read_library") }}
+        </h2>
+        <div class="friend-library-grid">
+          <ILBoxButton
+            :text="t('home.want_to_read')"
+            image="/images/drawings/read-list.png"
+            @click="router.push({ name: 'wantToRead', query: friendQuery })"
+          />
+          <ILBoxButton
+            :text="t('home.have_read')"
+            image="/images/drawings/have-read.png"
+            @click="router.push({ name: 'haveRead', query: friendQuery })"
+          />
+          <ILBoxButton
+            :text="t('home.graveyard')"
+            image="/images/drawings/gravestone.png"
+            @click="router.push({ name: 'dropped', query: friendQuery })"
+          />
+        </div>
+      </section>
+
+      <section class="friend-section">
+        <h2 class="section-title">
+          {{ t("home.quote_library") }}
+        </h2>
+        <button
+          class="friend-quote-card"
+          type="button"
+          @click="
+            router.push({
+              name: 'friendQuotes',
+              params: { username: friendUsername },
+            })
+          "
+        >
+          <ILQuotes
+            v-if="dailyQuote?.content"
+            :quote="dailyQuote?.content"
+            :source="dailyQuoteSource"
+          />
+          <span v-else class="friend-empty-quote">
+            {{ t("quotes.no_quotes") }}
+          </span>
+        </button>
+      </section>
+    </div>
+
+    <div v-else class="content-container">
+      <div class="clickable-quote" @click="router.push({ name: 'quotes' })">
+        <ILQuotes :quote="dailyQuote?.content" :source="dailyQuoteSource" />
       </div>
       <ILDivider />
 
@@ -356,7 +460,7 @@ loadCurrentlyReading();
             class="swipe-wrapper"
             @scroll="handleScroll"
           >
-            <div v-if="!isFriendView" class="swipe-actions">
+            <div class="swipe-actions">
               <ILAddItem
                 text="Add New Read"
                 variant="vertical"
@@ -364,14 +468,7 @@ loadCurrentlyReading();
               />
             </div>
 
-            <div v-if="reads.length <= 0" class="no-reads-image-container">
-              <img
-                src="/images/drawings/kitty_on_shelf.png"
-                alt="Kitty on shelf"
-              />
-            </div>
-
-            <div v-if="reads.loading">
+            <div v-if="readsLoading">
               <div class="skeleton-container">
                 <Skeleton width="100px" height="150px" />
                 <div class="skeleton-column">
@@ -379,6 +476,13 @@ loadCurrentlyReading();
                   <Skeleton width="120px" height="3rem" />
                 </div>
               </div>
+            </div>
+
+            <div v-else-if="!reads.length" class="no-reads-image-container">
+              <img
+                src="/images/drawings/kitty_on_shelf.png"
+                alt="Kitty on shelf"
+              />
             </div>
 
             <div
@@ -394,7 +498,6 @@ loadCurrentlyReading();
             >
               <CurrentlyReading
                 :read="read"
-                :readonly="isFriendView"
                 @add-quote="
                   activeRead = read.id;
                   addQuote = true;
@@ -405,7 +508,6 @@ loadCurrentlyReading();
                   router.push({
                     name: 'showRead',
                     params: { id: read.id },
-                    query: friendQuery,
                   })
                 "
               />
@@ -423,140 +525,134 @@ loadCurrentlyReading();
           <ILBoxButton
             :text="t('home.want_to_read')"
             image="/images/drawings/read-list.png"
-            @click="router.push({ name: 'wantToRead', query: friendQuery })"
+            @click="router.push({ name: 'wantToRead' })"
           />
           <ILBoxButton
             :text="t('home.have_read')"
             image="/images/drawings/have-read.png"
-            @click="router.push({ name: 'haveRead', query: friendQuery })"
+            @click="router.push({ name: 'haveRead' })"
           />
         </div>
         <ILBoxButton
           :text="t('home.graveyard')"
           image="/images/drawings/gravestone.png"
-          @click="router.push({ name: 'dropped', query: friendQuery })"
+          @click="router.push({ name: 'dropped' })"
         />
       </div>
     </div>
 
-    <ILDrawer v-if="!isFriendView" v-model="addQuote" :title="t('quotes.add')">
-      <template #body>
-        <Form
-          :resolver="quoteResolver"
-          class="quote-drawer-form"
-          @submit="saveQuote"
-        >
-          <ILTextArea name="quote" :label="t('quotes.quote')" />
-          <ILTextButton :text="t('quotes.save')" type="submit" />
-        </Form>
-      </template>
-    </ILDrawer>
+    <template v-if="!isFriendView">
+      <ILDrawer v-model="addQuote" :title="t('quotes.add')">
+        <template #body>
+          <Form
+            :resolver="quoteResolver"
+            class="quote-drawer-form"
+            @submit="saveQuote"
+          >
+            <ILTextArea name="quote" :label="t('quotes.quote')" />
+            <ILTextButton :text="t('quotes.save')" type="submit" />
+          </Form>
+        </template>
+      </ILDrawer>
 
-    <ILDrawer
-      v-if="!isFriendView"
-      v-model="trackRead"
-      :title="t('home.track_read')"
-    >
-      <template #body>
-        <Form
-          ref="trackForm"
-          v-slot="$form"
-          :resolver="trackResolver"
-          class="track-drawer-form"
-          :initialValues="trackReadInitialValues"
-          @submit="saveTrackRead"
-        >
-          <div class="select-type">
+      <ILDrawer v-model="trackRead" :title="t('home.track_read')">
+        <template #body>
+          <Form
+            ref="trackForm"
+            v-slot="$form"
+            :resolver="trackResolver"
+            class="track-drawer-form"
+            :initialValues="trackReadInitialValues"
+            @submit="saveTrackRead"
+          >
+            <div class="select-type">
+              <ILSelectButton
+                name="type"
+                :options="[
+                  { id: 'chapters', label: t('read.chapters') },
+                  { id: 'pages', label: t('read.pages') },
+                  { id: 'percentage', label: t('read.percentage') },
+                ]"
+                optionLabel="label"
+                optionValue="id"
+                @update:model-value="updateProgressType"
+              />
+            </div>
+
+            <ILTextInput
+              v-show="$form.type?.value !== 'percentage'"
+              name="max"
+              :label="t('read.total')"
+              type="number"
+            />
+
+            <ILTextInput
+              name="current"
+              :label="t('read.current')"
+              type="number"
+            />
+
+            <ILTextButton :text="t('home.track_progress')" type="submit" />
+          </Form>
+        </template>
+      </ILDrawer>
+
+      <ILDrawer v-model="finishRead" :title="t('home.finish_read')">
+        <template #body>
+          <Form
+            class="finish-read-form"
+            :initialValues="finishedReadInitialValues"
+            @submit="saveFinishedRead"
+          >
             <ILSelectButton
-              name="type"
-              :options="[
-                { id: 'chapters', label: t('read.chapters') },
-                { id: 'pages', label: t('read.pages') },
-                { id: 'percentage', label: t('read.percentage') },
-              ]"
+              name="reading_status"
               optionLabel="label"
+              :options="[
+                { id: 2, label: t('read.reading_status.finished') },
+                { id: 3, label: t('read.reading_status.dropped') },
+              ]"
               optionValue="id"
-              @update:model-value="updateProgressType"
+            />
+            <ILRating
+              v-model="finishedReadInitialValues.rating"
+              name="rating"
+              :editEnabled="true"
+            />
+            <ILToggleSwitch
+              v-model="finishedReadInitialValues.recommended"
+              name="recommended"
+              :label="t('read.would_recommend')"
+              class="toggle-switch"
+            />
+            <ILTextArea
+              v-model="finishedReadInitialValues.notes"
+              name="notes"
+              :label="t('read.notes')"
+            />
+            <ILTextButton text="Submit" type="submit" />
+          </Form>
+        </template>
+      </ILDrawer>
+
+      <ILDrawer v-model="updatesDrawer" :title="t('home.updates')">
+        <template #body>
+          <Updates />
+          <div class="updates-actions">
+            <ILTextButton
+              :text="t('home.read_updates')"
+              variant="fit-content"
+              @click="markUpdatesRead"
+            />
+            <ILTextButton
+              :text="t('home.close_updates')"
+              variant="fit-content"
+              color="transparent"
+              @click="updatesDrawer = false"
             />
           </div>
-
-          <ILTextInput
-            v-show="$form.type?.value !== 'percentage'"
-            name="max"
-            :label="t('read.total')"
-            type="number"
-          />
-
-          <ILTextInput
-            name="current"
-            :label="t('read.current')"
-            type="number"
-          />
-
-          <ILTextButton :text="t('home.track_progress')" type="submit" />
-        </Form>
-      </template>
-    </ILDrawer>
-
-    <ILDrawer
-      v-if="!isFriendView"
-      v-model="finishRead"
-      :title="t('home.finish_read')"
-    >
-      <template #body>
-        <Form
-          class="finish-read-form"
-          :initialValues="finishedReadInitialValues"
-          @submit="saveFinishedRead"
-        >
-          <ILSelectButton
-            name="reading_status"
-            optionLabel="label"
-            :options="[
-              { id: 2, label: t('read.reading_status.finished') },
-              { id: 3, label: t('read.reading_status.dropped') },
-            ]"
-            optionValue="id"
-          />
-          <ILRating
-            v-model="finishedReadInitialValues.rating"
-            name="rating"
-            :editEnabled="true"
-          />
-          <ILToggleSwitch
-            v-model="finishedReadInitialValues.recommended"
-            name="recommended"
-            :label="t('read.would_recommend')"
-            class="toggle-switch"
-          />
-          <ILTextArea
-            v-model="finishedReadInitialValues.notes"
-            name="notes"
-            :label="t('read.notes')"
-          />
-          <ILTextButton text="Submit" type="submit" />
-        </Form>
-      </template>
-    </ILDrawer>
-
-    <ILDrawer v-model="updatesDrawer" :title="t('home.updates')">
-      <template #body>
-        <Updates />
-        <div class="updates-actions">
-          <ILTextButton
-            :text="t('home.read_updates')"
-            variant="fit-content"
-            @click="markUpdatesRead"
-          />
-          <ILTextButton
-            :text="t('home.close_updates')"
-            variant="fit-content"
-            color="transparent"
-            @click="updatesDrawer = false"
-          />
-        </div>
-      </template>
-    </ILDrawer>
+        </template>
+      </ILDrawer>
+    </template>
   </div>
 </template>
 
@@ -565,6 +661,118 @@ loadCurrentlyReading();
   display: flex;
   flex-direction: column;
   padding: var(--gap-3);
+
+  .section-title {
+    margin: 0;
+    font-family: "IM Fell English", serif;
+    font-size: var(--font-size-6);
+    font-weight: normal;
+  }
+
+  .friend-content-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-4);
+    margin-top: var(--gap-4);
+
+    .friend-section {
+      display: flex;
+      flex-direction: column;
+      gap: var(--gap-3);
+      min-width: 0;
+    }
+
+    .friend-currently-reading {
+      display: grid;
+      grid-auto-columns: minmax(105px, 35%);
+      grid-auto-flow: column;
+      gap: var(--gap-3);
+      padding-bottom: var(--gap-1);
+      overflow-x: auto;
+      scrollbar-width: none;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    }
+
+    .friend-read-card,
+    .friend-quote-card {
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: inherit;
+      cursor: pointer;
+      font: inherit;
+      text-align: left;
+    }
+
+    .friend-read-card {
+      display: flex;
+      flex-direction: column;
+      gap: var(--gap-2);
+      min-width: 0;
+
+      :deep(.read-cover-container) {
+        width: 100%;
+      }
+
+      .friend-read-title {
+        overflow: hidden;
+        font-size: var(--font-size-2);
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .friend-progress-bar {
+        width: 100%;
+      }
+    }
+
+    .friend-empty-state {
+      height: var(--read-cover-height);
+
+      img {
+        height: 70%;
+      }
+    }
+
+    .friend-library-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--gap-2);
+
+      :deep(.box-button-container) {
+        box-sizing: border-box;
+        height: 100%;
+        padding: var(--gap-2);
+      }
+
+      :deep(.text) {
+        font-size: var(--font-size-2);
+      }
+
+      :deep(.image) {
+        max-width: 100%;
+        height: 48px;
+      }
+    }
+
+    .friend-quote-card {
+      width: 100%;
+    }
+
+    .friend-empty-quote {
+      display: block;
+      box-sizing: border-box;
+      width: 100%;
+      padding: var(--gap-4) var(--gap-3);
+      border: 1px solid var(--color-2);
+      border-radius: var(--border-radius-1);
+      color: var(--text-color-1-light);
+      text-align: center;
+    }
+  }
 
   .content-container {
     display: flex;
@@ -578,10 +786,13 @@ loadCurrentlyReading();
       gap: var(--gap-3);
 
       .section-title {
-        font-family: "IM Fell English", serif;
-        font-size: var(--font-size-6);
         padding-left: var(--gap-3);
-        margin: 0;
+      }
+
+      .box-buttons-container {
+        display: flex;
+        justify-content: center;
+        gap: var(--gap-3);
       }
 
       .swipe-container-relative {
@@ -663,17 +874,6 @@ loadCurrentlyReading();
         flex-shrink: 0;
         scroll-snap-align: center;
         width: calc(100% - 30px);
-      }
-    }
-
-    .box-container {
-      display: flex;
-      flex-direction: column;
-
-      .box-buttons-container {
-        display: flex;
-        justify-content: center;
-        gap: var(--gap-3);
       }
     }
   }

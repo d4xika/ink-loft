@@ -28,6 +28,8 @@ export const de = {
     register_error_conflict: "Benutzername oder E-Mail existiert bereits.",
   },
   home: {
+    read_library: "Lesebibliothek",
+    quote_library: "Zitatbibliothek",
     readings_of: "Lektüren von {username}",
     want_to_read: "Leseliste",
     have_read: "Gelesen",
@@ -42,6 +44,7 @@ export const de = {
   },
   quotes: {
     quotes: "Zitate",
+    no_quotes: "Noch keine Zitate hinzugefügt.",
     quotes_of: "Zitate von {username}",
     quote: "Zitat",
     save: "Zitat speichern",

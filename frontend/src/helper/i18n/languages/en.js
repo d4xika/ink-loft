@@ -29,6 +29,8 @@ export const en = {
   },
   home: {
     readings_of: "Readings of {username}",
+    read_library: "Read Library",
+    quote_library: "Quote Library",
     want_to_read: "Want to read",
     have_read: "Have read",
     graveyard: "Graveyard",

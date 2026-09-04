@@ -1,5 +1,5 @@
 <script>
-export const UPDATE_VERSION = "3";
+export const UPDATE_VERSION = "4";
 </script>
 
 <template>
@@ -12,11 +12,7 @@ export const UPDATE_VERSION = "3";
     <div class="updates-section">
       <p>We have something special for you! Checkout these updates:</p>
       <ul>
-        <li>New Update button.</li>
-        <li>Changed adding friends process.</li>
-        <li>Restyled Topbar.</li>
-        <li>Press your username three times for some magic.</li>
-        <li>Save reads from a friend to your own list.</li>
+        <li>Redesign of your friend's read corner.</li>
       </ul>
     </div>
   </div>
