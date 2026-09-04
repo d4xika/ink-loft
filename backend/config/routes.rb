@@ -11,6 +11,8 @@ Rails.application.routes.draw do
         post :register
         put :logout
         put :update_profile
+        get :updates_state
+        put :mark_updates_read
       end
     end
 

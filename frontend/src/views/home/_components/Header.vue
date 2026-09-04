@@ -1,6 +1,5 @@
 <script setup>
 import { onBeforeUnmount } from "vue";
-import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
 const props = defineProps({
@@ -8,15 +7,10 @@ const props = defineProps({
     type: String,
     default: null,
   },
-  showUpdates: {
-    type: Boolean,
-    default: false,
-  },
 });
-const emit = defineEmits(["confetti", "open-updates"]);
+const emit = defineEmits(["confetti"]);
 
 const router = useRouter();
-const { t } = useI18n();
 
 const user = JSON.parse(localStorage.getItem("user"));
 let usernameClickCount = 0;
@@ -56,22 +50,14 @@ onBeforeUnmount(() => clearTimeout(usernameClickTimer));
         @click="router.push({ name: 'profile' })"
       />
       <div class="text-container">
-        <h4 class="welcome">Cozy day,</h4>
+        <h4 class="welcome">
+          Cozy day,
+        </h4>
         <button class="username" type="button" @click="handleUsernameClick">
           {{ user.username }}
         </button>
       </div>
     </div>
-    <Button
-      v-if="props.showUpdates"
-      class="updates-button"
-      type="button"
-      :aria-label="t('home.updates')"
-      @click="emit('open-updates')"
-    >
-      <i class="pi pi-bell" aria-hidden="true"></i>
-      <span>{{ t("home.updates") }}</span>
-    </Button>
   </div>
 </template>
 
@@ -111,27 +97,6 @@ onBeforeUnmount(() => clearTimeout(usernameClickTimer));
         font-weight: bold;
         text-align: left;
       }
-    }
-  }
-
-  .updates-button {
-    flex: 0 0 auto;
-    gap: var(--gap-2);
-    padding: 9px 12px;
-    border: 1px solid var(--color-7);
-    border-radius: 999px;
-    background-color: var(--color-6);
-    box-shadow: none;
-    color: var(--text-color-1);
-    font-family: inherit;
-    font-weight: bold;
-
-    &:hover,
-    &:focus-visible {
-      border-color: var(--color-7) !important;
-      background-color: var(--color-6) !important;
-      box-shadow: none !important;
-      color: var(--text-color-1) !important;
     }
   }
 }

@@ -7,7 +7,7 @@ import { useRoute, useRouter } from "vue-router";
 import { z } from "zod";
 import CurrentlyReading from "./_components/CurrentlyReading.vue";
 import Header from "./_components/Header.vue";
-import Updates, { UPDATE_VERSION } from "./_components/Updates.vue";
+import Updates, { UPDATES } from "./_components/Updates.vue";
 import { useLottieAnimation } from "@/composables/useLottieAnimation.js";
 import API from "@/helper/api.js";
 
@@ -18,11 +18,15 @@ const route = useRoute();
 const friendUsername = computed(() => route.params.username || null);
 const isFriendView = computed(() => Boolean(friendUsername.value));
 const friendQuery = computed(() => ({ friend: friendUsername.value }));
-const currentUser = JSON.parse(localStorage.getItem("user"));
-const updateStorageKey = `ink-loft:updates-read:${currentUser?.username || "anonymous"}`;
-const showUpdateButton = ref(
-  localStorage.getItem(updateStorageKey) !== UPDATE_VERSION,
-);
+const updatesSeenCount = ref(null);
+const unreadUpdates = computed(() => {
+  if (updatesSeenCount.value === null) return [];
+
+  return UPDATES.slice(
+    0,
+    Math.max(UPDATES.length - updatesSeenCount.value, 0),
+  );
+});
 const updatesDrawer = ref(false);
 const swipeContainer = ref(null);
 const addQuote = ref(false);
@@ -140,10 +144,43 @@ function showConfetti() {
   playAnimation("/animations/Confetti.json");
 }
 
-function markUpdatesRead() {
-  localStorage.setItem(updateStorageKey, UPDATE_VERSION);
-  showUpdateButton.value = false;
-  updatesDrawer.value = false;
+async function loadUpdatesState() {
+  try {
+    const response = await API.get("users/updates_state");
+    let seenCount = response.data.updates_seen_count;
+
+    if (seenCount === null) {
+      const initialSeenCount = Math.max(UPDATES.length - 1, 0);
+      const initializeResponse = await API.put("users/mark_updates_read", {
+        updates_seen_count: initialSeenCount,
+      });
+      seenCount = initializeResponse.data.updates_seen_count;
+    }
+
+    updatesSeenCount.value = seenCount;
+  } catch {
+    toast.add({
+      severity: "error",
+      message: t("general.generic_error"),
+      life: 3000,
+    });
+  }
+}
+
+async function markUpdatesRead() {
+  try {
+    const response = await API.put("users/mark_updates_read", {
+      updates_seen_count: UPDATES.length,
+    });
+    updatesSeenCount.value = response.data.updates_seen_count;
+    updatesDrawer.value = false;
+  } catch {
+    toast.add({
+      severity: "error",
+      message: t("general.generic_error"),
+      life: 3000,
+    });
+  }
 }
 
 function updateProgressType(type) {
@@ -330,6 +367,7 @@ onMounted(() => {
 
 loadDailyQuote();
 loadCurrentlyReading();
+loadUpdatesState();
 </script>
 
 <template>
@@ -344,10 +382,19 @@ loadCurrentlyReading();
     ></div>
     <Header
       :friendUsername="friendUsername"
-      :showUpdates="!isFriendView && showUpdateButton"
       @confetti="showConfetti"
-      @open-updates="updatesDrawer = true"
     />
+    <Button
+      v-if="!isFriendView && unreadUpdates.length"
+      class="updates-button"
+      type="button"
+      :aria-label="`${t('home.updates')} (${unreadUpdates.length})`"
+      @click="updatesDrawer = true"
+    >
+      <i class="pi pi-bell" aria-hidden="true"></i>
+      <span>{{ t("home.updates") }}</span>
+      <span class="updates-count">{{ unreadUpdates.length }}</span>
+    </Button>
     <div v-if="isFriendView" class="friend-content-container">
       <section class="friend-section">
         <h2 class="section-title">
@@ -636,7 +683,7 @@ loadCurrentlyReading();
 
       <ILDrawer v-model="updatesDrawer" :title="t('home.updates')">
         <template #body>
-          <Updates />
+          <Updates :updates="unreadUpdates" />
           <div class="updates-actions">
             <ILTextButton
               :text="t('home.read_updates')"
@@ -907,5 +954,42 @@ loadCurrentlyReading();
   justify-content: flex-end;
   gap: var(--gap-2);
   margin-top: var(--gap-3);
+}
+
+.updates-button {
+  position: fixed;
+  right: max(var(--gap-3), env(safe-area-inset-right));
+  bottom: max(var(--gap-3), env(safe-area-inset-bottom));
+  z-index: 10;
+  gap: var(--gap-2);
+  padding: 9px 12px;
+  border: 1px solid var(--color-7);
+  border-radius: 999px;
+  background-color: var(--color-6);
+  box-shadow: 0 5px 14px rgba(0, 0, 0, 0.28);
+  color: var(--text-color-1);
+  font-family: inherit;
+  font-weight: bold;
+
+  &:hover,
+  &:focus-visible {
+    border-color: var(--color-7) !important;
+    background-color: var(--color-6) !important;
+    box-shadow: 0 5px 14px rgba(0, 0, 0, 0.28) !important;
+    color: var(--text-color-1) !important;
+  }
+
+  .updates-count {
+    display: inline-flex;
+    min-width: 1.25rem;
+    height: 1.25rem;
+    align-items: center;
+    justify-content: center;
+    padding: 0 var(--gap-1);
+    border-radius: 999px;
+    background: var(--color-7);
+    font-size: var(--font-size-1);
+    line-height: 1;
+  }
 }
 </style>

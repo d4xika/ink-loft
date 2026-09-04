@@ -24,6 +24,10 @@ class User < ApplicationRecord
 
   enum :language, [ :en, :de, :noe, :sue ]
 
+  validates :updates_seen_count,
+            numericality: { only_integer: true, greater_than_or_equal_to: 0 },
+            allow_nil: true
+
   def generate_auth_key
     auth_key = "ink-loft-#{SecureRandom.hex(16)}"
     return AuthKey.create(user: self, key: auth_key)

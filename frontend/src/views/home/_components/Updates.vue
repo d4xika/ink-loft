@@ -1,20 +1,39 @@
 <script>
-export const UPDATE_VERSION = "4";
+export const UPDATES = [
+  // Add every new announcement at the top with its own stable ID.
+  {
+    id: "4",
+    changes: ["Redesign of your friend's read corner."],
+  },
+];
+
+export default {
+  props: {
+    updates: {
+      type: Array,
+      required: true,
+    },
+  },
+};
 </script>
 
 <template>
   <div class="updates">
-    <div class="updates-header">
-      <p class="latest-update">Latest update</p>
-      <h1>What’s new in Ink Loft?</h1>
-    </div>
+    <article v-for="(update, index) in updates" :key="update.id">
+      <div class="updates-header">
+        <p v-if="index === 0" class="latest-update">Latest update</p>
+        <h1>What’s new in Ink Loft?</h1>
+      </div>
 
-    <div class="updates-section">
-      <p>We have something special for you! Checkout these updates:</p>
-      <ul>
-        <li>Redesign of your friend's read corner.</li>
-      </ul>
-    </div>
+      <div class="updates-section">
+        <p>We have something special for you! Checkout these updates:</p>
+        <ul>
+          <li v-for="change in update.changes" :key="change">
+            {{ change }}
+          </li>
+        </ul>
+      </div>
+    </article>
   </div>
 </template>
 
@@ -22,6 +41,10 @@ export const UPDATE_VERSION = "4";
 .updates {
   max-height: 50vh;
   overflow-y: auto;
+
+  article + article {
+    margin-top: var(--gap-4);
+  }
 
   .latest-update {
     margin: 0 0 var(--gap-1);

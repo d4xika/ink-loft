@@ -1,5 +1,6 @@
 class Api::UsersController < Api::ApplicationController
   skip_forgery_protection only: [ :login, :register ]
+  before_action :authenticate_user!, only: [ :updates_state, :mark_updates_read ]
 
   def login
     user = User.find_by(username: params[:username])
@@ -111,6 +112,23 @@ class Api::UsersController < Api::ApplicationController
     end
   rescue ActiveRecord::RecordNotUnique
     render json: { error: "Username or email already exists" }, status: :conflict
+  end
+
+  def updates_state
+    render json: { updates_seen_count: current_user.updates_seen_count }
+  end
+
+  def mark_updates_read
+    updates_seen_count = Integer(params[:updates_seen_count], exception: false)
+
+    if updates_seen_count.nil? || updates_seen_count.negative?
+      return render json: { error: "Invalid updates seen count" }, status: :bad_request
+    end
+
+    current_count = current_user.updates_seen_count || 0
+    current_user.update!(updates_seen_count: [ current_count, updates_seen_count ].max)
+
+    render json: { updates_seen_count: current_user.updates_seen_count }
   end
 
   private
