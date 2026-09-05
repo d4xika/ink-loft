@@ -2,6 +2,10 @@
 export const UPDATES = [
   // Add every new announcement at the top with its own stable ID.
   {
+    id: "7",
+    changes: ["There is now a light theme in your profile."],
+  },
+  {
     id: "6",
     changes: [
       "You can now see activities of your friends in the activity feed.",
