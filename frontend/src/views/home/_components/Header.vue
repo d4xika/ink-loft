@@ -18,6 +18,7 @@ const router = useRouter();
 const user = JSON.parse(localStorage.getItem("user"));
 const friend = ref(null);
 const hasNewActivity = ref(false);
+const hasPendingFriendRequest = ref(false);
 let usernameClickCount = 0;
 let usernameClickTimer;
 
@@ -30,6 +31,9 @@ if (props.friendUsername) {
 } else {
   API.get("/activities").then((response) => {
     hasNewActivity.value = response.data.some((activity) => activity.new);
+  });
+  API.get("/friendships").then((response) => {
+    hasPendingFriendRequest.value = response.data.incoming_requests.length > 0;
   });
 }
 
@@ -60,11 +64,16 @@ onBeforeUnmount(() => clearTimeout(usernameClickTimer));
       @click="router.push({ name: 'profile' })"
     />
     <div v-else class="left-container">
-      <ILAvatar
-        :image="user.avatar_url.small"
-        class="avatar-image-filter"
-        @click="router.push({ name: 'profile' })"
-      />
+      <div
+        class="profile-avatar"
+        :class="{ 'has-pending-request-badge': hasPendingFriendRequest }"
+      >
+        <ILAvatar
+          :image="user.avatar_url.small"
+          class="avatar-image-filter"
+          @click="router.push({ name: 'profile' })"
+        />
+      </div>
       <div class="text-container">
         <h4 class="welcome">
           {{ t("home.cozy_day") }}
@@ -102,6 +111,25 @@ onBeforeUnmount(() => clearTimeout(usernameClickTimer));
   .left-container {
     display: flex;
     gap: var(--gap-2);
+
+    .profile-avatar {
+      display: flex;
+      position: relative;
+
+      &.has-pending-request-badge::after {
+        content: "";
+        position: absolute;
+        z-index: 1;
+        top: -0.2rem;
+        right: -0.2rem;
+        width: 0.75rem;
+        height: 0.75rem;
+        border: 2px solid var(--color-0);
+        border-radius: 50%;
+        background-color: var(--color-1-bright);
+        pointer-events: none;
+      }
+    }
 
     .text-container {
       display: flex;
