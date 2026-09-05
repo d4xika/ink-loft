@@ -26,11 +26,7 @@ const props = defineProps({
 <template>
   <div class="activity-container" :class="{ new: props.new }">
     <div class="avatar" :class="{ 'has-new-badge': props.new }">
-      <ILAvatar
-        class="avatar-image-filter"
-        :image="props.avatarUrl"
-        :username="props.username"
-      />
+      <ILAvatar :image="props.avatarUrl" :username="props.username" />
     </div>
     <div>
       <h3>{{ props.username }}</h3>

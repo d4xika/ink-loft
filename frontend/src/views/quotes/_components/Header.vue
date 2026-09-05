@@ -106,7 +106,7 @@ getFriends();
             class="flex flex-row gap-2"
           >
             <ILAvatar
-              class="sharing-avatar avatar-image-filter"
+              class="sharing-avatar"
               :image="friend.avatar_url || undefined"
               :username="friend.username"
             />

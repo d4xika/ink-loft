@@ -45,7 +45,6 @@ const emit = defineEmits(["edit", "delete"]);
             <i v-if="!readonly" class="pi pi-pen-to-square"></i>
             <ILAvatar
               v-else
-              class="avatar-image-filter"
               :image="props.avatarUrl"
               :username="props.username"
             />

@@ -24,6 +24,7 @@ class User < ApplicationRecord
   end
 
   enum :language, [ :en, :de, :noe, :sue ]
+  enum :theme, [ :dark, :light ]
 
   validates :updates_seen_count,
             numericality: { only_integer: true, greater_than_or_equal_to: 0 },

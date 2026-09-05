@@ -90,6 +90,14 @@ class Api::UsersController < Api::ApplicationController
       end
     end
 
+    if params[:theme].present?
+      if User.themes.key?(params[:theme])
+        user.theme = params[:theme]
+      else
+        return render json: { error: "Invalid theme" }, status: :bad_request
+      end
+    end
+
     if user.save
       if account_update_params["password"].present?
         user.auth_keys.destroy_all
@@ -168,7 +176,8 @@ class Api::UsersController < Api::ApplicationController
       avatar_url: { small: avatar_url_small, medium: avatar_url_medium, large: avatar_url_large },
       language: user.language,
       quotes_share_with_friends: user.quotes_share_with_friends,
-      last_activity_check: user.last_activity_check
+      last_activity_check: user.last_activity_check,
+      theme: user.theme
     }
   end
 end

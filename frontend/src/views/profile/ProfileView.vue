@@ -7,11 +7,11 @@ import { useRouter } from "vue-router";
 import { z } from "zod";
 import Header from "./_components/Header.vue";
 import API from "@/helper/api.js";
+import { setTheme } from "@/helper/helper.js";
 import { languages } from "@/helper/i18n/i18n.js";
 import { REGEX } from "@/helper/regex.js";
 
-const { locale } = useI18n();
-const { t } = useI18n();
+const { locale, t } = useI18n();
 const toast = useToast();
 const router = useRouter();
 const user = ref(JSON.parse(localStorage.getItem("user")));
@@ -32,6 +32,7 @@ const accountForm = ref({
   new_password: "",
   confirm_new_password: "",
 });
+const theme = ref(user.value?.theme || "dark");
 
 const selectedLanguage = ref(
   languages.find((language) => language.value === user.value?.language) ||
@@ -61,6 +62,11 @@ const accountResolver = zodResolver(
     ),
 );
 
+function storeUser(updatedUser) {
+  user.value = updatedUser;
+  localStorage.setItem("user", JSON.stringify(updatedUser));
+}
+
 async function updateProfilePicture(file) {
   const formData = new FormData();
   formData.append("avatar", file);
@@ -74,8 +80,7 @@ async function updateProfilePicture(file) {
       },
     });
 
-    user.value = response.data.user;
-    localStorage.setItem("user", JSON.stringify(response.data.user));
+    storeUser(response.data.user);
     avatarUrl.value = response.data.user?.avatar_url.medium || null;
     toast.add({
       severity: "success",
@@ -100,9 +105,8 @@ async function removeProfilePicture() {
 
   API.put("/users/update_profile", formData)
     .then((response) => {
-      user.value = response.data.user;
+      storeUser(response.data.user);
       avatarUrl.value = response.data.user?.avatar_url.medium || null;
-      localStorage.setItem("user", JSON.stringify(response.data.user));
       toast.add({
         severity: "success",
         message: t("profile.avatar_remove_success"),
@@ -120,13 +124,35 @@ async function removeProfilePicture() {
       avatarLoading.value = false;
     });
 }
+
+function updateTheme(selectedTheme) {
+  API.put("/users/update_profile", { theme: selectedTheme }).then(
+    (response) => {
+      storeUser(response.data.user);
+      setTheme(response.data.user.theme);
+      toast.add({
+        severity: "success",
+        message: t("profile.theme_update_success"),
+        life: 3000,
+      });
+    },
+    () => {
+      theme.value = user.value.theme;
+      toast.add({
+        severity: "error",
+        message: t("profile.theme_update_error"),
+        life: 3000,
+      });
+    },
+  );
+}
+
 function updateLanguage(event) {
   if (!event?.value?.value) return;
   locale.value = event.value.value;
   API.put("/users/update_profile", { language: event.value.value }).then(
     (response) => {
-      user.value = response.data.user;
-      localStorage.setItem("user", JSON.stringify(response.data.user));
+      storeUser(response.data.user);
       toast.add({
         severity: "success",
         message: t("profile.update_success"),
@@ -162,8 +188,7 @@ async function updateAccount(data) {
       password: data.values.new_password,
     });
 
-    user.value = response.data.user;
-    localStorage.setItem("user", JSON.stringify(response.data.user));
+    storeUser(response.data.user);
     if (response.data.csrf_token) {
       API.defaults.headers.common["X-CSRF-Token"] = response.data.csrf_token;
     }
@@ -328,6 +353,19 @@ onMounted(loadFriendships);
           @change="(event) => updateLanguage(event)"
         />
       </div>
+      <section class="theme-section">
+        <ILSelectButton
+          v-model="theme"
+          :aria-label="t('profile.theme')"
+          :options="[
+            { value: 'dark', label: t('profile.theme_dark') },
+            { value: 'light', label: t('profile.theme_light') },
+          ]"
+          optionLabel="label"
+          optionValue="value"
+          @update:model-value="updateTheme"
+        />
+      </section>
     </Form>
 
     <section class="friends-section">
@@ -352,7 +390,7 @@ onMounted(loadFriendships);
             <ILAvatar
               :image="request.avatar_url"
               :username="request.username"
-              class="friend-avatar avatar-image-filter"
+              class="friend-avatar"
             />
             <span>{{ request.username }}</span>
             <ILTextButton
@@ -376,7 +414,7 @@ onMounted(loadFriendships);
             <ILAvatar
               :image="request.avatar_url"
               :username="request.username"
-              class="friend-avatar avatar-image-filter"
+              class="friend-avatar"
             />
             <span>{{ request.username }}</span>
             <ILTextButton
@@ -410,7 +448,7 @@ onMounted(loadFriendships);
             <ILAvatar
               :image="friend.avatar_url"
               :username="friend.username"
-              class="friend-avatar avatar-image-filter"
+              class="friend-avatar"
             />
             <span>{{ friend.username }}</span>
             <ILTextButton
@@ -500,12 +538,19 @@ onMounted(loadFriendships);
   }
 
   .language-select-container {
-    padding: var(--gap-3);
+    padding: var(--gap-2) var(--gap-3);
+  }
+
+  .theme-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   .account-section,
-  .friends-section {
-    margin: var(--gap-4) var(--gap-3);
+  .friends-section,
+  .theme-section {
+    margin: var(--gap-3) var(--gap-3);
     padding: var(--gap-3);
     border-radius: var(--border-radius-2);
     background-color: var(--color-2);

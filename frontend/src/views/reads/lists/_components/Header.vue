@@ -126,7 +126,7 @@ function sortButtonText(value, label) {
       <img
         v-if="props.image"
         :src="props.image"
-        class="header-image"
+        class="header-image invertible"
         alt="header icon"
       />
 

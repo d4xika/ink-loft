@@ -12,6 +12,7 @@ const model = defineModel({ type: Boolean, default: false });
   <Drawer
     v-model:visible="model"
     :header="props.title"
+    :closeButtonProps="{ severity: 'contrast', text: true, rounded: true }"
     position="bottom"
     style="height: fit-content"
   >

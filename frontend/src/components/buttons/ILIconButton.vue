@@ -34,7 +34,7 @@ const props = defineProps({
     <img
       v-if="props.image"
       :src="props.image"
-      class="button-image"
+      class="button-image invertible"
       alt="read icon"
     />
   </Button>
@@ -69,6 +69,7 @@ const props = defineProps({
 
   &.color-transparent {
     background-color: transparent;
+    border: 1px solid var(--color-3);
   }
 
   .button-image {

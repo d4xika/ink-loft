@@ -12,6 +12,25 @@
   --color-7: #564031;
   --text-color-1: #dad9d9;
   --text-color-1-light: #dad9d980;
+
+  &.light {
+    --color-0: #f3d9c7;
+    --color-1: #d77a6b;
+    --color-1-bright: #cb523f;
+    --color-2: #bda595;
+    --color-3: #95987c;
+    --color-4: #cc7557;
+    --color-5: #986c4b;
+    --color-6: #a66d4f;
+    --color-7: #b28465;
+    --text-color-1: #3b3b3b;
+    --text-color-1-light: #5a4438;
+
+    .invertible {
+      filter: invert(1);
+    }
+  }
+
   --gap-1: 4px;
   --gap-2: 8px;
   --gap-3: 16px;

@@ -23,7 +23,10 @@ const fallbackInitial = computed(() =>
     :image="props.image"
     :label="props.image ? undefined : fallbackInitial"
     size="large"
-    :class="{ 'no-image': !props.image }"
+    :class="{
+      'avatar-image-filter': props.image,
+      'no-image': !props.image,
+    }"
   />
 </template>
 

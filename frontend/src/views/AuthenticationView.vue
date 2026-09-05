@@ -1,13 +1,14 @@
 <script setup>
 import { zodResolver } from "@primevue/forms/resolvers/zod";
+import { useToast } from "primevue/usetoast";
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import { z } from "zod";
 import API from "@/helper/api.js";
+import { setTheme } from "@/helper/helper.js";
 import { REGEX } from "@/helper/regex.js";
 import { setAuthStatus } from "@/router/router.js";
-import { useToast } from "primevue/usetoast";
 
 const { t } = useI18n();
 const router = useRouter();
@@ -79,6 +80,7 @@ async function submit(data) {
     const { csrf_token, ...user } = response.data;
     API.defaults.headers.common["X-CSRF-Token"] = csrf_token;
     localStorage.setItem("user", JSON.stringify(user));
+    setTheme(user.theme);
     locale.value = user.language;
     setAuthStatus(true);
     await router.push({ name: "home" });

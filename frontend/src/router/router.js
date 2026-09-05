@@ -1,6 +1,7 @@
-import { createRouter, createWebHistory } from "vue-router";
 import { nextTick } from "vue";
+import { createRouter, createWebHistory } from "vue-router";
 import API from "@/helper/api.js";
+import { setTheme } from "@/helper/helper.js";
 import { setLocale } from "@/helper/i18n/i18n.js";
 
 const AuthenticationView = () => import("../views/AuthenticationView.vue");
@@ -129,6 +130,7 @@ export function setAuthStatus(status) {
   isAuthenticated = status;
   if (!status) {
     localStorage.removeItem("user");
+    setTheme();
     delete API.defaults.headers.common["X-CSRF-Token"];
   }
   isAuthChecked = true;
@@ -185,13 +187,13 @@ router.beforeEach(async (to, from, next) => {
       isAuthenticated = response.data.authenticated;
       if (response.data.user) {
         localStorage.setItem("user", JSON.stringify(response.data.user));
+        setTheme(response.data.user.theme);
         setLocale(response.data.user.language);
       } else {
-        localStorage.removeItem("user");
+        setAuthStatus(false);
       }
-    } catch (error) {
-      isAuthenticated = false;
-      localStorage.removeItem("user");
+    } catch {
+      setAuthStatus(false);
     }
     isAuthChecked = true;
   }

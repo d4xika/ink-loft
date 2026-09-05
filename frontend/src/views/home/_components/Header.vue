@@ -70,7 +70,6 @@ onBeforeUnmount(() => clearTimeout(usernameClickTimer));
       >
         <ILAvatar
           :image="user.avatar_url.small"
-          class="avatar-image-filter"
           @click="router.push({ name: 'profile' })"
         />
       </div>
@@ -85,19 +84,21 @@ onBeforeUnmount(() => clearTimeout(usernameClickTimer));
     </div>
     <ILAvatar
       v-if="friend"
-      class="avatar-image-filter"
       :image="friend.avatar_url"
       :username="friend.username"
     />
-    <ILIconButton
+    <div
       v-else-if="!props.friendUsername"
       class="activity-button"
       :class="{ 'has-new-badge': hasNewActivity }"
-      icon="pi-bell"
-      variant="square"
-      color="transparent"
-      @click="router.push({ name: 'activity' })"
-    />
+    >
+      <ILIconButton
+        icon="pi-bell"
+        variant="square"
+        color="transparent"
+        @click="router.push({ name: 'activity' })"
+      />
+    </div>
   </div>
 </template>
 
@@ -160,6 +161,7 @@ onBeforeUnmount(() => clearTimeout(usernameClickTimer));
   }
 
   .activity-button {
+    display: flex;
     position: relative;
 
     &.has-new-badge::after {

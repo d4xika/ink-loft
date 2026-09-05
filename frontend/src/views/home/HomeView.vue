@@ -22,10 +22,7 @@ const updatesSeenCount = ref(null);
 const unreadUpdates = computed(() => {
   if (updatesSeenCount.value === null) return [];
 
-  return UPDATES.slice(
-    0,
-    Math.max(UPDATES.length - updatesSeenCount.value, 0),
-  );
+  return UPDATES.slice(0, Math.max(UPDATES.length - updatesSeenCount.value, 0));
 });
 const updatesDrawer = ref(false);
 const swipeContainer = ref(null);
@@ -380,10 +377,7 @@ loadUpdatesState();
         { 'lottie-overlay--ghost': animationType === 'ghost' },
       ]"
     ></div>
-    <Header
-      :friendUsername="friendUsername"
-      @confetti="showConfetti"
-    />
+    <Header :friendUsername="friendUsername" @confetti="showConfetti" />
     <Button
       v-if="!isFriendView && unreadUpdates.length"
       class="updates-button"
@@ -392,7 +386,7 @@ loadUpdatesState();
       @click="updatesDrawer = true"
     >
       <i class="pi pi-bell" aria-hidden="true"></i>
-      <span>{{ t("home.updates") }}</span>
+      <span class="font-fix">{{ t("home.updates") }}</span>
       <span class="updates-count">{{ unreadUpdates.length }}</span>
     </Button>
     <div v-if="isFriendView" class="friend-content-container">
@@ -435,7 +429,11 @@ loadUpdatesState();
         </div>
 
         <div v-else class="friend-empty-state">
-          <img src="/images/drawings/kitty_on_shelf.png" alt="Kitty on shelf" />
+          <img
+            src="/images/drawings/kitty_on_shelf.png"
+            alt="Kitty on shelf"
+            class="invertible"
+          />
         </div>
       </section>
 
@@ -529,6 +527,7 @@ loadUpdatesState();
               <img
                 src="/images/drawings/kitty_on_shelf.png"
                 alt="Kitty on shelf"
+                class="invertible"
               />
             </div>
 
@@ -985,7 +984,7 @@ loadUpdatesState();
     height: 1.25rem;
     align-items: center;
     justify-content: center;
-    padding: 0 var(--gap-1);
+    padding: 0.3em var(--gap-1) 0;
     border-radius: 999px;
     background: var(--color-7);
     font-size: var(--font-size-1);

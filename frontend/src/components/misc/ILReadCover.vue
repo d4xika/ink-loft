@@ -16,7 +16,7 @@ const props = defineProps({
   <div class="read-cover">
     <div class="read-cover-container">
       <Skeleton v-if="props.loading" class="cover-skeleton" />
-      <img v-else :src="props.cover" alt="Read cover" />
+      <img v-else :src="props.cover" alt="Read cover" class="invertible" />
     </div>
   </div>
 </template>

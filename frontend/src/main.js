@@ -1,20 +1,30 @@
+import { definePreset, palette } from "@primevue/themes";
 import Aura from "@primevue/themes/aura";
 import PrimeVue from "primevue/config";
 import ToastService from "primevue/toastservice";
 import { createApp } from "vue";
+import VueDOMPurifyHTML from "vue-dompurify-html";
 import App from "./App.vue";
 import { i18n } from "./helper/i18n/i18n.js";
 import router from "./router/router.js";
 import "./core.scss";
 import "primeicons/primeicons.css";
-import { definePreset, palette } from "@primevue/themes";
-import VueDOMPurifyHTML from "vue-dompurify-html";
 
 const primary = palette("#464832");
+const lightSurface = palette("#5a4438");
+const darkSurface = palette("#71717a");
 
 const preset = definePreset(Aura, {
   semantic: {
     primary,
+    colorScheme: {
+      light: {
+        surface: lightSurface,
+      },
+      dark: {
+        surface: darkSurface,
+      },
+    },
   },
 });
 
@@ -23,10 +33,10 @@ const app = createApp(App);
 app.use(router);
 app.use(PrimeVue, {
   theme: {
-    preset: preset,
+    preset,
     options: {
       prefix: "p",
-      darkModeSelector: "system",
+      darkModeSelector: ".dark",
       cssLayer: false,
     },
   },

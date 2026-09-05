@@ -41,8 +41,5 @@ const model = defineModel({ type: Boolean, default: false });
 
 :deep(.p-toggleswitch-checked) .p-toggleswitch-slider {
   background-color: var(--color-3) !important;
-  .p-toggleswitch-handle {
-    color: white !important;
-  }
 }
 </style>

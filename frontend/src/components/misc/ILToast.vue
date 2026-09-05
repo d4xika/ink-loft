@@ -5,8 +5,10 @@
     <template #container="{ message, closeCallback }">
       <div class="toasti">
         <div class="left-container">
-          <i :class="`pi pi-book`"></i>
-          <p class="font-fix">{{ message.message }}</p>
+          <i class="pi pi-book"></i>
+          <p class="font-fix">
+            {{ message.message }}
+          </p>
         </div>
         <div class="right-container">
           <i class="pi pi-times" @click="closeCallback"></i>
@@ -21,7 +23,8 @@
   max-width: 80vw !important;
 }
 
-.p-toast .p-toast-message-info {
+.p-toast .p-toast-message-info,
+.p-toast .p-toast-message-success {
   background-color: var(--color-3) !important;
   border: 1px solid var(--color-3) !important;
 }
