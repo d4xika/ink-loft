@@ -5,11 +5,7 @@ import { useRoute } from "vue-router";
 
 const route = useRoute();
 const { t } = useI18n();
-const cachedListViews = [
-  "WantToReadView",
-  "HaveReadView",
-  "DroppedView",
-];
+const cachedListViews = ["WantToReadView", "HaveReadView", "DroppedView"];
 
 const friendUsername = computed(() => {
   const username = route.params.username || route.query.friend;
@@ -19,8 +15,10 @@ const friendUsername = computed(() => {
 
 <template>
   <ILToast />
-  <div v-if="friendUsername" class="friend-island font-fix">
-    {{ t("home.readings_of", { username: friendUsername }) }}
+  <div v-if="friendUsername" class="friend-island">
+    <p class="font-fix">
+      {{ t("home.readings_of", { username: friendUsername }) }}
+    </p>
   </div>
   <router-view v-slot="{ Component, route: currentRoute }">
     <KeepAlive :include="cachedListViews">
@@ -32,7 +30,7 @@ const friendUsername = computed(() => {
 <style scoped>
 .friend-island {
   position: fixed;
-  top: max(var(--gap-3), env(safe-area-inset-top));
+  top: max(calc(var(--gap-3) + var(--gap-2)), env(safe-area-inset-top));
   left: 50%;
   z-index: 10;
   max-width: calc(100vw - 180px);
@@ -46,7 +44,6 @@ const friendUsername = computed(() => {
     inset 0 1px 0 rgba(255, 255, 255, 0.04),
     0 5px 14px rgba(0, 0, 0, 0.28);
   font-size: var(--font-size-2);
-  font-weight: bold;
   text-overflow: ellipsis;
   white-space: nowrap;
 }

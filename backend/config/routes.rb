@@ -13,6 +13,7 @@ Rails.application.routes.draw do
         put :update_profile
         get :updates_state
         put :mark_updates_read
+        put :update_quotes_share_with_friends
       end
     end
 

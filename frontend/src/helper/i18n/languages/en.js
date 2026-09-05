@@ -29,6 +29,7 @@ export const en = {
   },
   home: {
     readings_of: "Readings of {username}",
+    cozy_day: "Cozy day,",
     read_library: "Read Library",
     quote_library: "Quote Library",
     want_to_read: "Want to read",
@@ -49,6 +50,10 @@ export const en = {
     save: "Save Quote",
     add: "Add Quote",
     edit: "Edit Quote",
+    private_quote: "Don't show to friends",
+    sharing_settings: "Sharing Settings",
+    save_settings: "Save Settings",
+    settings_save_success: "Settings saved successfully.",
     no_quotes: "No quotes added yet.",
     save_success: "Quote saved successfully.",
     delete_success: "Quote deleted successfully.",

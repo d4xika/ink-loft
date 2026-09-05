@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, ref } from "vue";
+import { onMounted, ref } from "vue";
 import { new_line_to_br } from "@/helper/helper.js";
 
 const props = defineProps({
@@ -14,6 +14,14 @@ const props = defineProps({
   readonly: {
     type: Boolean,
     default: false,
+  },
+  avatarUrl: {
+    type: String,
+    default: undefined,
+  },
+  username: {
+    type: String,
+    default: undefined,
   },
 });
 
@@ -34,7 +42,13 @@ const emit = defineEmits(["edit", "delete"]);
       <div class="quotes-container">
         <div class="left-container">
           <div>
-            <i class="pi pi-pen-to-square"></i>
+            <i v-if="!readonly" class="pi pi-pen-to-square"></i>
+            <ILAvatar
+              v-else
+              class="avatar-image-filter"
+              :image="props.avatarUrl"
+              :username="props.username"
+            />
           </div>
           <div>
             <h2

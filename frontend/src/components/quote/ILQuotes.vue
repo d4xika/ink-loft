@@ -1,5 +1,4 @@
 <script setup>
-import { computed } from "vue";
 import { new_line_to_br } from "@/helper/helper.js";
 
 const props = defineProps({

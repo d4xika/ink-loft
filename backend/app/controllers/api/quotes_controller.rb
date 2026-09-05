@@ -3,19 +3,19 @@ class Api::QuotesController < Api::ApplicationController
   before_action :set_quote_user, only: [ :index, :daily_quote ]
 
   def index
-    @quotes = @quote_user.quotes.includes(:read).order(created_at: :desc)
-
-    return render json: @quotes.as_json(
+    return render json: visible_quotes.as_json(
       include: {
         read: {
           only: [ :id, :title, :author ]
         }
-      },
+      }
     ), status: :ok
   end
 
   def daily_quote
-    if @quote_user.quotes.empty?
+    quotes = visible_quotes.to_a
+
+    if quotes.empty?
       return render json: { message: "No quotes found" }, status: :ok
     end
 
@@ -24,14 +24,13 @@ class Api::QuotesController < Api::ApplicationController
     end
 
     rng = Random.new((Date.today.to_time.to_i + @quote_user.daily_quote_seed).to_i)
-    @quote = @quote_user.quotes.order(created_at: :desc)[rng.rand(@quote_user.quotes.count)]
-    @read = @quote_user.reads.find(@quote.read_id)
+    quote = quotes[rng.rand(quotes.length)]
 
-    return render json: @quote.as_json.merge(
+    return render json: quote.as_json.merge(
         read: {
-          id: @read.id,
-          title: @read.title,
-          author: @read.author
+          id: quote.read.id,
+          title: quote.read.title,
+          author: quote.read.author
         }
       ), status: :ok
   end
@@ -68,6 +67,18 @@ class Api::QuotesController < Api::ApplicationController
   end
 
   def quote_params
-    params.require(:quote).permit(:content, :read_id)
+    params.require(:quote).permit(:content, :read_id, :private)
+  end
+
+  def visible_quotes
+    user_ids = [ @quote_user.id ]
+    if @quote_user == current_user
+      user_ids.concat(current_user.quotes_share_with_friends & current_user.accepted_friend_ids)
+    end
+
+    Quote.includes(:read)
+         .where(user_id: user_ids)
+         .where("quotes.user_id = :user_id OR quotes.private = FALSE", user_id: current_user.id)
+         .order(created_at: :desc)
   end
 end

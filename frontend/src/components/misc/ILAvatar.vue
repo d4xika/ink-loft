@@ -1,23 +1,27 @@
 <script setup>
-import { ref } from "vue";
+import { computed } from "vue";
 
 const props = defineProps({
   image: {
     type: String,
     default: undefined,
   },
+  username: {
+    type: String,
+    default: undefined,
+  },
 });
 
-const user = ref({});
-if (!props.image) {
-  user.value = JSON.parse(localStorage.getItem("user"));
-}
+const localUsername = JSON.parse(localStorage.getItem("user"))?.username;
+const fallbackInitial = computed(() =>
+  (props.username || localUsername)?.charAt(0).toUpperCase(),
+);
 </script>
 
 <template>
   <Avatar
     :image="props.image"
-    :label="user.username?.charAt(0).toUpperCase()"
+    :label="props.image ? undefined : fallbackInitial"
     size="large"
     :class="{ 'no-image': !props.image }"
   />
@@ -28,7 +32,7 @@ if (!props.image) {
   background-color: var(--color-3) !important;
   color: var(--text-color-1);
   border-radius: var(--border-radius-1);
-  cursor: pointer;
+  aspect-ratio: 1/1 !important;
 
   &.no-image {
     padding-top: 4px !important;

@@ -78,6 +78,6 @@ class Api::FriendshipsController < Api::ApplicationController
       Rails.application.routes.url_helpers.rails_blob_url(user.avatar.variant(:small), host: base_url)
     end
 
-    { username: user.username, avatar_url: avatar_url }
+    { user_id: user.id, username: user.username, avatar_url: avatar_url }
   end
 end

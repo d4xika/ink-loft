@@ -1,6 +1,6 @@
 class Api::UsersController < Api::ApplicationController
   skip_forgery_protection only: [ :login, :register ]
-  before_action :authenticate_user!, only: [ :updates_state, :mark_updates_read ]
+  before_action :authenticate_user!, only: [ :updates_state, :mark_updates_read, :update_quotes_share_with_friends ]
 
   def login
     user = User.find_by(username: params[:username])
@@ -131,6 +131,16 @@ class Api::UsersController < Api::ApplicationController
     render json: { updates_seen_count: current_user.updates_seen_count }
   end
 
+  def update_quotes_share_with_friends
+    requested_user_ids = Array(params[:quotes_share_with_friends]).filter_map do |user_id|
+      Integer(user_id, exception: false)
+    end
+    current_user.update!(
+      quotes_share_with_friends: requested_user_ids & current_user.accepted_friend_ids
+    )
+    render json: { quotes_share_with_friends: current_user.quotes_share_with_friends }
+  end
+
   private
 
   def account_update_params
@@ -147,10 +157,12 @@ class Api::UsersController < Api::ApplicationController
     avatar_url_large = user.avatar.attached? ? Rails.application.routes.url_helpers.rails_blob_url(user.avatar.variant(:large), host: base_url) : nil
 
     return {
+      id: user.id,
       username: user.username,
       email: user.email,
       avatar_url: { small: avatar_url_small, medium: avatar_url_medium, large: avatar_url_large },
-      language: user.language
+      language: user.language,
+      quotes_share_with_friends: user.quotes_share_with_friends
     }
   end
 end

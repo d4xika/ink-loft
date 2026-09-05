@@ -82,7 +82,7 @@ async function updateProfilePicture(file) {
       message: t("profile.avatar_update_success"),
       life: 3000,
     });
-  } catch (error) {
+  } catch {
     toast.add({
       severity: "error",
       message: t("profile.update_error"),
@@ -133,7 +133,7 @@ function updateLanguage(event) {
         life: 3000,
       });
     },
-    (error) => {
+    () => {
       toast.add({
         severity: "error",
         message: t("profile.update_error"),
@@ -349,9 +349,9 @@ onMounted(loadFriendships);
             :key="request.id"
             class="friend-row"
           >
-            <Avatar
+            <ILAvatar
               :image="request.avatar_url"
-              :label="request.username.charAt(0).toUpperCase()"
+              :username="request.username"
               class="friend-avatar avatar-image-filter"
             />
             <span>{{ request.username }}</span>
@@ -373,9 +373,9 @@ onMounted(loadFriendships);
             :key="request.id"
             class="friend-row"
           >
-            <Avatar
+            <ILAvatar
               :image="request.avatar_url"
-              :label="request.username.charAt(0).toUpperCase()"
+              :username="request.username"
               class="friend-avatar avatar-image-filter"
             />
             <span>{{ request.username }}</span>
@@ -407,9 +407,9 @@ onMounted(loadFriendships);
               })
             "
           >
-            <Avatar
+            <ILAvatar
               :image="friend.avatar_url"
-              :label="friend.username.charAt(0).toUpperCase()"
+              :username="friend.username"
               class="friend-avatar avatar-image-filter"
             />
             <span>{{ friend.username }}</span>
@@ -427,7 +427,9 @@ onMounted(loadFriendships);
 
     <section class="account-section">
       <h2>{{ t("profile.account") }}</h2>
-      <p class="security-note">{{ t("profile.account_security_note") }}</p>
+      <p class="security-note">
+        {{ t("profile.account_security_note") }}
+      </p>
       <Form
         :initialValues="accountForm"
         :resolver="accountResolver"

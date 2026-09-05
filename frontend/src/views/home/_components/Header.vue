@@ -1,6 +1,8 @@
 <script setup>
-import { onBeforeUnmount } from "vue";
+import { onBeforeUnmount, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
+import API from "@/helper/api.js";
 
 const props = defineProps({
   friendUsername: {
@@ -10,11 +12,21 @@ const props = defineProps({
 });
 const emit = defineEmits(["confetti"]);
 
+const { t } = useI18n();
 const router = useRouter();
 
 const user = JSON.parse(localStorage.getItem("user"));
+const friend = ref(null);
 let usernameClickCount = 0;
 let usernameClickTimer;
+
+if (props.friendUsername) {
+  API.get("/friendships").then((response) => {
+    friend.value = response.data.friends.find(
+      ({ username }) => username === props.friendUsername,
+    );
+  });
+}
 
 function handleUsernameClick() {
   usernameClickCount += 1;
@@ -51,13 +63,19 @@ onBeforeUnmount(() => clearTimeout(usernameClickTimer));
       />
       <div class="text-container">
         <h4 class="welcome">
-          Cozy day,
+          {{ t("home.cozy_day") }}
         </h4>
         <button class="username" type="button" @click="handleUsernameClick">
           {{ user.username }}
         </button>
       </div>
     </div>
+    <ILAvatar
+      v-if="friend"
+      class="avatar-image-filter"
+      :image="friend.avatar_url"
+      :username="friend.username"
+    />
   </div>
 </template>
 

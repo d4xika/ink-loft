@@ -28,6 +28,15 @@ class User < ApplicationRecord
             numericality: { only_integer: true, greater_than_or_equal_to: 0 },
             allow_nil: true
 
+  def accepted_friend_ids
+    Friendship.involving(self)
+              .accepted
+              .pluck(:user_one_id, :user_two_id)
+              .flatten
+              .uniq
+              .excluding(id)
+  end
+
   def generate_auth_key
     auth_key = "ink-loft-#{SecureRandom.hex(16)}"
     return AuthKey.create(user: self, key: auth_key)

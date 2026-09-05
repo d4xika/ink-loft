@@ -1,30 +1,64 @@
 <script setup>
 import { zodResolver } from "@primevue/forms/resolvers/zod";
-import { ref } from "vue";
+import { useToast } from "primevue/usetoast";
+import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
 import { z } from "zod";
 import Header from "./_components/Header.vue";
 import API from "@/helper/api.js";
-import { useToast } from "primevue/usetoast";
 
 const { t } = useI18n();
 const toast = useToast();
 const route = useRoute();
+const currentUserId = JSON.parse(localStorage.getItem("user"))?.id;
 const friendUsername = route.params.username || null;
 const readonly = Boolean(friendUsername);
 const addQuoteDrawer = ref(false);
 const editQuoteDrawer = ref(false);
 const quotes = ref({ loading: true });
+const friendsByUserId = ref({});
 const dailyQuote = ref(null);
+const dailyQuoteSource = computed(
+  () =>
+    `${dailyQuote.value?.read?.title || "Your Mom"}${
+      dailyQuote.value?.read?.author ? `, ${dailyQuote.value.read.author}` : ""
+    }`,
+);
+const canEditDailyQuote = computed(
+  () =>
+    !readonly &&
+    Boolean(dailyQuote.value?.content) &&
+    dailyQuote.value?.user_id === currentUserId,
+);
 const addInitialValues = ref({});
+const newQuoteInitialValues = { private: false };
 
 const resolver = zodResolver(
   z.object({
     content: z.string().min(1, "Quote is required."),
     read: z.any().refine((val) => val && val.id, "Read is required."),
+    private: z.boolean().default(false),
   }),
 );
+
+function setFriends(friends) {
+  friendsByUserId.value = Object.fromEntries(
+    friends.map((friend) => [friend.user_id, friend]),
+  );
+}
+
+function quoteAttributes(values) {
+  return {
+    read_id: values.read.id,
+    content: values.content,
+    private: values.private,
+  };
+}
+
+function showError(message = t("general.generic_error")) {
+  toast.add({ severity: "error", message, life: 3000 });
+}
 
 function saveQuote(event) {
   if (!event.valid) {
@@ -32,12 +66,9 @@ function saveQuote(event) {
   }
 
   API.post("quotes", {
-    quote: {
-      read_id: event.values.read.id,
-      content: event.values.content,
-    },
+    quote: quoteAttributes(event.values),
   }).then(
-    (response) => {
+    () => {
       addQuoteDrawer.value = false;
       loadQuotes();
       toast.add({
@@ -46,13 +77,7 @@ function saveQuote(event) {
         life: 3000,
       });
     },
-    (error) => {
-      toast.add({
-        severity: "error",
-        message: t("general.generic_error"),
-        life: 3000,
-      });
-    },
+    () => showError(),
   );
 }
 
@@ -63,43 +88,32 @@ function loadQuotes() {
     (response) => {
       quotes.value = response.data;
     },
-    (error) => {
-      toast.add({
-        severity: "error",
-        message: t("quotes.load_error"),
-        life: 3000,
-      });
-    },
+    () => showError(t("quotes.load_error")),
   );
 }
 
 function loadDailyQuote(refresh = false) {
-  let params = { username: friendUsername || undefined };
-  if (refresh) {
-    params = {
-      refresh: true,
-      username: friendUsername || undefined,
-    };
-  }
-  API.get("quotes/daily_quote", { params: params }).then(
+  const params = {
+    username: friendUsername || undefined,
+    ...(refresh && { refresh: true }),
+  };
+
+  API.get("quotes/daily_quote", { params }).then(
     (response) => {
       dailyQuote.value = response.data;
     },
-    (error) => {
-      if (refresh) {
-        toast.add({
-          severity: "error",
-          message: t("general.generic_error"),
-          life: 3000,
-        });
-      }
-    },
+    () => refresh && showError(),
   );
+}
+
+function reloadQuoteLibrary() {
+  loadQuotes();
+  loadDailyQuote();
 }
 
 function deleteQuote(quote) {
   API.delete(`quotes/${quote.id}`).then(
-    (response) => {
+    () => {
       loadQuotes();
       toast.add({
         severity: "success",
@@ -107,13 +121,7 @@ function deleteQuote(quote) {
         life: 3000,
       });
     },
-    (error) => {
-      toast.add({
-        severity: "error",
-        message: t("general.generic_error"),
-        life: 3000,
-      });
-    },
+    () => showError(),
   );
 }
 
@@ -122,6 +130,7 @@ function openEditQuote(quote) {
     id: quote.id,
     read: quote.read,
     content: quote.content,
+    private: quote.private,
   };
 
   editQuoteDrawer.value = true;
@@ -133,28 +142,18 @@ function editQuote(event) {
   }
 
   API.put(`quotes/${addInitialValues.value.id}`, {
-    quote: {
-      read_id: event.values.read.id,
-      content: event.values.content,
-    },
+    quote: quoteAttributes(event.values),
   }).then(
-    (response) => {
+    () => {
       editQuoteDrawer.value = false;
-      loadQuotes();
-      loadDailyQuote();
+      reloadQuoteLibrary();
       toast.add({
         severity: "success",
         message: t("quotes.save_success"),
         life: 3000,
       });
     },
-    (error) => {
-      toast.add({
-        severity: "error",
-        message: t("general.generic_error"),
-        life: 3000,
-      });
-    },
+    () => showError(),
   );
 }
 
@@ -164,12 +163,16 @@ loadDailyQuote();
 
 <template>
   <div class="quotes-view-container">
-    <Header :friendUsername="friendUsername" />
+    <Header
+      :friendUsername="friendUsername"
+      @friends-loaded="setFriends"
+      @reload-quotes="reloadQuoteLibrary"
+    />
     <div class="quotes-view">
       <ILQuotes
         :quote="dailyQuote?.content"
-        :source="`${dailyQuote?.read?.title || 'Your Mom'}${dailyQuote?.read?.author ? `, ${dailyQuote?.read?.author}` : ''}`"
-        :editEnabled="!readonly && !!dailyQuote?.content"
+        :source="dailyQuoteSource"
+        :editEnabled="canEditDailyQuote"
         :refreshEnabled="!readonly && !!dailyQuote?.content"
         @edit="openEditQuote(dailyQuote)"
         @refresh="loadDailyQuote(true)"
@@ -183,19 +186,25 @@ loadDailyQuote();
           @click="addQuoteDrawer = true"
         />
 
-        <div v-if="quotes.loading" v-for="index in 3" :key="index">
-          <Skeleton height="80px" />
-        </div>
+        <template v-if="quotes.loading">
+          <div v-for="index in 3" :key="index">
+            <Skeleton height="80px" />
+          </div>
+        </template>
 
-        <div v-else v-for="quote in quotes" :key="quote.id">
+        <template v-else>
           <ILQuoteSmall
+            v-for="quote in quotes"
+            :key="quote.id"
             :quote="quote.content"
             :source="`${quote.read.title}, ${quote.read.author}`"
-            :readonly="readonly"
+            :readonly="readonly || quote.user_id !== currentUserId"
+            :avatarUrl="friendsByUserId[quote.user_id]?.avatar_url"
+            :username="friendsByUserId[quote.user_id]?.username"
             @delete="deleteQuote(quote)"
             @edit="openEditQuote(quote)"
           />
-        </div>
+        </template>
       </div>
     </div>
     <ILDrawer
@@ -205,9 +214,10 @@ loadDailyQuote();
     >
       <template #body>
         <Form
+          :initialValues="newQuoteInitialValues"
           :resolver="resolver"
-          @submit="saveQuote"
           class="flex flex-col gap-2"
+          @submit="saveQuote"
         >
           <ILAutoComplete
             name="read"
@@ -215,6 +225,7 @@ loadDailyQuote();
             url="reads/autocomplete"
           />
           <ILTextArea name="content" :label="t('quotes.quote')" />
+          <ILToggleSwitch :label="t('quotes.private_quote')" name="private" />
           <ILTextButton :text="t('quotes.save')" type="submit" />
         </Form>
       </template>
@@ -228,8 +239,8 @@ loadDailyQuote();
         <Form
           :initialValues="addInitialValues"
           :resolver="resolver"
-          @submit="editQuote"
           class="flex flex-col gap-2"
+          @submit="editQuote"
         >
           <ILAutoComplete
             v-model="addInitialValues.read"
@@ -241,6 +252,11 @@ loadDailyQuote();
             v-model="addInitialValues.content"
             name="content"
             :label="t('quotes.quote')"
+          />
+          <ILToggleSwitch
+            v-model="addInitialValues.private"
+            :label="t('quotes.private_quote')"
+            name="private"
           />
           <ILTextButton :text="t('quotes.save')" type="submit" />
         </Form>
