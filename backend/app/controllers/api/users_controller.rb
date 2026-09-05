@@ -1,6 +1,6 @@
 class Api::UsersController < Api::ApplicationController
   skip_forgery_protection only: [ :login, :register ]
-  before_action :authenticate_user!, only: [ :updates_state, :mark_updates_read, :update_quotes_share_with_friends ]
+  before_action :authenticate_user!, only: [ :updates_state, :mark_updates_read, :update_quotes_share_with_friends, :update_last_activity_check ]
 
   def login
     user = User.find_by(username: params[:username])
@@ -141,6 +141,11 @@ class Api::UsersController < Api::ApplicationController
     render json: { quotes_share_with_friends: current_user.quotes_share_with_friends }
   end
 
+  def update_last_activity_check
+    current_user.update!(last_activity_check: Time.current)
+    render json: { last_activity_check: current_user.last_activity_check }, status: :ok
+  end
+
   private
 
   def account_update_params
@@ -162,7 +167,8 @@ class Api::UsersController < Api::ApplicationController
       email: user.email,
       avatar_url: { small: avatar_url_small, medium: avatar_url_medium, large: avatar_url_large },
       language: user.language,
-      quotes_share_with_friends: user.quotes_share_with_friends
+      quotes_share_with_friends: user.quotes_share_with_friends,
+      last_activity_check: user.last_activity_check
     }
   end
 end

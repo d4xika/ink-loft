@@ -2,6 +2,12 @@
 export const UPDATES = [
   // Add every new announcement at the top with its own stable ID.
   {
+    id: "6",
+    changes: [
+      "You can now see activities of your friends in the activity feed.",
+    ],
+  },
+  {
     id: "5",
     changes: [
       "Expand your quote library with the quotes from your friends. You can make a quote private when adding or editing it.",

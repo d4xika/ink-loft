@@ -43,6 +43,12 @@ export const noe = {
     read_updates: "Glesn",
     close_updates: "Schliaßn",
   },
+  activity: {
+    activities: "Aktivitäten",
+    started_read: "hot augfaunga zum Lesn:",
+    finished_read: "hot fertig glesn:",
+    dropped_read: "hot aufgheat zum Lesn:",
+  },
   quotes: {
     quotes: "Zitate",
     no_quotes: "No kane Zitate hinzuagfügt.",

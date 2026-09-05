@@ -15,6 +15,7 @@ class User < ApplicationRecord
            class_name: "Friendship",
            foreign_key: :requested_by_id,
            dependent: :destroy
+  has_many :activities
 
   has_one_attached :avatar do |attachable|
     attachable.variant :small, resize_to_fill: [ 200, 200 ]

@@ -43,6 +43,12 @@ export const sue = {
     read_updates: "Glesen",
     close_updates: "Schliaßn",
   },
+  activity: {
+    activities: "Aktivitäten",
+    started_read: "hot ogfanga zum Lesen:",
+    finished_read: "hot fertig glesen:",
+    dropped_read: "hot aufgheart zum Lesen:",
+  },
   quotes: {
     quotes: "Zitate",
     no_quotes: "No koi Zitate hinzugefügt.",

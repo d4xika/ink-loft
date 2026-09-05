@@ -29,6 +29,7 @@ class Api::ReadsController < Api::ApplicationController
     @read = current_user.reads.build(read_params)
     @read.author = @read.author.presence || "Unknown"
     if @read.save
+      create_activity(@read)
       return render json: @read, status: :created
     else
       return render json: { errors: @read.errors.full_messages }, status: :unprocessable_entity
@@ -42,6 +43,7 @@ class Api::ReadsController < Api::ApplicationController
     end
 
     if @read.update(read_params)
+      create_activity(@read)
       return render json: @read, status: :ok
     else
       return render json: { errors: @read.errors.full_messages }, status: :unprocessable_entity
@@ -113,5 +115,16 @@ class Api::ReadsController < Api::ApplicationController
       Arel.sql("#{sorted_value} #{direction.upcase} NULLS LAST"),
       Arel.sql("LOWER(title) ASC"),
     )
+  end
+
+  def create_activity(read)
+    case read.reading_status
+    when "have_read"
+      current_user.activities.create(action: "finished_read", description: read.title)
+    when "currently_reading"
+      current_user.activities.create(action: "started_read", description: read.title)
+    when "dropped"
+      current_user.activities.create(action: "dropped_read", description: read.title)
+    end
   end
 end

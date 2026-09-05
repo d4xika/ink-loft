@@ -19,7 +19,8 @@ const props = defineProps({
   color: {
     type: String,
     default: "primary",
-    validator: (value) => ["primary", "red", "brown"].includes(value),
+    validator: (value) =>
+      ["primary", "red", "brown", "transparent"].includes(value),
   },
 });
 </script>
@@ -64,6 +65,10 @@ const props = defineProps({
 
   &.color-brown {
     background-color: var(--color-6);
+  }
+
+  &.color-transparent {
+    background-color: transparent;
   }
 
   .button-image {

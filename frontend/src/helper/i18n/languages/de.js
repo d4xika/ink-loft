@@ -43,6 +43,12 @@ export const de = {
     read_updates: "Gelesen",
     close_updates: "Schließen",
   },
+  activity: {
+    activities: "Aktivitäten",
+    started_read: "hat angefangen zu lesen:",
+    finished_read: "hat fertig gelesen:",
+    dropped_read: "hat aufgehört zu lesen:",
+  },
   quotes: {
     quotes: "Zitate",
     no_quotes: "Noch keine Zitate hinzugefügt.",

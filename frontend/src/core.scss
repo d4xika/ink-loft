@@ -3,6 +3,7 @@
 :root {
   --color-0: #1c1917;
   --color-1: #45150d;
+  --color-1-bright: #702418;
   --color-2: #292524;
   --color-3: #464832;
   --color-4: #4d2618;
@@ -70,6 +71,8 @@ h2 {
 }
 
 h3 {
+  font-family: "IM Fell English", serif !important;
+  font-size: var(--font-size-5);
   margin: 0;
 }
 

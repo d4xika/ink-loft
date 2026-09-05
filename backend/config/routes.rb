@@ -14,6 +14,7 @@ Rails.application.routes.draw do
         get :updates_state
         put :mark_updates_read
         put :update_quotes_share_with_friends
+        put :update_last_activity_check
       end
     end
 
@@ -34,6 +35,12 @@ Rails.application.routes.draw do
       member do
         put :accept
       end
+    end
+
+    resources :activities, only: [ :index, :create, :destroy ] do
+      collection do
+        get :feed
+        end
     end
   end
 end

@@ -43,6 +43,12 @@ export const en = {
     read_updates: "Read",
     close_updates: "Close",
   },
+  activity: {
+    activities: "Activities",
+    started_read: "started reading:",
+    finished_read: "finished reading:",
+    dropped_read: "stopped reading:",
+  },
   quotes: {
     quotes: "Quotes",
     quotes_of: "Quotes of {username}",

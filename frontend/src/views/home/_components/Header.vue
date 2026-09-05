@@ -17,6 +17,7 @@ const router = useRouter();
 
 const user = JSON.parse(localStorage.getItem("user"));
 const friend = ref(null);
+const hasNewActivity = ref(false);
 let usernameClickCount = 0;
 let usernameClickTimer;
 
@@ -25,6 +26,10 @@ if (props.friendUsername) {
     friend.value = response.data.friends.find(
       ({ username }) => username === props.friendUsername,
     );
+  });
+} else {
+  API.get("/activities").then((response) => {
+    hasNewActivity.value = response.data.some((activity) => activity.new);
   });
 }
 
@@ -48,13 +53,12 @@ onBeforeUnmount(() => clearTimeout(usernameClickTimer));
 
 <template>
   <div class="header-container">
-    <div v-if="props.friendUsername">
-      <ILIconButton
-        icon="pi-chevron-left"
-        variant="square"
-        @click="router.push({ name: 'profile' })"
-      />
-    </div>
+    <ILIconButton
+      v-if="props.friendUsername"
+      icon="pi-chevron-left"
+      variant="square"
+      @click="router.push({ name: 'profile' })"
+    />
     <div v-else class="left-container">
       <ILAvatar
         :image="user.avatar_url.small"
@@ -75,6 +79,15 @@ onBeforeUnmount(() => clearTimeout(usernameClickTimer));
       class="avatar-image-filter"
       :image="friend.avatar_url"
       :username="friend.username"
+    />
+    <ILIconButton
+      v-else-if="!props.friendUsername"
+      class="activity-button"
+      :class="{ 'has-new-badge': hasNewActivity }"
+      icon="pi-bell"
+      variant="square"
+      color="transparent"
+      @click="router.push({ name: 'activity' })"
     />
   </div>
 </template>
@@ -115,6 +128,24 @@ onBeforeUnmount(() => clearTimeout(usernameClickTimer));
         font-weight: bold;
         text-align: left;
       }
+    }
+  }
+
+  .activity-button {
+    position: relative;
+
+    &.has-new-badge::after {
+      content: "";
+      position: absolute;
+      z-index: 1;
+      top: 0;
+      right: 0;
+      width: 0.75rem;
+      height: 0.75rem;
+      border: 2px solid var(--color-0);
+      border-radius: 50%;
+      background-color: var(--color-1-bright);
+      pointer-events: none;
     }
   }
 }
