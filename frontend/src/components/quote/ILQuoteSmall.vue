@@ -1,5 +1,6 @@
 <script setup>
 import { computed, onMounted, ref } from "vue";
+import { new_line_to_br } from "@/helper/helper.js";
 
 const props = defineProps({
   quote: {
@@ -25,10 +26,6 @@ onMounted(() => {
 });
 
 const emit = defineEmits(["edit", "delete"]);
-
-const escapedQuote = computed(() => {
-  return `<div>"${props.quote.replaceAll("\n", "</br>")}"</div>`;
-});
 </script>
 
 <template>
@@ -40,7 +37,10 @@ const escapedQuote = computed(() => {
             <i class="pi pi-pen-to-square"></i>
           </div>
           <div>
-            <h2 class="quote" v-dompurify-html="escapedQuote"></h2>
+            <h2
+              v-dompurify-html="new_line_to_br(props.quote)"
+              class="quote"
+            ></h2>
             <h3 class="source">
               {{ props.source }}
             </h3>

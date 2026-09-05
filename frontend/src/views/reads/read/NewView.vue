@@ -1,10 +1,10 @@
 <script setup>
-import ReadForm from "./ReadForm.vue";
-import API from "@/helper/api.js";
-import router from "@/router/router.js";
 import { useToast } from "primevue/usetoast";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
+import ReadForm from "./ReadForm.vue";
+import API from "@/helper/api.js";
+import router from "@/router/router.js";
 
 const { t } = useI18n();
 const toast = useToast();

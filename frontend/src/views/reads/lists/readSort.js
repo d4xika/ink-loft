@@ -1,4 +1,12 @@
-const SORT_BY_VALUES = ["title", "author", "pairing", "date"];
+const SORT_BY_VALUES = [
+  "title",
+  "author",
+  "pairing",
+  "date",
+  "chapters",
+  "pages",
+  "words",
+];
 const SORT_DIRECTION_VALUES = ["asc", "desc"];
 
 export function getSavedReadSort(listKey) {

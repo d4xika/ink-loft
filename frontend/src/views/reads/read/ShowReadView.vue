@@ -8,6 +8,7 @@ import API from "@/helper/api.js";
 import { READING_STATUSES } from "@/helper/constants.js";
 import { externalSongUrl, spotifyEmbedUrl } from "@/helper/song.js";
 import router from "@/router/router.js";
+import { new_line_to_br } from "@/helper/helper.js";
 
 const { t, n } = useI18n();
 const route = useRoute();
@@ -177,7 +178,7 @@ getReadData();
             />
 
             <div class="notes-container" v-if="read.notes">
-              <p>{{ read.notes }}</p>
+              <p v-dompurify-html="new_line_to_br(read.notes)"></p>
             </div>
 
             <iframe

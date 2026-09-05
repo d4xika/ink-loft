@@ -96,16 +96,17 @@ class Api::ReadsController < Api::ApplicationController
   end
 
   def apply_sort(reads)
-    sort_by = params[:sort_by].presence_in(%w[title author pairing date]) || "date"
+    sort_by = params[:sort_by].presence_in(%w[title author pairing date chapters pages words]) || "date"
     direction = params[:sort_direction].to_s.in?(%w[asc desc]) ? params[:sort_direction] : "desc"
     column = sort_by == "date" ? "start_date" : sort_by
+    numeric_sort = sort_by.in?(%w[chapters pages words])
 
-    missing_value = if sort_by == "date"
+    missing_value = if sort_by == "date" || numeric_sort
                       "#{column} IS NULL"
                     else
                       "NULLIF(TRIM(#{column}), '') IS NULL"
                     end
-    sorted_value = sort_by == "date" ? column : "LOWER(#{column})"
+    sorted_value = sort_by == "date" || numeric_sort ? column : "LOWER(#{column})"
 
     reads.order(
       Arel.sql("CASE WHEN #{missing_value} THEN 1 ELSE 0 END ASC"),

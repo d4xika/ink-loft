@@ -30,7 +30,15 @@ const props = defineProps({
     type: String,
     default: "date",
     validator: (value) =>
-      ["title", "author", "pairing", "date"].includes(value),
+      [
+        "title",
+        "author",
+        "pairing",
+        "date",
+        "chapters",
+        "pages",
+        "words",
+      ].includes(value),
   },
   sortDirection: {
     type: String,
@@ -186,6 +194,24 @@ function sortButtonText(value, label) {
             variant="fit-content"
             :color="selectedSort === 'date' ? 'primary' : 'transparent'"
             @click="selectSort('date')"
+          />
+          <ILTextButton
+            :text="sortButtonText('chapters', t('read.chapters'))"
+            variant="fit-content"
+            :color="selectedSort === 'chapters' ? 'primary' : 'transparent'"
+            @click="selectSort('chapters')"
+          />
+          <ILTextButton
+            :text="sortButtonText('pages', t('read.pages'))"
+            variant="fit-content"
+            :color="selectedSort === 'pages' ? 'primary' : 'transparent'"
+            @click="selectSort('pages')"
+          />
+          <ILTextButton
+            :text="sortButtonText('words', t('read.words'))"
+            variant="fit-content"
+            :color="selectedSort === 'words' ? 'primary' : 'transparent'"
+            @click="selectSort('words')"
           />
         </div>
       </div>
