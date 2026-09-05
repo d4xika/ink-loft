@@ -60,6 +60,7 @@ export const sue = {
     load_error: "Zitate hobn net glodn werdn kennen.",
   },
   read: {
+    select: "Lektüre auswähln",
     title: "Titl",
     title_or_author: "Titl oder AutorIn",
     author: "AutorIn",

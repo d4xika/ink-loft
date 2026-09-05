@@ -60,6 +60,7 @@ export const noe = {
     load_error: "Zitate hom ned gladn weadn kina.",
   },
   read: {
+    select: "Lektüre auswöhn",
     title: "Titl",
     title_or_author: "Titl oda AutorIn",
     author: "AutorIn",

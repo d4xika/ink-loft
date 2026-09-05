@@ -25,21 +25,23 @@ export default {
 
 <template>
   <div class="updates">
-    <article v-for="(update, index) in updates" :key="update.id">
+    <template v-if="updates.length">
       <div class="updates-header">
-        <p v-if="index === 0" class="latest-update">Latest update</p>
+        <p class="latest-update">Latest update</p>
         <h1>What’s new in Ink Loft?</h1>
       </div>
 
       <div class="updates-section">
         <p>We have something special for you! Checkout these updates:</p>
-        <ul>
-          <li v-for="change in update.changes" :key="change">
-            {{ change }}
-          </li>
-        </ul>
+        <article v-for="update in updates" :key="update.id">
+          <ul>
+            <li v-for="change in update.changes" :key="change">
+              {{ change }}
+            </li>
+          </ul>
+        </article>
       </div>
-    </article>
+    </template>
   </div>
 </template>
 

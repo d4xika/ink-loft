@@ -1,6 +1,9 @@
 <script setup>
 import { ref } from "vue";
+import { useI18n } from "vue-i18n";
 import API from "@/helper/api.js";
+
+const { t } = useI18n();
 
 const props = defineProps({
   suggestions: {
@@ -46,7 +49,7 @@ function search(event) {
       fluid
       @complete="search"
     />
-    <label>Select a read</label>
+    <label>{{ t("read.select") }}</label>
   </FloatLabel>
 </template>
 

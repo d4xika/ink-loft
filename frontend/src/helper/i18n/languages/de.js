@@ -60,6 +60,7 @@ export const de = {
     load_error: "Zitate konnten nicht geladen werden.",
   },
   read: {
+    select: "Lektüre auswählen",
     title: "Titel",
     title_or_author: "Titel oder AutorIn",
     author: "AutorIn",
