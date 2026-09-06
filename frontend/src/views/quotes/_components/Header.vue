@@ -83,7 +83,7 @@ getFriends();
   <div class="header-container">
     <ILIconButton icon="pi-chevron-left" variant="square" @click="goBack" />
     <ILIconButton
-      v-if="!readonly && friends.length > 0"
+      v-if="!readonly"
       icon="pi-users"
       variant="square"
       @click="quoteLibrarySettings = true"
@@ -95,7 +95,9 @@ getFriends();
       :title="t('quotes.sharing_settings')"
     >
       <template #body>
+        <p v-if="friends">{{ t("quotes.add_friend_hint") }}</p>
         <Form
+          v-else
           :initialValues="initialValues"
           class="flex flex-col gap-2"
           @submit="saveSettings"

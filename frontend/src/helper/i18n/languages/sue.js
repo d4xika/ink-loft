@@ -45,6 +45,7 @@ export const sue = {
   },
   activity: {
     activities: "Aktivitäten",
+    add_friend_hint: "Füg Freunde hinzu, damit ihre Aktivitäten siehsch.",
     started_read: "hot ogfanga zum Lesen:",
     finished_read: "hot fertig glesen:",
     dropped_read: "hot aufgheart zum Lesen:",
@@ -58,6 +59,7 @@ export const sue = {
     add: "Zitat hinzuafügen",
     edit: "Zitat beorbetn",
     private_quote: "Net mit Freunde teilen",
+    add_friend_hint: "Füg Freunde hinzu, damit du Zitate mit ihnen teilen konnsch.",
     sharing_settings: "Freigabeeinstellungen",
     save_settings: "Einstellungen speichern",
     settings_save_success: "Einstellungen erfolgreich gspeichert.",

@@ -45,6 +45,7 @@ export const noe = {
   },
   activity: {
     activities: "Aktivitäten",
+    add_friend_hint: "Füg Freind hinzu, damitst ihre Aktivitäten siachst.",
     started_read: "hot augfaunga zum Lesn:",
     finished_read: "hot fertig glesn:",
     dropped_read: "hot aufgheat zum Lesn:",
@@ -58,6 +59,7 @@ export const noe = {
     add: "Zitat hinzufüng",
     edit: "Zitat beoaweitn",
     private_quote: "Ned mit Freind teilen",
+    add_friend_hint: "Füg Freind hinzu, damitst Zitate mit eana teilen kaunst.",
     sharing_settings: "Freigabeeinstellungen",
     save_settings: "Einstellungen speichan",
     settings_save_success: "Einstellungen erfoigreich gspeichat.",

@@ -21,6 +21,7 @@ getActivities();
   <Header />
   <div class="activities-container">
     <h1>{{ t("activity.activities") }}</h1>
+    <p v-if="activities">{{ t("activity.add_friend_hint") }}</p>
     <div v-for="activity in activities" :key="activity.id" class="activity">
       <Activity
         :new="activity.new"

@@ -45,6 +45,7 @@ export const de = {
   },
   activity: {
     activities: "Aktivitäten",
+    add_friend_hint: "Füge FreundInnen hinzu, um ihre Aktivitäten zu sehen.",
     started_read: "hat angefangen zu lesen:",
     finished_read: "hat fertig gelesen:",
     dropped_read: "hat aufgehört zu lesen:",
@@ -58,6 +59,7 @@ export const de = {
     add: "Zitat hinzufügen",
     edit: "Zitat bearbeiten",
     private_quote: "Nicht mit Freunden teilen",
+    add_friend_hint: "Füge FreundInnen hinzu, um Zitate mit ihnen zu teilen.",
     sharing_settings: "Freigabeeinstellungen",
     save_settings: "Einstellungen speichern",
     settings_save_success: "Einstellungen erfolgreich gespeichert.",
