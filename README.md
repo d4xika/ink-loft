@@ -17,17 +17,17 @@ The project is split into a Ruby on Rails API backend 🚂 and a responsive Vue.
 ## Screenshots 📱
 
 <p align="center">
-  <img src="frontend/docs/screenshots/mockup-home.png" alt="Ink Loft home screen" width="30%">
-  <img src="frontend/docs/screenshots/mockup-readlist.png" alt="Reading list" width="30%">
-  <img src="frontend/docs/screenshots/mockup-read-1.png" alt="Book details" width="30%">
+  <img src="frontend/docs/Screenshots/mockup-home.png" alt="Ink Loft home screen" width="30%">
+  <img src="frontend/docs/Screenshots/mockup-readlist.png" alt="Reading list" width="30%">
+  <img src="frontend/docs/Screenshots/mockup-read-1.png" alt="Book details" width="30%">
 </p>
 <p align="center">
-  <img src="frontend/docs/screenshots/mockup-read-2.png" alt="Book details and quotes" width="30%">
-  <img src="frontend/docs/screenshots/mockup-quotes.png" alt="Quote library" width="30%">
-  <img src="frontend/docs/screenshots/mockup-friends-home.png" alt="Friend's reading corner" width="30%">
+  <img src="frontend/docs/Screenshots/mockup-read-2.png" alt="Book details and quotes" width="30%">
+  <img src="frontend/docs/Screenshots/mockup-quotes.png" alt="Quote library" width="30%">
+  <img src="frontend/docs/Screenshots/mockup-friends-home.png" alt="Friend's reading corner" width="30%">
 </p>
 <p align="center">
-  <img src="frontend/docs/screenshots/mockup-light-theme.png" alt="Light theme" width="30%">
+  <img src="frontend/docs/Screenshots/mockup-light-theme.png" alt="Light theme" width="30%">
 </p>
 
 ## The Ink Stack 🛠️
