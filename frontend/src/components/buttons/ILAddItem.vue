@@ -21,7 +21,7 @@ const props = defineProps({
 </script>
 
 <template>
-  <div class="add-item" :class="`variant-${props.variant}`">
+  <div v-ripple class="add-item" :class="`variant-${props.variant}`">
     <div class="add-item-icon">
       <i class="pi pi-plus"></i>
     </div>

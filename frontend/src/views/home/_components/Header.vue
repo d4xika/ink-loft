@@ -69,6 +69,7 @@ onBeforeUnmount(() => clearTimeout(usernameClickTimer));
         :class="{ 'has-pending-request-badge': hasPendingFriendRequest }"
       >
         <ILAvatar
+          v-ripple
           :image="user.avatar_url.small"
           @click="router.push({ name: 'profile' })"
         />
@@ -77,7 +78,12 @@ onBeforeUnmount(() => clearTimeout(usernameClickTimer));
         <h4 class="welcome">
           {{ t("home.cozy_day") }}
         </h4>
-        <button class="username" type="button" @click="handleUsernameClick">
+        <button
+          v-ripple
+          class="username"
+          type="button"
+          @click="handleUsernameClick"
+        >
           {{ user.username }}
         </button>
       </div>

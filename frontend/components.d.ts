@@ -57,4 +57,7 @@ declare module 'vue' {
     Toast: typeof import('primevue/toast')['default']
     ToggleSwitch: typeof import('primevue/toggleswitch')['default']
   }
+  export interface GlobalDirectives {
+    Ripple: typeof import('primevue/ripple')['default']
+  }
 }

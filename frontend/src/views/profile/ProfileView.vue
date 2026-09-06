@@ -437,6 +437,7 @@ onMounted(loadFriendships);
           <div
             v-for="friend in friends"
             :key="friend.username"
+            v-ripple
             class="friend-row friend-row-clickable"
             @click="
               router.push({

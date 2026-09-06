@@ -15,7 +15,7 @@ const model = defineModel({ type: Boolean, default: false });
 <template>
   <div class="toggle-switch-container">
     <p>{{ props.label }}</p>
-    <ToggleSwitch v-model="model" :name="props.name">
+    <ToggleSwitch v-model="model" v-ripple :name="props.name">
       <template #handle="{ checked }">
         <i
           :class="[

@@ -20,7 +20,7 @@ const props = defineProps({
 </script>
 
 <template>
-  <div class="box-button-container">
+  <div v-ripple class="box-button-container">
     <p class="text">
       {{ props.text }}
     </p>

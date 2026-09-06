@@ -11,7 +11,7 @@
           </p>
         </div>
         <div class="right-container">
-          <i class="pi pi-times" @click="closeCallback"></i>
+          <i v-ripple class="pi pi-times" @click="closeCallback"></i>
         </div>
       </div>
     </template>

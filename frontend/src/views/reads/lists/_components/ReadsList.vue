@@ -35,6 +35,7 @@ const router = useRouter();
       <div v-for="read in props.reads" :key="read.id">
         <div class="read-container">
           <ILReadCover
+            interactive
             :loading="props.reads.loading"
             :cover="read.cover_small_url ?? undefined"
             @click="

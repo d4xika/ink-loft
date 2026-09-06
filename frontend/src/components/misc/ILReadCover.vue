@@ -2,10 +2,13 @@
 const props = defineProps({
   cover: {
     type: String,
-    required: true,
     default: "/images/drawings/default_cover.png",
   },
   loading: {
+    type: Boolean,
+    default: false,
+  },
+  interactive: {
     type: Boolean,
     default: false,
   },
@@ -13,7 +16,7 @@ const props = defineProps({
 </script>
 
 <template>
-  <div class="read-cover">
+  <div v-ripple class="read-cover" :class="{ interactive: props.interactive }">
     <div class="read-cover-container">
       <Skeleton v-if="props.loading" class="cover-skeleton" />
       <img
@@ -30,6 +33,10 @@ const props = defineProps({
 .read-cover {
   width: 100%;
   max-width: 200px;
+
+  &:not(.interactive) :deep(.p-ink) {
+    display: none;
+  }
 }
 
 .read-cover-container {

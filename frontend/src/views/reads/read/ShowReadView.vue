@@ -200,6 +200,7 @@ getReadData();
 
             <a
               v-else-if="songLinkUrl"
+              v-ripple
               class="song-link"
               :href="songLinkUrl"
               target="_blank"

@@ -28,11 +28,13 @@ const emit = defineEmits(["edit", "refresh"]);
     <div v-if="props.editEnabled || props.refreshEnabled" class="edit-buttons">
       <i
         v-if="props.editEnabled"
+        v-ripple
         class="pi pi-pencil"
         @click="emit('edit')"
       ></i>
       <i
         v-if="props.refreshEnabled"
+        v-ripple
         class="pi pi-sync"
         @click="emit('refresh')"
       ></i>

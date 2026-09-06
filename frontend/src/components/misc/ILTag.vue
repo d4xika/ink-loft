@@ -1,5 +1,5 @@
 <script setup>
-import { onBeforeUnmount, onMounted, ref, useId } from "vue";
+import { onBeforeUnmount, onMounted, ref } from "vue";
 
 const props = defineProps({
   color: {
@@ -69,7 +69,11 @@ onBeforeUnmount(() =>
 <template>
   <div ref="tagWrapper" class="tag-wrapper">
     <div
-      :class="`color-${props.color} size-${props.size}`"
+      v-ripple
+      :class="[
+        `color-${props.color} size-${props.size}`,
+        { interactive: props.tooltip },
+      ]"
       class="tag"
       @click="toggleTooltip"
     >
@@ -104,6 +108,10 @@ onBeforeUnmount(() =>
     overflow: hidden;
     word-break: break-word;
     color: var(--text-color);
+
+    &:not(.interactive) :deep(.p-ink) {
+      display: none;
+    }
 
     & + .tooltip.visible {
       visibility: visible;

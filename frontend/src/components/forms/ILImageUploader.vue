@@ -74,6 +74,7 @@ function removeFile(event) {
     <div class="relative-container">
       <button
         v-if="src && !loading"
+        v-ripple
         type="button"
         class="remove-btn"
         @click.stop="removeFile"
@@ -141,7 +142,7 @@ function removeFile(event) {
 }
 
 .remove-btn {
-  position: absolute;
+  position: absolute !important;
   top: -10px;
   right: -10px;
   width: 40px;

@@ -406,6 +406,7 @@ loadUpdatesState();
           <button
             v-for="read in reads"
             :key="read.id"
+            v-ripple
             class="friend-read-card"
             type="button"
             @click="
@@ -465,6 +466,7 @@ loadUpdatesState();
           {{ t("home.quote_library") }}
         </h2>
         <button
+          v-ripple
           class="friend-quote-card"
           type="button"
           @click="
@@ -487,7 +489,11 @@ loadUpdatesState();
     </div>
 
     <div v-else class="content-container">
-      <div class="clickable-quote" @click="router.push({ name: 'quotes' })">
+      <div
+        v-ripple
+        class="clickable-quote"
+        @click="router.push({ name: 'quotes' })"
+      >
         <ILQuotes :quote="dailyQuote?.content" :source="dailyQuoteSource" />
       </div>
       <ILDivider />
@@ -956,7 +962,7 @@ loadUpdatesState();
 }
 
 .updates-button {
-  position: fixed;
+  position: fixed !important;
   right: max(var(--gap-3), env(safe-area-inset-right));
   bottom: max(var(--gap-3), env(safe-area-inset-bottom));
   z-index: 10;

@@ -34,7 +34,7 @@ const progress = computed(() => {
 <template>
   <div class="currently-reading-container">
     <div class="content-container">
-      <div class="left-container" @click="emit('showRead')">
+      <div v-ripple class="left-container" @click="emit('showRead')">
         <ILReadCover
           :cover="
             props.read.cover_small_url ? props.read.cover_small_url : undefined
@@ -42,7 +42,7 @@ const progress = computed(() => {
         />
       </div>
       <div class="right-container">
-        <div class="title-author-container" @click="emit('showRead')">
+        <div v-ripple class="title-author-container" @click="emit('showRead')">
           <p class="title">
             {{ props.read.title }}
           </p>

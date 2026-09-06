@@ -209,7 +209,11 @@ getReadData();
             class="quote-item"
           >
             <p class="font-fix">{{ quote.content }}</p>
-            <i class="pi pi-pencil font-fix" @click="openQuoteDrawer(quote)" />
+            <i
+              v-ripple
+              class="pi pi-pencil font-fix"
+              @click="openQuoteDrawer(quote)"
+            ></i>
           </div>
         </div>
       </div>
