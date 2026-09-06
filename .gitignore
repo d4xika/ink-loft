@@ -37,3 +37,5 @@ backend/.kamal
 backend/test
 backend/storage
 .keep
+
+Makefile
