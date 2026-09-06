@@ -83,7 +83,7 @@ getFriends();
   <div class="header-container">
     <ILIconButton icon="pi-chevron-left" variant="square" @click="goBack" />
     <ILIconButton
-      v-if="!readonly"
+      v-if="!readonly && friends.length > 0"
       icon="pi-users"
       variant="square"
       @click="quoteLibrarySettings = true"
