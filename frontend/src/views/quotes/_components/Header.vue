@@ -95,7 +95,9 @@ getFriends();
       :title="t('quotes.sharing_settings')"
     >
       <template #body>
-        <p v-if="friends">{{ t("quotes.add_friend_hint") }}</p>
+        <p v-if="friends.length === 0">
+          {{ t("quotes.add_friend_hint") }}
+        </p>
         <Form
           v-else
           :initialValues="initialValues"

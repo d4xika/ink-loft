@@ -21,17 +21,21 @@ getActivities();
   <Header />
   <div class="activities-container">
     <h1>{{ t("activity.activities") }}</h1>
-    <p v-if="activities">{{ t("activity.add_friend_hint") }}</p>
-    <div v-for="activity in activities" :key="activity.id" class="activity">
-      <Activity
-        :new="activity.new"
-        :action="t(`activity.${activity.action}`)"
-        :description="activity.description"
-        :avatarUrl="activity.avatar_url"
-        :username="activity.username"
-      />
-      <ILDivider width="100" />
-    </div>
+    <p v-if="activities.length === 0">
+      {{ t("activity.add_friend_hint") }}
+    </p>
+    <template v-else>
+      <div v-for="activity in activities" :key="activity.id" class="activity">
+        <Activity
+          :new="activity.new"
+          :action="t(`activity.${activity.action}`)"
+          :description="activity.description"
+          :avatarUrl="activity.avatar_url"
+          :username="activity.username"
+        />
+        <ILDivider width="100" />
+      </div>
+    </template>
   </div>
 </template>
 
