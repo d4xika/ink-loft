@@ -1,6 +1,6 @@
 <script setup>
 import { useToast } from "primevue/usetoast";
-import { ref } from "vue";
+import { onActivated, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
 import Header from "./_components/Header.vue";
@@ -29,8 +29,11 @@ function updateSort({
   getReads({ search });
 }
 
-function getReads(filters = {}) {
-  reads.value = { loading: true };
+let lastFilters = {};
+
+function getReads(filters = {}, silent = false) {
+  lastFilters = filters;
+  if (!silent) reads.value = { loading: true };
   API.get("reads", {
     params: {
       reading_status: "want_to_read",
@@ -58,7 +61,7 @@ function toggleSearch() {
   if (!showSearch.value) getReads();
 }
 
-getReads();
+onActivated(() => getReads(lastFilters, true));
 </script>
 
 <template>

@@ -28,9 +28,15 @@ function addToWantToRead() {
     reading_status: "want_to_read",
     cover: read.value.cover_signed_id,
   };
-  ["start_date", "end_date", "rating", "recommended", "notes"].forEach(
-    (attribute) => delete readData[attribute],
-  );
+  [
+    "start_date",
+    "end_date",
+    "rating",
+    "recommended",
+    "notes",
+    "current_progress",
+    "progress_type",
+  ].forEach((attribute) => delete readData[attribute]);
 
   const formData = new FormData();
   formData.append("read", JSON.stringify(readData));

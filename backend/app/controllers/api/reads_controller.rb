@@ -105,9 +105,9 @@ class Api::ReadsController < Api::ApplicationController
 
     missing_value = if sort_by == "date" || numeric_sort
                       "#{column} IS NULL"
-                    else
+    else
                       "NULLIF(TRIM(#{column}), '') IS NULL"
-                    end
+    end
     sorted_value = sort_by == "date" || numeric_sort ? column : "LOWER(#{column})"
 
     reads.order(
@@ -118,6 +118,8 @@ class Api::ReadsController < Api::ApplicationController
   end
 
   def create_activity(read)
+    return unless read.saved_change_to_reading_status?
+
     case read.reading_status
     when "have_read"
       current_user.activities.create(action: "finished_read", description: read.title)

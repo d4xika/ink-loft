@@ -102,7 +102,7 @@ function deleteRead() {
   API.delete(`reads/${route.params.id}`).then(
     (response) => {
       deleteReadDrawer.value = false;
-      router.push({ name: "home" });
+      router.go(-2);
       toast.add({
         severity: "success",
         message: t("read.delete_success"),

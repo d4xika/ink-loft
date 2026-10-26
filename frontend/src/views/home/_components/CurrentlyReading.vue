@@ -113,6 +113,11 @@ const progress = computed(() => {
           max-width: 45dvw;
           overflow: hidden;
           text-overflow: ellipsis;
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 2;
+          line-clamp: 2;
+          word-break: break-word;
         }
         .author {
           font-size: var(--font-size-2);
